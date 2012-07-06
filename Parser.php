@@ -67,7 +67,6 @@ require_once 'Exception/AbstractException.php';
  * @package    WhoisParser
  * @copyright  Copyright (c) 2007 - 2012 Novutec Inc. (http://www.novutec.com)
  * @license    http://www.apache.org/licenses/LICENSE-2.0
- * @todo       Caching, More Templates, Bugfixing
  */
 class Parser
 {
