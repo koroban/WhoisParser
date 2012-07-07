@@ -27,17 +27,17 @@ namespace Novutec\WhoisParser;
 /**
  * @see Result/AbstractResult
  */
-require_once 'AbstractResult.php';
+require_once WHOISPARSERPATH . '/Result/AbstractResult.php';
 
 /**
  * @see Result/Conact
  */
-require_once 'Contact.php';
+require_once WHOISPARSERPATH . '/Result/Contact.php';
 
 /**
  * @see Result/Registrar
  */
-require_once 'Registrar.php';
+require_once WHOISPARSERPATH . '/Result/Registrar.php';
 
 /**
  * WhoisParser Result
@@ -64,7 +64,7 @@ class Result extends AbstractResult
      * @var string
      * @access protected
      */
-    protected $idn_name;
+    protected $idnName;
 
     /**
      * Status of domain or IP address
@@ -200,20 +200,23 @@ class Result extends AbstractResult
             $value = $value[0];
         }
         
+        // reservedType is sometimes need by templates like .DE
         if ($target == 'contacts:reservedType') {
             if ($this->lastHandle != strtolower($value)) {
                 $this->lastId = - 1;
             }
             
             $this->lastHandle = strtolower($value);
-            $this->lastId ++;
+            $this->lastId++;
             return;
         }
         
         if (strpos($target, ':')) {
+            // split target by :
             $targetArray = explode(':', $target);
             $element = &$this;
             
+            // lookup target to determine where we should add the item
             foreach ($targetArray as $key => $type) {
                 if ($targetArray[0] == 'contacts' && $key == 1 && sizeof($targetArray) == 2) {
                     // estimate handle match by network contacts
@@ -231,7 +234,7 @@ class Result extends AbstractResult
                                         }
                                         
                                         $this->lastHandle = $networkContactKey;
-                                        $this->lastId ++;
+                                        $this->lastId++;
                                         unset($this->network->contacts->{$networkContactKey}[$multiContactKey]);
                                         break 2;
                                     }
@@ -242,7 +245,7 @@ class Result extends AbstractResult
                                         $this->lastId = - 1;
                                     }
                                     $this->lastHandle = $networkContactKey;
-                                    $this->lastId ++;
+                                    $this->lastId++;
                                     unset($this->network->contacts->$networkContactKey);
                                     break;
                                 }
@@ -256,6 +259,7 @@ class Result extends AbstractResult
                     
                     $this->contacts->{$this->lastHandle}[$this->lastId]->$type = $value;
                 } else {
+                    // if last element of target is reached we need to add value
                     if ($key == sizeof($targetArray) - 1) {
                         if (is_array($element)) {
                             $element[sizeof($element) - 1]->$type = $value;
@@ -301,6 +305,8 @@ class Result extends AbstractResult
             $this->$key = null;
         }
         
+        // need to set contacts to stdClass otherwise it will not working to
+        // add items again
         $this->contacts = new \stdClass();
         $this->lastId = - 1;
     }
@@ -323,19 +329,37 @@ class Result extends AbstractResult
     public function toArray()
     {
         $output = get_object_vars($this);
+        $contacts = array();
+        $network = array();
         
+        // lookup all contact handles and convert to array
         foreach ($this->contacts as $type => $handle) {
-            if (is_array($handle)) {
-                foreach ($handle as $number => $object) {
-                    $contacts[$type][$number] = $object->toArray();
-                }
-            } else {
-                $contacts[$type] = $handle->toArray();
+            foreach ($handle as $number => $object) {
+                $contacts[$type][$number] = $object->toArray();
             }
         }
-        
         $output['contacts'] = $contacts;
-        $output['registrar'] = $this->registrar->toArray();
+        
+        if (! empty($this->registrar)) {
+            $output['registrar'] = $this->registrar->toArray();
+        }
+        
+        if (! empty($this->network)) {
+            // lookup network for all properties
+            foreach ($this->network as $type => $value) {
+                // if there is an object we need to convert it to array
+                if (is_object($value)) {
+                    $value = (array) $value;
+                    // if converted array is empty there is no need to add it
+                    if (! empty($value)) {
+                        $network[$type] = $value;
+                    }
+                } else {
+                    $network[$type] = $value;
+                }
+            }
+            $output['network'] = $network;
+        }
         
         return $output;
     }
@@ -362,7 +386,9 @@ class Result extends AbstractResult
         
         $output = get_object_vars($this);
         
+        // lookup all object variables
         foreach ($output as $name => $var) {
+            // if variable is an array add it to xml
             if (is_array($var)) {
                 $child = $xml->addChild($name);
                 
@@ -370,8 +396,10 @@ class Result extends AbstractResult
                     $child->addChild('item', trim(htmlspecialchars($firstValue)));
                 }
             } elseif (is_object($var)) {
+                // if variable is an object we need to convert it to array
                 $child = $xml->addChild($name);
                 
+                // if it is not a stdClass object we have the toArray() method
                 if (! $var instanceof \stdClass) {
                     $firstArray = $var->toArray();
                     
@@ -387,16 +415,23 @@ class Result extends AbstractResult
                         }
                     }
                 } else {
+                    // if it is an stdClass object we need to convert it
+                    // manually
+                    
+                    // lookup all properties of stdClass and convert it
                     foreach ($var as $firstKey => $firstValue) {
-                        $secondChild = $child->addChild($firstKey);
-                        
-                        if (! $firstValue instanceof \stdClass && ! is_array($firstValue)) {
+                        if (! $firstValue instanceof \stdClass && ! is_array($firstValue) &&
+                                 ! is_string($firstValue)) {
+                            $secondChild = $child->addChild($firstKey);
+                            
                             $firstArray = $firstValue->toArray();
                             
                             foreach ($firstArray as $secondKey => $secondValue) {
                                 $secondChild->addChild($secondKey, trim(htmlspecialchars($secondValue)));
                             }
                         } elseif (is_array($firstValue)) {
+                            $secondChild = $child->addChild($firstKey);
+                            
                             foreach ($firstValue as $secondKey => $secondValue) {
                                 $secondArray = $secondValue->toArray();
                                 $thirdChild = $secondChild->addChild('item');
@@ -413,11 +448,11 @@ class Result extends AbstractResult
                                     }
                                 }
                             }
+                        } elseif (is_string($firstValue)) {
+                            $secondChild = $child->addChild($firstKey, $firstValue);
                         }
                     }
                 }
-                
-                // stdClass is missing
             } else {
                 $xml->addChild($name, trim($var));
             }

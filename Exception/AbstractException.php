@@ -64,7 +64,9 @@ abstract class AbstractException extends \Exception
             $classname = 'Novutec\WhoisParser\\' . ucfirst($type) . 'Exception';
             return new $classname($message, $code, $previous);
         } else {
-            return null;
+            include_once __DIR__ . '/Exception.php';
+            $classname = 'Novutec\WhoisParser\Exception';
+            return new $classname($message, $code, $previous);
         }
     }
 }

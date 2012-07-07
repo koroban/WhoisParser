@@ -51,7 +51,16 @@ class Socket extends AbstractAdapter
         
         stream_set_blocking($this->sock, 1);
         
-        $lookupString = str_replace('%domain%', $query->idnFqdn, $config['format']);
+        if (isset($query->tld) && ! isset($query->idnFqdn)) {
+            $lookupString = str_replace('%domain%', $query->tld, $config['format']);
+        } elseif (isset($query->ip)) {
+            $lookupString = str_replace('%domain%', $query->ip, $config['format']);
+        } elseif (isset($query->asn)) {
+            $lookupString = str_replace('%domain%', $query->asn, $config['format']);
+        } else {
+            $lookupString = str_replace('%domain%', $query->idnFqdn, $config['format']);
+        }
+        
         $send = fwrite($this->sock, $lookupString . "\r\n");
         
         if ($send != strlen($lookupString . "\r\n")) {

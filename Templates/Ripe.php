@@ -41,7 +41,7 @@ class Template_Ripe extends AbstractTemplate
 	 * @var array
 	 * @access protected
 	 */
-    protected $blocks = array(1 => '/(inetnum|inet6num):[\s]*(.*?)[\n]{2}/is', 
+    protected $blocks = array(1 => '/(inetnum|inet6num|as-block):[\s]*(.*?)[\n]{2}/is', 
             2 => '/(role|person|organisation):[\s]*(.*?)[\n]{2}/is');
 
     /**
@@ -51,7 +51,8 @@ class Template_Ripe extends AbstractTemplate
 	 * @access protected
 	 */
     protected $blockItems = array(
-            1 => array('/^inetnum:(?>[\x20\t]*)(.+)$/im' => 'network:inetnum', 
+            1 => array('/^as-block:(?>[\x20\t]*)(.+)$/im' => 'network:as-block', 
+                    '/^inetnum:(?>[\x20\t]*)(.+)$/im' => 'network:inetnum', 
                     '/^inet6num:(?>[\x20\t]*)(.+)$/im' => 'network:inetnum', 
                     '/^netname:(?>[\x20\t]*)(.+)$/im' => 'network:name', 
                     '/^mnt-by:(?>[\x20\t]*)(.+)$/im' => 'network:maintainer', 

@@ -61,6 +61,8 @@ class Template_Iana extends AbstractTemplate
      * 
      * If result contains only whois server and not domain then we have to ask
      * a RIR for the full and correct whois output about the IP address.
+     * 
+     * If result is just a top-level domain name we are stopping the processing
      *
      * @param  object &$WhoisParser
      * @return void
@@ -71,24 +73,26 @@ class Template_Iana extends AbstractTemplate
         $Config = $WhoisParser->getConfig();
         $Query = $WhoisParser->getQuery();
         
-        if (isset($Result->name) && $Result->name != '') {
-            if ($Result->name != $Query->tld) {
-                $newConfig = $Config->get($Query->tld);
+        if (isset($Query->idnFqdn) || isset($Query->ip) || isset($Query->asn)) {
+            if (isset($Result->name) && $Result->name != '') {
+                if ($Result->name != $Query->tld) {
+                    $newConfig = $Config->get($Query->tld);
+                }
+                
+                if ($Result->name == $Query->tld || $newConfig['dummy'] === false) {
+                    $newConfig = $Config->get($Result->name);
+                }
+                
+                if ($newConfig['server'] == '') {
+                    $newConfig['server'] = $Result->whoisserver;
+                }
+            } else {
+                $mapping = $Config->get($Result->whoisserver);
+                $newConfig = $Config->get($mapping['template']);
             }
             
-            if ($Result->name == $Query->tld || $newConfig['dummy'] === false) {
-                $newConfig = $Config->get($Result->name);
-            }
-            
-            if ($newConfig['server'] == '') {
-                $newConfig['server'] = $Result->whoisserver;
-            }
-        } else {
-            $mapping = $Config->get($Result->whoisserver);
-            $newConfig = $Config->get($mapping['template']);
+            $Config->setCurrent($newConfig);
+            $WhoisParser->call();
         }
-        
-        $Config->setCurrent($newConfig);
-        $WhoisParser->call();
     }
 }
