@@ -59,8 +59,8 @@ abstract class AbstractException extends \Exception
      */
     public static function factory($type = '', $message = '', $code = 0, Exception $previous = null)
     {
-        if (file_exists(__DIR__ . '/' . $type . 'Exception.php')) {
-            include_once __DIR__ . '/' . $type . 'Exception.php';
+        if (file_exists(__DIR__ . '/' . ucfirst($type) . 'Exception.php')) {
+            include_once __DIR__ . '/' . ucfirst($type) . 'Exception.php';
             $classname = 'Novutec\WhoisParser\\' . ucfirst($type) . 'Exception';
             return new $classname($message, $code, $previous);
         } else {

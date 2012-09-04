@@ -38,8 +38,8 @@ class Socket extends AbstractAdapter
     /**
      * Send data to whois server
      *
-     * @throws \Novutec\WhoisParser\WriteErrorException
-     * @throws \Novutec\WhoisParser\ReadErrorException
+     * @throws WriteErrorException
+     * @throws ReadErrorException
      * @param  object $query
      * @param  array $config
      * @return string
@@ -92,7 +92,7 @@ class Socket extends AbstractAdapter
     /**
      * Creates and initiates a socket connection
      *
-     * @throws \Novutec\WhoisParser\ConnectErrorException
+     * @throws ConnectErrorException
      * @param  array $config
      * @return void
      */

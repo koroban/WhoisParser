@@ -161,22 +161,34 @@ class Parser
     /**
 	 * Lookup an IP address (ipv4 and ipv6) and domain names
 	 * 
-	 * @throws \Novutec\WhoisParser\NoQueryException
+	 * @throws NoQueryException
+	 * @throws instance of AbstractException if throwExceptions = true
 	 * @param  string $query
 	 * @return object
 	 */
     public function lookup($query = '')
     {
         $this->Result = new \Novutec\WhoisParser\Result();
+        $this->Config = new \Novutec\WhoisParser\Config($this->specialWhois);
         
         try {
             if ($query == '') {
                 throw \Novutec\WhoisParser\AbstractException::factory('NoQuery', 'No lookup query given.');
             }
             
-            $this->Config = new \Novutec\WhoisParser\Config($this->specialWhois);
-            $this->Config->setCurrent($this->Config->get('iana'));
             $this->prepare($query);
+            
+            if (isset($this->Query->ip)) {
+                $config = $this->Config->get('iana');
+            } else {
+                $config = $this->Config->get($this->Query->tld);
+                
+                if ($config['server'] == '') {
+                    $config = $this->Config->get('iana');
+                }
+            }
+            
+            $this->Config->setCurrent($config);
             $this->call();
         } catch (\Novutec\WhoisParser\AbstractException $e) {
             if ($this->throwExceptions) {
@@ -184,8 +196,13 @@ class Parser
             }
             
             $this->Result->addItem('exception', $e);
-            $this->Result->addItem('name', $query);
             $this->Result->addItem('rawdata', explode("\n", $this->rawdata));
+            
+            if (isset($this->Query)) {
+                $this->Result->addItem('name', $this->Query->fqdn);
+            } else {
+                $this->Result->addItem('name', $query);
+            }
         }
         
         // small clean up
@@ -244,7 +261,7 @@ class Parser
     /**
      * Send data to whois server and call parse() to process rawdata
      * 
-     * @throws \Novutec\WhoisParser\NoAdapterException
+     * @throws NoAdapterException
      * @param  object $query
 	 * @return void
 	 */
@@ -270,7 +287,7 @@ class Parser
     /**
      * Parses rawdata from whois server and call postProcess if exists afterwards
      * 
-     * @throws \Novutec\WhoisParser\NoTemplateException
+     * @throws NoTemplateException
      * @return void
      */
     private function parse()
@@ -421,18 +438,20 @@ class Parser
         if (isset($this->Result->network->contacts)) {
             // lookup all left over handles in network
             foreach ($this->Result->network->contacts as $type => $handle) {
-                // lookup all contacts in Result
-                foreach ($this->Result->contacts as $contactType => $contactArray) {
-                    foreach ($contactArray as $contactObject) {
-                        // if contact handle in network matches the one in
-                        // Result, we have to clone it
-                        if (strtolower($contactObject->handle) == strtolower($handle)) {
-                            if (empty($this->Result->contacts->$type)) {
-                                $this->Result->contacts->$type = Array();
+                if (is_string($handle)) {
+                    // lookup all contacts in Result
+                    foreach ($this->Result->contacts as $contactType => $contactArray) {
+                        foreach ($contactArray as $contactObject) {
+                            // if contact handle in network matches the one in
+                            // Result, we have to clone it
+                            if (strtolower($contactObject->handle) == strtolower($handle)) {
+                                if (empty($this->Result->contacts->$type)) {
+                                    $this->Result->contacts->$type = Array();
+                                }
+                                array_push($this->Result->contacts->$type, $contactObject);
+                                unset($this->Result->network->contacts->$type);
+                                break 2;
                             }
-                            array_push($this->Result->contacts->$type, $contactObject);
-                            unset($this->Result->network->contacts->$type);
-                            break 2;
                         }
                     }
                 }
