@@ -44,8 +44,8 @@ class Template_Nz extends AbstractTemplate
     protected $blocks = array(1 => '/domain_name:(?>[\x20\t]*)(.*?)(?=registrar_name)/is', 
             2 => '/registrar_name:(?>[\x20\t]*)(.*?)(?=registrant_contact_name)/is', 
             3 => '/registrant_contact_name:(?>[\x20\t]*)(.*?)(?=admin_contact_name)/is', 
-            4 => '/admin_contact_name:(?>[\x20\t]*)(.*?)(?=technical_contact_name)/is',
-            5 => '/technical_contact_name:(?>[\x20\t]*)(.*?)(?=ns_name_01)/is',
+            4 => '/admin_contact_name:(?>[\x20\t]*)(.*?)(?=technical_contact_name)/is', 
+            5 => '/technical_contact_name:(?>[\x20\t]*)(.*?)(?=ns_name_01)/is', 
             6 => '/ns_name_01:(?>[\x20\t]*)(.*?)$/is');
 
     /**
@@ -62,7 +62,8 @@ class Template_Nz extends AbstractTemplate
                     '/^domain_signed:(?>[\x20\t]*)(.+)$/im' => 'dnssec'), 
             2 => array('/^registrar_name:(?>[\x20\t]*)(.+)$/im' => 'registrar:name', 
                     '/^registrar_email:(?>[\x20\t]*)(.+)$/im' => 'registrar:email'), 
-            3 => array('/^registrant_contact_name:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:organization', 
+            3 => array(
+                    '/^registrant_contact_name:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:organization', 
                     '/^registrant_contact_address[0-9]:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:name', 
                     '/^registrant_contact_city:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:address', 
                     '/^registrant_contact_province:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:city', 
@@ -71,7 +72,8 @@ class Template_Nz extends AbstractTemplate
                     '/^registrant_contact_phone:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:country', 
                     '/^registrant_contact_fax:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:phone', 
                     '/^registrant_contact_email:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:fax'), 
-            4 => array('/^admin_contact_name:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:organization', 
+            4 => array(
+                    '/^admin_contact_name:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:organization', 
                     '/^admin_contact_address[0-9]:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:name', 
                     '/^admin_contact_city:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:address', 
                     '/^admin_contact_province:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:city', 
@@ -79,18 +81,19 @@ class Template_Nz extends AbstractTemplate
                     '/^admin_contact_country:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:zipcode', 
                     '/^admin_contact_phone:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:country', 
                     '/^admin_contact_fax:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:phone', 
-                    '/^admin_contact_email:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:fax'),
-            5 => array('/^technical_contact_name:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:organization',
-                    '/^technical_contact_address[0-9]:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:name',
-                    '/^technical_contact_city:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:address',
-                    '/^technical_contact_province:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:city',
-                    '/^technical_contact_postalcode:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:state',
-                    '/^technical_contact_country:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:zipcode',
-                    '/^technical_contact_phone:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:country',
-                    '/^technical_contact_fax:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:phone',
-                    '/^technical_contact_email:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:fax'),
+                    '/^admin_contact_email:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:fax'), 
+            5 => array(
+                    '/^technical_contact_name:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:organization', 
+                    '/^technical_contact_address[0-9]:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:name', 
+                    '/^technical_contact_city:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:address', 
+                    '/^technical_contact_province:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:city', 
+                    '/^technical_contact_postalcode:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:state', 
+                    '/^technical_contact_country:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:zipcode', 
+                    '/^technical_contact_phone:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:country', 
+                    '/^technical_contact_fax:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:phone', 
+                    '/^technical_contact_email:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:fax'), 
             6 => array('/^ns_name_0[0-9]:(?>[\x20\t]*)(.+)$/im' => 'nameserver'));
-    
+
     /**
      * RegEx to check availability of the domain name
      *
@@ -98,7 +101,7 @@ class Template_Nz extends AbstractTemplate
      * @access protected
      */
     protected $available = '/query_status: 220 Available/i';
-    
+
     /**
      * After parsing ...
      *
@@ -110,7 +113,7 @@ class Template_Nz extends AbstractTemplate
     public function postProcess(&$WhoisParser)
     {
         $ResultSet = $WhoisParser->getResult();
-    
+        
         if ($ResultSet->dnssec != 'no') {
             $ResultSet->dnssec = true;
         } else {

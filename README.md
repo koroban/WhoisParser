@@ -161,7 +161,7 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [ ] DZ - whois server on port 43 is broken, http get whois possible
 [x] EC
 [x] EDU
-[ ] EE - possible
+[x] EE
 [ ] EG
 [ ] ER
 [ ] ES - possible
@@ -201,14 +201,14 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [ ] HU - webbased with captcha
 [ ] ID
 [ ] IE - possible
-[ ] IL - possible
+[X] IL
 [ ] IM - possible
 [x] IN
 [x] INFO
 [ ] INT - to few domain names
 [ ] IO - webbased
 [ ] IQ - possible
-[ ] IR - possible
+[X] IR
 [X] IS
 [x] IT
 [x] JE
@@ -226,7 +226,7 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [ ] KR - possible
 [ ] KW
 [ ] KY
-[ ] KZ - possible
+[x] KZ
 [x] LA
 [ ] LB
 [x] LC
@@ -236,7 +236,7 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [ ] LS
 [ ] LT - possible
 [x] LU
-[ ] LV - possible
+[x] LV
 [ ] LY - possible
 [ ] MA - possible
 [ ] MC
