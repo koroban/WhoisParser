@@ -179,6 +179,14 @@ class Result extends AbstractResult
     protected $exception;
 
     /**
+     * Have contacts been parsed?
+     * 
+     * @var boolean
+     * @access protected
+     */
+    protected $parsedContacts;
+
+    /**
 	 * Creates a WhoisParserResult object
 	 *
 	 * @return void

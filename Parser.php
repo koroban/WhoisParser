@@ -195,7 +195,7 @@ class Parser
                 throw $e;
             }
             
-            $this->Result->addItem('exception', $e);
+            $this->Result->addItem('exception', $e->getMessage());
             $this->Result->addItem('rawdata', explode("\n", $this->rawdata));
             
             if (isset($this->Query)) {
@@ -215,6 +215,13 @@ class Parser
         
         if (isset($this->Result->lastHandle)) {
             unset($this->Result->lastHandle);
+        }
+        
+        // check if contacts have been parsed
+        if (sizeof(get_object_vars($this->Result->contacts)) > 0) {
+            $this->Result->addItem('parsedContacts', true);
+        } else {
+            $this->Result->addItem('parsedContacts', false);
         }
         
         // peparing output of Result by format

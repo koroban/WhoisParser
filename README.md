@@ -276,7 +276,7 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [ ] NP
 [ ] NR
 [ ] NU
-[ ] NZ - possible
+[x] NZ
 [ ] OM - possible
 [x] ORG
 [ ] PA
