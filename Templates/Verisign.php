@@ -56,6 +56,7 @@ class Template_Verisign extends AbstractTemplate
                     '/(?>[\x20\t]*)creation date:(?>[\x20\t]*)(.+)$/im' => 'created', 
                     '/(?>[\x20\t]*)expiration date:(?>[\x20\t]*)(.+)$/im' => 'expires', 
                     '/(?>[\x20\t]*)updated date:(?>[\x20\t]*)(.+)$/im' => 'changed', 
+                    '/(?>[\x20\t]*)name server:(?>[\x20\t]*)(.+)$/im' => 'nameserver', 
                     '/(?>[\x20\t]*)status:(?>[\x20\t]*)(.+)$/im' => 'status'));
 
     /**

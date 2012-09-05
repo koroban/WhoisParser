@@ -425,7 +425,7 @@ gTLDs
 [ ] Ascio
 [ ] BasicFusion.com
 [ ] BizCn.com
-[ ] Core Nic
+[x] Core Nic
 [ ] Corporate Domains
 [x] CPS Datensysteme
 [x] Deutsche Telekom
@@ -438,9 +438,9 @@ gTLDs
 [ ] Dynadot
 [x] eNom
 [ ] EPAG
-[ ] Gandi
+[x] Gandi
 [ ] GoDaddy
-[ ] Hetzner.de
+[x] Hetzner.de
 [ ] HTTP.net
 [ ] Joker.com
 [ ] Fabulous.com
@@ -457,7 +457,7 @@ gTLDs
 [ ] Namesecure
 [ ] Network Solutions
 [ ] Nicline
-[ ] Onamae.com
+[x] Onamae.com
 [ ] OnlineNic
 [ ] OVH
 [x] PSI-USA
@@ -469,10 +469,10 @@ gTLDs
 [ ] Strato
 [ ] Tucows
 [x] united-domains
-[ ] Variomedia
+[x] Variomedia
 [ ] Webnic
 [ ] WildWestDomains
-[ ] Xinnet.com
+[x] Xinnet.com
 ```
 
 3rd Party Libraries

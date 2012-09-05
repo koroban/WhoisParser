@@ -42,14 +42,15 @@ class Template_Afilias extends AbstractTemplate
 	 * @access protected
 	 */
     protected $blocks = array(
-            1 => '/Domain (ID|Name):(?>[\x20\t]*)(.*?)(?=Registrant ID|Name Server\:)/is', 
-            2 => '/Registrant ID:(?>[\x20\t]*)(.*?)(?=(Admin ID\:|Admin ID\:|Administrative ID\:|Name Server\:))/is', 
-            3 => '/(Admin|Administrative) ID:(?>[\x20\t]*)(.*?)(?=(Billing ID\:|Tech ID\:|Technical ID\:))/is', 
-            4 => '/Billing ID:(?>[\x20\t]*)(.*?)(?=(Tech ID\:|Technical ID\:|CED ID\:|Name Server\:))/is', 
-            5 => '/(Tech|Technical) ID:(?>[\x20\t]*)(.*?)(?=(Name Server\:|Nameservers\:))/is', 
+            1 => '/Domain (ID|Name):(?>[\x20\t]*)(.*?)(?=Registrant ID|Name Server|Registrant Name\:)/is', 
+            2 => '/Registrant (ID|Name):(?>[\x20\t]*)(.*?)(?=(Admin ID\:|Admin ID\:|Administrative ID\:|Administrative Name\:|Name Server\:))/is', 
+            3 => '/(Admin|Administrative) (ID|Name):(?>[\x20\t]*)(.*?)(?=(Billing ID\:|Billing Name\:|Tech ID\:|Technical ID\:))/is', 
+            4 => '/Billing (ID|Name):(?>[\x20\t]*)(.*?)(?=(Tech ID\:|Tech Name\:|Technical ID\:|CED ID\:|Name Server\:))/is', 
+            5 => '/(Tech|Technical) (ID|Name):(?>[\x20\t]*)(.*?)(?=(Name Server\:|Nameservers\:))/is', 
             6 => '/(Name Server|Nameservers):(?>[\x20\t]*)(.*?)$/is', 
             7 => '/CED ID:(?>[\x20\t]*)(.*?)(?=Operations and Notifications ID\:)/is', 
-            8 => '/Registration Date:(?>[\x20\t]*)(.*?)$/is');
+            8 => '/Registration Date:(?>[\x20\t]*)(.*?)$/is', 
+            9 => '/Zone (ID|Name):(?>[\x20\t]*)(.*?)(?=(Name Server\:|Nameservers\:))/is');
 
     /**
 	 * Items for each block
@@ -123,7 +124,18 @@ class Template_Afilias extends AbstractTemplate
                     '/^CED Identification Number:(?>[\x20\t]*)(.+)$/im' => 'contacts:ced:id'), 
             8 => array('/^Registration Date:(?>[\x20\t]*)(.+)$/im' => 'created', 
                     '/^Expiration Date:(?>[\x20\t]*)(.+)$/im' => 'expires', 
-                    '/^DNSSEC:(?>[\x20\t]*)(.+)$/im' => 'dnssec'));
+                    '/^DNSSEC:(?>[\x20\t]*)(.+)$/im' => 'dnssec'), 
+            9 => array('/^Zone ID:(?>[\x20\t]*)(.+)$/im' => 'contacts:zone:handle', 
+                    '/^Zone Name:(?>[\x20\t]*)(.+)$/im' => 'contacts:zone:name', 
+                    '/^Zone Organization:(?>[\x20\t]*)(.+)$/im' => 'contacts:zone:organization', 
+                    '/^Zone (Street|Address)[0-9]*:(?>[\x20\t]*)(.+)$/im' => 'contacts:zone:address', 
+                    '/^Zone City:(?>[\x20\t]*)(.+)$/im' => 'contacts:zone:city', 
+                    '/^Zone State\/Province:(?>[\x20\t]*)(.+)$/im' => 'contacts:zone:state', 
+                    '/^Zone Postal Code:(?>[\x20\t]*)(.+)$/im' => 'contacts:zone:zipcode', 
+                    '/^Zone Country:(?>[\x20\t]*)(.+)$/im' => 'contacts:zone:country', 
+                    '/^Zone Phone:(?>[\x20\t]*)(.+)$/im' => 'contacts:zone:phone', 
+                    '/^Zone FAX:(?>[\x20\t]*)(.+)$/im' => 'contacts:zone:fax', 
+                    '/^Zone (Email|E-Mail):(?>[\x20\t]*)(.+)$/im' => 'contacts:zone:email'));
 
     /**
      * RegEx to check availability of the domain name
