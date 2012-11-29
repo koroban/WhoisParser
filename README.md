@@ -167,15 +167,15 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [ ] ES - possible
 [ ] ET
 [x] EU
-[ ] FI - possible
+[x] FI
 [ ] FJ
 [ ] FK
 [x] FM
-[ ] FO - possible
+[x] FO
 [x] FR
 [ ] GA
 [ ] GB
-[ ] GD - possible
+[x] GD
 [ ] GE
 [ ] GF
 [x] GG
@@ -207,7 +207,7 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [x] INFO
 [ ] INT - to few domain names
 [ ] IO - webbased
-[ ] IQ - possible
+[x] IQ
 [X] IR
 [X] IS
 [x] IT
@@ -272,7 +272,7 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [x] NG
 [ ] NI
 [x] NL
-[ ] NO - possible
+[ ] NO - possible - need recrusive lookup for nameserver
 [ ] NP
 [ ] NR
 [ ] NU
@@ -321,7 +321,7 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [ ] SX - possible
 [ ] SY
 [ ] SZ
-[ ] TC - possible
+[x] TC 
 [ ] TD 
 [x] TEL
 [x] TF
@@ -349,7 +349,7 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [ ] VA
 [x] VC
 [ ] VE - possible
-[ ] VG - possible
+[x] VG
 [ ] VI
 [ ] VN
 [ ] VU

@@ -143,7 +143,7 @@ class Template_Afilias extends AbstractTemplate
      * @var string
      * @access protected
      */
-    protected $available = '/(Status: free|no matching record)|(DOMAIN NOT FOUND|NOT FOUND)/i';
+    protected $available = '/(Status: free|no matching record)|(DOMAIN NOT FOUND|NOT FOUND)|(Domain Status: Available)/i';
 
     /**
      * After parsing do something
