@@ -57,11 +57,10 @@ class Template_Adamsnames extends AbstractTemplate
     protected $blockItems = array(
             1 => array('/^created date:(?>[\x20\t]*)(.+)$/im' => 'created', 
                     '/^updated date:(?>[\x20\t]*)(.+)$/im' => 'changed', 
-                    '/^expiration date:(?>[\x20\t]*)(.+)$/im' => 'expires',
-                    '/^status:(?>[\x20\t]*)(.+)$/im' => 'status',
+                    '/^expiration date:(?>[\x20\t]*)(.+)$/im' => 'expires', 
+                    '/^status:(?>[\x20\t]*)(.+)$/im' => 'status', 
                     '/^registrar:(?>[\x20\t]*)(.+)$/im' => 'registrar:name'), 
-            2 => array(
-                    '/^owner-contact:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:handle',
+            2 => array('/^owner-contact:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:handle', 
                     '/^owner-organization:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:organization', 
                     '/^owner-name:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:name', 
                     '/^owner-street:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:address', 
@@ -72,8 +71,7 @@ class Template_Adamsnames extends AbstractTemplate
                     '/^owner-phone:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:phone', 
                     '/^owner-fax:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:fax', 
                     '/^owner-email:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:email'), 
-            3 => array(
-                    '/^admin-contact:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:handle',
+            3 => array('/^admin-contact:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:handle', 
                     '/^admin-organization:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:organization', 
                     '/^admin-name:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:name', 
                     '/^admin-street:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:address', 
@@ -84,8 +82,7 @@ class Template_Adamsnames extends AbstractTemplate
                     '/^admin-phone:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:phone', 
                     '/^admin-fax:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:fax', 
                     '/^admin-email:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:email'), 
-            4 => array(
-                    '/^tech-contact:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:handle',
+            4 => array('/^tech-contact:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:handle', 
                     '/^tech-organization:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:organization', 
                     '/^tech-name:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:name', 
                     '/^tech-street:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:address', 
@@ -96,8 +93,7 @@ class Template_Adamsnames extends AbstractTemplate
                     '/^tech-phone:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:phone', 
                     '/^tech-fax:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:fax', 
                     '/^tech-email:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:email'), 
-            5 => array(
-                    '/^billing-contact:(?>[\x20\t]*)(.+)$/im' => 'contacts:billing:handle',
+            5 => array('/^billing-contact:(?>[\x20\t]*)(.+)$/im' => 'contacts:billing:handle', 
                     '/^billing-organization:(?>[\x20\t]*)(.+)$/im' => 'contacts:billing:organization', 
                     '/^billing-name:(?>[\x20\t]*)(.+)$/im' => 'contacts:billing:name', 
                     '/^billing-street:(?>[\x20\t]*)(.+)$/im' => 'contacts:billing:address', 
@@ -109,7 +105,7 @@ class Template_Adamsnames extends AbstractTemplate
                     '/^billing-fax:(?>[\x20\t]*)(.+)$/im' => 'contacts:billing:fax', 
                     '/^billing-email:(?>[\x20\t]*)(.+)$/im' => 'contacts:billing:email'), 
             6 => array('/^nameserver:(?>[\x20\t]*)(.+)$/im' => 'nameserver'));
-    
+
     /**
      * RegEx to check availability of the domain name
      *

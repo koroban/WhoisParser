@@ -181,7 +181,7 @@ class Parser
             if (isset($this->Query->ip)) {
                 $config = $this->Config->get('iana');
             } else {
-                $config = $this->Config->get($this->Query->tld);
+                $config = $this->Config->get($this->Query->idnTld);
                 
                 if ($config['server'] == '') {
                     $config = $this->Config->get('iana');

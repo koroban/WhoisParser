@@ -42,10 +42,10 @@ class Template_Hk extends AbstractTemplate
 	 * @access protected
 	 */
     protected $blocks = array(
-            1 => '/Registrant Contact Information:(.*?)(?=Administrative Contact Information)/is', 
+            1 => '/Registrant Contact Information:(.*?)(?=Administrative|Technical Contact Information)/is', 
             2 => '/Administrative Contact Information:(?>[\x20\t]*)(.*?)(?=Technical Contact Information)/is', 
             3 => '/Technical Contact Information:(?>[\x20\t]*)(.*?)(?=Name Servers Information)/is', 
-            4 => '/Name Servers Information:(?>[\x20\t]*)(.*?)$/is', 
+            4 => '/Name Servers Information:(?>[\x20\t]*)(.*?)(?=---)/is', 
             5 => '/Registrar Name:(?>[\x20\t]*)(.*?)(?=Registrant Contact Information)/is');
 
     /**
@@ -55,7 +55,8 @@ class Template_Hk extends AbstractTemplate
 	 * @access protected
 	 */
     protected $blockItems = array(
-            1 => array('/^Company English Name(.*):(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:name', 
+            1 => array(
+                    '/^Company|Holder English Name(.*):(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:name', 
                     '/Address:(?>[\x20\t]*)(.+)(?=Country)/is' => 'contacts:owner:address', 
                     '/^Country:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:country', 
                     '/^Email:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:email', 
@@ -79,10 +80,9 @@ class Template_Hk extends AbstractTemplate
                     '/^Fax:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:fax', 
                     '/^Email:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:email', 
                     '/^Account Name:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:handle'), 
-            4 => array(
-                    '/Name Servers Information:\r\n(?>[\x20\t]*)(.*?)[\r\n]{3}/is' => 'nameserver'), 
+            4 => array('/Name Servers Information:(?>[\n\x20\t]*)(.*?)[\r\n]{2}/is' => 'nameserver'), 
             5 => array('/^Registrar Name:(?>[\x20\t]*)(.+)$/im' => 'registrar:name', 
-                    '/^Registrar Contact Information: Email:(?>[\x20\t]*)(.+)$/im' => 'registrar:email'));
+                    '/^Registrar Contact Information: Email:(?>[\x20\t]*)(.+)(?>[\x20\t]*)Hotline:/im' => 'registrar:email'));
 
     /**
      * RegEx to check availability of the domain name

@@ -292,12 +292,12 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [x] PRO
 [ ] PS
 [ ] PT - possible
-[ ] PW
+[x] PW
 [ ] PY
 [ ] QA - possible
 [x] RE
 [ ] RO - possible
-[ ] RS - possible
+[x] RS
 [ ] RU - possible
 [ ] RW
 [ ] SA - possible
@@ -318,7 +318,7 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [ ] ST - possible
 [ ] SU - possible -> RU
 [ ] SV
-[ ] SX - possible
+[x] SX
 [ ] SY
 [ ] SZ
 [x] TC 
@@ -339,16 +339,16 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [ ] TT
 [x] TV
 [x] TW
-[ ] TZ - possible
+[ ] TZ
 [ ] UA - possible
 [ ] UG - possible
-[ ] UK - possible
+[x] UK
 [x] US
 [ ] UY - possible
 [ ] UZ - possible
 [ ] VA
 [x] VC
-[ ] VE - possible
+[ ] VE - whois server on port 43 broken
 [x] VG
 [ ] VI
 [ ] VN
@@ -358,42 +358,42 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [ ] XN--0ZWM56D
 [ ] XN--11B5BS3A9AJ6G
 [ ] XN--3E0B707E - possible .kr
-[ ] XN--45BRJ9C - don't know but it is .in
+[x] XN--45BRJ9C - .in
 [ ] XN--80AKHBYKNJ4F
 [ ] XN--80AO21A - possible .kz
 [ ] XN--90A3AC - possible .rs
 [ ] XN--9T4B11YI5A
 [ ] XN--CLCHC0EA0B2G2A9GCD - possible .sg
 [ ] XN--DEBA0AD
-[ ] XN--FIQS8S - possible .cn
-[ ] XN--FIQZ9S - possible .cn
-[ ] XN--FPCRJ9C3D - don't know but it is .in
+[x] XN--FIQS8S - .cn
+[x] XN--FIQZ9S - .cn
+[x] XN--FPCRJ9C3D - .in
 [ ] XN--FZC2C9E2C
 [ ] XN--G6W251D
-[ ] XN--GECRJ9C - don't know but it is .in
-[ ] XN--H2BRJ9C - don't know but it is .in
+[x] XN--GECRJ9C - .in
+[x] XN--H2BRJ9C - .in
 [ ] XN--HGBK6AJ7F53BBA
 [ ] XN--HLCJ6AYA9ESC7A
-[ ] XN--J6W193G - possible .hk
+[x] XN--J6W193G - .hk
 [ ] XN--JXALPDLP
 [ ] XN--KGBECHTV
-[ ] XN--KPRW13D - possible .tw
-[ ] XN--KPRY57D - possible .tw
+[x] XN--KPRW13D - .tw
+[x] XN--KPRY57D - .tw
 [ ] XN--LGBBAT1AD8J - possible .dz
 [ ] XN--MGBAAM7A8H - possible .ae
 [ ] XN--MGBAYH7GPA
-[ ] XN--MGBBH1A71E - don't know but it is .in
+[x] XN--MGBBH1A71E - .in
 [ ] XN--MGBC0A9AZCG - don't know but it is .ma
 [ ] XN--MGBERP4A5D4AR - possible .sa
 [ ] XN--O3CW4H - possible .th
 [ ] XN--OGBPF8FL
 [ ] XN--P1AI - possible .ru
 [ ] XN--PGBS0DH
-[ ] XN--S9BRJ9C - don't know but it is .in
+[x] XN--S9BRJ9C - .in
 [ ] XN--WGBH1C
 [ ] XN--WGBL6A - possible .qa
 [ ] XN--XKC2AL3HYE2A
-[ ] XN--XKC2DL3A5EE0H  - don't know but it is .in
+[x] XN--XKC2DL3A5EE0H - .in
 [ ] XN--YFRO4I67O - possible sgnic
 [ ] XN--YGBI2AMMX - possible .ps
 [ ] XN--ZCKZAH
@@ -428,6 +428,7 @@ gTLDs
 [x] Core Nic
 [ ] Corporate Domains
 [x] CPS Datensysteme
+[x] Cronon / Strato
 [x] Deutsche Telekom
 [ ] DirectNic
 [ ] DomainPeople
@@ -466,7 +467,6 @@ gTLDs
 [ ] ResellerClub.com
 [x] Schlund
 [ ] Srsplus
-[ ] Strato
 [ ] Tucows
 [x] united-domains
 [x] Variomedia
@@ -478,7 +478,7 @@ gTLDs
 3rd Party Libraries
 -------------------
 We are using our own DomainParser:
-* Novutec: http://github.com/novutec/DomainParser
+* Novutec: http://github.com/novutec/DomainParser (Version 1.1.5 and above)
 
 ChangeLog
 ---------
