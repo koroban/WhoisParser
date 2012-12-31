@@ -15,7 +15,7 @@
  *
  * @category   Novutec
  * @package    WhoisParser
- * @copyright  Copyright (c) 2007 - 2012 Novutec Inc. (http://www.novutec.com)
+ * @copyright  Copyright (c) 2007 - 2013 Novutec Inc. (http://www.novutec.com)
  * @license    http://www.apache.org/licenses/LICENSE-2.0
  */
 
@@ -29,7 +29,7 @@ namespace Novutec\WhoisParser;
  *
  * @category   Novutec
  * @package    WhoisParser
- * @copyright  Copyright (c) 2007 - 2012 Novutec Inc. (http://www.novutec.com)
+ * @copyright  Copyright (c) 2007 - 2013 Novutec Inc. (http://www.novutec.com)
  * @license    http://www.apache.org/licenses/LICENSE-2.0
  */
 class Http extends AbstractAdapter
@@ -54,7 +54,6 @@ class Http extends AbstractAdapter
         curl_setopt($this->sock, CURLOPT_SSLVERSION, 3);
         curl_setopt($this->sock, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($this->sock, CURLOPT_POST, false);
-        
         curl_setopt($this->sock, CURLOPT_URL, $url);
         
         $rawdata = curl_exec($this->sock);

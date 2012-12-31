@@ -15,7 +15,7 @@
  *
  * @category   Novutec
  * @package    WhoisParser
- * @copyright  Copyright (c) 2007 - 2012 Novutec Inc. (http://www.novutec.com)
+ * @copyright  Copyright (c) 2007 - 2013 Novutec Inc. (http://www.novutec.com)
  * @license    http://www.apache.org/licenses/LICENSE-2.0
  */
 
@@ -44,7 +44,7 @@ require_once WHOISPARSERPATH . '/Result/Registrar.php';
  *
  * @category   Novutec
  * @package    WhoisParser
- * @copyright  Copyright (c) 2007 - 2012 Novutec Inc. (http://www.novutec.com)
+ * @copyright  Copyright (c) 2007 - 2013 Novutec Inc. (http://www.novutec.com)
  * @license    http://www.apache.org/licenses/LICENSE-2.0
  */
 class Result extends AbstractResult
@@ -467,5 +467,67 @@ class Result extends AbstractResult
         }
         
         return $xml->asXML();
+    }
+
+    /**
+     * cleanUp method will be called before output
+     * 
+     * @return void
+     */
+    public function cleanUp($config, $dateformat)
+    {
+        // add WHOIS server to output
+        $this->addItem('whoisserver', ($config['adapter'] == 'http') ? $config['server'] .
+                 str_replace('%domain%', $this->name, $config['format']) : $config['server']);
+        
+        // remove helper vars from result
+        if (isset($this->lastId)) {
+            unset($this->lastId);
+        }
+        
+        if (isset($this->lastHandle)) {
+            unset($this->lastHandle);
+        }
+        
+        // format dates
+        $this->changed = $this->formatDate($dateformat, $this->changed);
+        $this->created = $this->formatDate($dateformat, $this->created);
+        $this->expires = $this->formatDate($dateformat, $this->expires);
+        
+        foreach ($this->contacts as $contactType => $contactArray) {
+            foreach ($contactArray as $contactObject) {
+                $contactObject->created = $this->formatDate($dateformat, $contactObject->created);
+                $contactObject->changed = $this->formatDate($dateformat, $contactObject->changed);
+            }
+        }
+        
+        // check if contacts have been parsed
+        if (sizeof(get_object_vars($this->contacts)) > 0) {
+            $this->addItem('parsedContacts', true);
+        } else {
+            $this->addItem('parsedContacts', false);
+        }
+    }
+
+    /**
+     * Format given dates by date format
+     *
+     * @param  string $dateformat
+     * @param  string $date
+     * @return string
+     */
+    private function formatDate($dateformat, $date)
+    {
+        $timestamp = strtotime(str_replace('/', '-', $date));
+        
+        if ($timestamp == '') {
+            $timestamp = strtotime(str_replace('/', '.', $date));
+        }
+        
+        if ($timestamp != '') {
+            return strftime($dateformat, $timestamp);
+        } else {
+            return $date;
+        }
     }
 }

@@ -15,7 +15,7 @@
  *
  * @category   Novutec
  * @package    DomainParser
- * @copyright  Copyright (c) 2007 - 2012 Novutec Inc. (http://www.novutec.com)
+ * @copyright  Copyright (c) 2007 - 2013 Novutec Inc. (http://www.novutec.com)
  * @license    http://www.apache.org/licenses/LICENSE-2.0
  */
 
@@ -29,7 +29,7 @@ namespace Novutec\WhoisParser;
  *
  * @category   Novutec
  * @package    WhoisParser
- * @copyright  Copyright (c) 2007 - 2012 Novutec Inc. (http://www.novutec.com)
+ * @copyright  Copyright (c) 2007 - 2013 Novutec Inc. (http://www.novutec.com)
  * @license    http://www.apache.org/licenses/LICENSE-2.0
  */
 class Template_Gtld_melbourneit extends AbstractTemplate

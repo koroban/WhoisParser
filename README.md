@@ -1,14 +1,14 @@
 Novutec WhoisParser
 ===================
 
-Parse the WHOIS output by using certain templates.
+Lookup domain names, IP addresses and AS numbers by WHOIS.
 
 Automatically follows the WHOIS registry referral chains until it finds the
 correct WHOIS for the most complete WHOIS data. Exceptionally robust WHOIS parser
 that parses a variety of free form WHOIS data into well-structured data that your
 application may read. Also returns an indication of whether a domain is available.
 
-Copyright (c) 2007 - 2012 Novutec Inc. (http://www.novutec.com)
+Copyright (c) 2007 - 2013 Novutec Inc. (http://www.novutec.com)
 Licensed under the Apache License, Version 2.0 (the "License").
 
 Installation
@@ -23,56 +23,62 @@ Move the source code to your preferred project folder.
 Usage
 -----
 
-* include Parser.php
+* Include Parser.php
 ```
 require_once 'DomainParser/Parser.php';
 require_once 'WhoisParser/Parser.php';
 ```
 
-* create Parser() object
+* Create Parser() object
 ```
 $Parser = new Novutec\WhoisParser\Parser();
 ```
 
-* call lookup() method
+* Call lookup() method
 ```
 $result = $Parser->lookup($domain);
+$result = $Parser->lookup($ipv4);
+$result = $Parser->lookup($ipv6);
+$result = $Parser->lookup($asn);
 ```
 
-* access WHOIS record, the object oriented way.
+* Access WHOIS record, the object oriented way.
 ```
 echo $Result->created; // get create date of domain name
 print_r($Result->rawdata); // get raw output as array
 ```
 
-* you can choose 5 different return types. the types are array, object, json, serialize and
-xml. by default it is object. if you want to change that call the format method before calling
-the parse method or provide to the constructer. if you are not using object and an
+* You may choose 5 different return types. the types are array, object, json, serialize and
+xml. By default it is object. If you want to change that call the format method before calling
+the parse method or provide to the constructer. If you are not using object and an
 error occurs, then exceptions will not be trapped within the response and thrown directy.
 ```
 $Parser->setFormat('json');
 $Parser = new Novutec\WhoisParser\Parser('json');
 ```
 
-* if you have special whois server or login credentials for member whois you may use
-the method setSepcialWhois(). Please note that if you have a special whois and the output
+* You may set your own date format if you like. Please check http://php.net/strftime for further
+details
+```
+$Parser->setDateFormat('%d.%m.%Y %H:%M:%S');
+```
+
+* If you have special WHOIS server or login credentials for a registrar WHOIS you may use
+the method setSepcialWhois(). Please note that if you have a special WHOIS and the WHOIS output
 looks different you need your own template.
 ```
 $Parser->setSepcialWhois('it' => array('server' => 'whois.nic.it', 'port' => 43,
-'format' => '-u username -w passsword %domain%', 'template' => 'it-your-template'));
+'format' => '-u username -w passsword %domain%', 'template' => 'it-your-own-template'));
 ```
 
 ToDos
 -----
-Caching
+* Caching of data for better performance and to reduce requests
+* Optional logging of raw data and/or parsed data for audit proposes 
 
 Known bugs to be fixed in further versions
 ------------------------------------------
-* [Adapter] HTTP - it is just a prototype
-* [Template] .NL - need caching for testing, because after 10 requests you get blocked
-* [Template] .IT - no algorithm for public whois
 * [Template] gTLD cps-datensysteme - need caching for testing, because after 5 requests you get blocked
-* [Template] .EDU - no algorithm
 * [Template] .CZ - found a strange behavior by matching the contact handles with google.cz
 * [Template] .BJ - recrusive lookup for handles
 
@@ -96,50 +102,50 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [x] AERO
 [x] AF
 [x] AG
-[ ] AI
+[x] AI
 [ ] AL
 [x] AM
 [ ] AN
 [ ] AO
 [ ] AQ
-[ ] AR
+[ ] AR - webbased
 [ ] ARPA
 [x] AS
 [x] ASIA
 [x] AT
 [x] AU
 [ ] AW
-[ ] AX
-[ ] AZ
-[ ] BA
-[ ] BB
+[x] AX
+[ ] AZ - webbased
+[ ] BA - webbased
+[ ] BB - webbased with captcha
 [ ] BD
 [x] BE
 [ ] BF
-[ ] BG
+[x] BG
 [ ] BH
 [x] BI
 [x] BIZ
 [ ] BJ - need recrusive calls for handles
-[ ] BM
+[ ] BM - webbased
 [ ] BN
 [x] BO
-[ ] BR
-[ ] BS
+[ ] BR - possible
+[ ] BS - webbased
 [ ] BT
-[ ] BV
+[ ] BV - no domains but it is NORID
 [ ] BW
 [x] BY
 [x] BZ
 [x] CA
 [x] CAT
 [x] CC
-[ ] CD
+[x] CD
 [ ] CF
-[ ] CG
+[ ] CG - webbased with captcha
 [x] CH
 [ ] CI - need recrusive calls for handles
-[ ] CK
+[x] CK
 [ ] CL - possible
 [x] CM
 [x] CN
@@ -154,6 +160,7 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [ ] CY
 [x] CZ
 [x] DE
+[x] DE Registrar WHOIS
 [ ] DJ
 [x] DK
 [x] DM
@@ -168,7 +175,7 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [ ] ET
 [x] EU
 [x] FI
-[ ] FJ
+[ ] FJ (whois.usp.ac.fj)
 [ ] FK
 [x] FM
 [x] FO
@@ -189,35 +196,36 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [ ] GQ
 [ ] GR
 [x] GS
-[ ] GT
+[ ] GT  - webbased
 [ ] GU
 [ ] GW
 [x] GY
 [x] HK
-[ ] HM
+[ ] HM (whois.registry.hm)
 [x] HN
 [ ] HR - possible
 [x] HT
 [ ] HU - webbased with captcha
-[ ] ID
+[ ] ID (whois.idnic.net.id)
 [ ] IE - possible
 [X] IL
-[ ] IM - possible
+[x] IM
 [x] IN
 [x] INFO
 [ ] INT - to few domain names
-[ ] IO - webbased
+[x] IO
 [x] IQ
 [X] IR
 [X] IS
 [x] IT
+[x] IT Registrar WHOIS
 [x] JE
 [ ] JM
 [ ] JO
 [x] JOBS
-[ ] JP - possible
+[x] JP
 [x] KE
-[ ] KG - possible
+[x] KG
 [ ] KH
 [x] KI
 [ ] KM
@@ -231,10 +239,10 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [ ] LB
 [x] LC
 [x] LI
-[ ] LK
+[ ] LK (whois.nic.lk)
 [ ] LR
 [ ] LS
-[ ] LT - possible
+[x] LT
 [x] LU
 [x] LV
 [ ] LY - possible
@@ -255,12 +263,12 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [ ] MQ
 [ ] MR
 [x] MS
-[ ] MT
+[ ] MT (whois.nic.org.mt)
 [x] MU
 [x] MUSEUM
 [ ] MV
 [ ] MW
-[ ] MX - possible
+[x] MX
 [ ] MY - possible
 [ ] MZ
 [x] NA
@@ -275,16 +283,16 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [ ] NO - possible - need recrusive lookup for nameserver
 [ ] NP
 [ ] NR
-[ ] NU
+[ ] NU - possible
 [x] NZ
-[ ] OM - possible
+[x] OM
 [x] ORG
 [ ] PA
 [x] PE
 [ ] PF
 [ ] PG
 [ ] PH
-[ ] PK
+[ ] PK - webbased
 [x] PL
 [x] PM
 [ ] PN
@@ -294,7 +302,7 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [ ] PT - possible
 [x] PW
 [ ] PY
-[ ] QA - possible
+[x] QA
 [x] RE
 [ ] RO - possible
 [x] RS
@@ -306,9 +314,9 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [ ] SD
 [ ] SE - possible
 [ ] SG - possible
-[ ] SH - webbased
+[x] SH
 [ ] SI - possible
-[ ] SJ
+[ ] SJ - no domains but it is NORID
 [ ] SK - possible
 [ ] SL
 [ ] SM - possible
@@ -330,13 +338,13 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [ ] TJ
 [ ] TK - possible
 [x] TL
-[ ] TM - webbased
+[x] TM
 [ ] TN - whois server on port 43 broken
 [ ] TO - useless
 [ ] TP
 [x] TR
 [x] TRAVEL
-[ ] TT
+[ ] TT - webbased 
 [x] TV
 [x] TW
 [ ] TZ
@@ -400,7 +408,7 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [x] XXX
 [ ] YE
 [x] YT
-[ ] ZA
+[ ] ZA - webbased whois.co.za
 [ ] ZM
 [ ] ZW
 ```
@@ -456,7 +464,7 @@ gTLDs
 [ ] Names4ever
 [ ] Namesdirect
 [ ] Namesecure
-[ ] Network Solutions
+[x] Network Solutions
 [ ] Nicline
 [x] Onamae.com
 [ ] OnlineNic
@@ -490,7 +498,7 @@ Please report any issues via https://github.com/novutec/WhoisParser/issues
 
 LICENSE and COPYRIGHT
 -----------------------
-Copyright (c) 2007 - 2012 Novutec Inc. (http://www.novutec.com)
+Copyright (c) 2007 - 2013 Novutec Inc. (http://www.novutec.com)
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

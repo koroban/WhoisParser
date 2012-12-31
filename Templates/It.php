@@ -15,7 +15,7 @@
  *
  * @category   Novutec
  * @package    DomainParser
- * @copyright  Copyright (c) 2007 - 2012 Novutec Inc. (http://www.novutec.com)
+ * @copyright  Copyright (c) 2007 - 2013 Novutec Inc. (http://www.novutec.com)
  * @license    http://www.apache.org/licenses/LICENSE-2.0
  */
 
@@ -29,7 +29,7 @@ namespace Novutec\WhoisParser;
  *
  * @category   Novutec
  * @package    WhoisParser
- * @copyright  Copyright (c) 2007 - 2012 Novutec Inc. (http://www.novutec.com)
+ * @copyright  Copyright (c) 2007 - 2013 Novutec Inc. (http://www.novutec.com)
  * @license    http://www.apache.org/licenses/LICENSE-2.0
  */
 class Template_It extends AbstractTemplate
@@ -41,7 +41,12 @@ class Template_It extends AbstractTemplate
 	 * @var array
 	 * @access protected
 	 */
-    protected $blocks = array(1 => '/(domain):[\s]*(.*?)[\r\n]{2}/is');
+    protected $blocks = array(1 => '/Domain:(?>[\x20\t]*)(.*?)(?=Registrant)/is', 
+            2 => '/Registrant(?>[\x20\t]*)(.*?)(?=Admin Contact)/is', 
+            3 => '/Admin Contact(?>[\x20\t]*)(.*?)(?=Technical Contacts)/is', 
+            4 => '/Technical Contacts(?>[\x20\t]*)(.*?)(?=Registrar)/is', 
+            5 => '/Registrar(?>[\x20\t]*)(.*?)(?=Nameservers)/is', 
+            6 => '/Nameservers(?>[\x20\t]*)(.*?)$/is');
 
     /**
 	 * Items for each block
@@ -50,32 +55,31 @@ class Template_It extends AbstractTemplate
 	 * @access protected
 	 */
     protected $blockItems = array(
-            1 => array('/^status:[\s]*(.+)$/im' => 'status', '/^created:[\s]*(.+)$/im' => 'created', 
-                    '/^lastUpdate:[\s]*(.+)$/im' => 'changed', 
-                    '/^Last Update:[\s]*(.+)$/im' => 'changed', 
-                    '/^expire:[\s]*(.+)$/im' => 'expires', 
-                    '/^Expire Date:[\s]*(.+)$/im' => 'expires', 
-                    '/^mnt-by:[\s]*(.+)$/im' => 'registrar:id', 
-                    '/^registrant:[\s]*(.+)$/im' => 'network:contacts:owner', 
-                    '/^admin:[\s]*(.+)$/im' => 'network:contacts:admin', 
-                    '/^tech:[\s]*(.+)$/im' => 'network:contacts:tech', 
-                    '/^nserver:[\s]*(.+)$/im' => 'nameserver'), 
-            
-            2 => array('/^[\s]*contactid:[\s]*(.+)$/im' => 'contact:handle', 
-                    '/^[\s]*contacttype:[\s]*(.+)$/im' => 'contact:type', 
-                    '/^[\s]*regcode:[\s]*(.+)$/im' => 'contact:regcode', 
-                    '/^[\s]*entitytype:[\s]*(.+)$/im' => 'contact:entity', 
-                    '/^[\s]*name:[\s]*(.+)$/im' => 'contact:name', 
-                    '/^[\s]*org:[\s]*(.+)$/im' => 'contact:organization', 
-                    '/^[\s]*postalcode:[\s]*(.+)$/im' => 'contact:zipcode', 
-                    '/^[\s]*city:[\s]*(.+)$/im' => 'contact:city', 
-                    '/^[\s]*stateOrProvince:[\s]*(.+)$/im' => 'contact:state', 
-                    '/^[\s]*countryCode:[\s]*(.+)$/im' => 'contact:country', 
-                    '/^[\s]*voice:[\s]*(.+)$/im' => 'contact:phone', 
-                    '/^[\s]*fax:[\s]*(.+)$/im' => 'contact:fax', 
-                    '/^[\s]*email:[\s]*(.+)$/im' => 'contact:email', 
-                    '/^[\s]*created:[\s]*(.+)$/im' => 'contact:created', 
-                    '/^[\s]*last update:[\s]*(.+)$/im' => 'contact:changed'));
+            1 => array('/status:(?>[\x20\t]*)(.+)$/im' => 'status', 
+                    '/created:(?>[\x20\t]*)(.+)$/im' => 'created', 
+                    '/^Last Update:(?>[\x20\t]*)(.+)$/im' => 'changed', 
+                    '/^Expire Date:(?>[\x20\t]*)(.+)$/im' => 'expires'), 
+            2 => array('/Name:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:name', 
+                    '/Organization:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:organization', 
+                    '/ContactID:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:handle', 
+                    '/Address:(?>[\x20\t]*)(.+)(?=Created)/is' => 'contacts:owner:address', 
+                    '/Created:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:created', 
+                    '/Last Update:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:changed'), 
+            3 => array('/Name:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:name', 
+                    '/Organization:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:organization', 
+                    '/ContactID:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:handle', 
+                    '/Address:(?>[\x20\t]*)(.+)(?=Created)/is' => 'contacts:admin:address', 
+                    '/Created:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:created', 
+                    '/Last Update:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:changed'), 
+            4 => array('/Name:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:name', 
+                    '/Organization:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:organization', 
+                    '/ContactID:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:handle', 
+                    '/Address:(?>[\x20\t]*)(.+)(?=Created)/is' => 'contacts:tech:address', 
+                    '/Created:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:created', 
+                    '/Last Update:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:changed'), 
+            5 => array('/Organization:(?>[\x20\t]*)(.+)$/im' => 'registrar:name', 
+                    '/Name:(?>[\x20\t]*)(.+)$/im' => 'registrar:id'), 
+            6 => array('/Nameservers[\n](?>[\x20\t]*)(.+)$/is' => 'nameserver'));
 
     /**
      * RegEx to check availability of the domain name
@@ -83,5 +87,44 @@ class Template_It extends AbstractTemplate
      * @var string
      * @access protected
      */
-    protected $available = '/(Status:[\s]*AVAILABLE)[\r\n]/i';
+    protected $available = '/Status:(?>[\x20\t]*)AVAILABLE/i';
+
+    /**
+     * After parsing ...
+     *
+     * Fix address and nameserver in whois output
+     *
+     * @param  object $whoisParser
+     * @return void
+     */
+    public function postProcess(&$WhoisParser)
+    {
+        $ResultSet = $WhoisParser->getResult();
+        $filteredNameserver = array();
+        
+        foreach ($ResultSet->contacts as $contactType => $contactArray) {
+            foreach ($contactArray as $contactObject) {
+                if (! is_array($contactObject->address)) {
+                    $explodedAddress = explode("\n", $contactObject->address);
+                    
+                    $contactObject->address = trim($explodedAddress[0]);
+                    $contactObject->city = trim($explodedAddress[1]);
+                    $contactObject->zipcode = trim($explodedAddress[2]);
+                    $contactObject->state = trim($explodedAddress[3]);
+                    $contactObject->country = trim($explodedAddress[4]);
+                }
+            }
+        }
+        
+        if (isset($ResultSet->nameserver) && $ResultSet->nameserver != '' &&
+                 ! is_array($ResultSet->nameserver)) {
+            $explodedNameserver = explode("\n", $ResultSet->nameserver);
+            foreach ($explodedNameserver as $key => $line) {
+                if (trim($line) != '') {
+                    $filteredNameserver[] = strtolower(trim($line));
+                }
+            }
+            $ResultSet->nameserver = $filteredNameserver;
+        }
+    }
 }

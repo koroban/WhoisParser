@@ -15,7 +15,7 @@
  *
  * @category   Novutec
  * @package    WhoisParser
- * @copyright  Copyright (c) 2007 - 2012 Novutec Inc. (http://www.novutec.com)
+ * @copyright  Copyright (c) 2007 - 2013 Novutec Inc. (http://www.novutec.com)
  * @license    http://www.apache.org/licenses/LICENSE-2.0
  */
 
@@ -64,7 +64,7 @@ require_once WHOISPARSERPATH . '/Exception/AbstractException.php';
  *
  * @category   Novutec
  * @package    WhoisParser
- * @copyright  Copyright (c) 2007 - 2012 Novutec Inc. (http://www.novutec.com)
+ * @copyright  Copyright (c) 2007 - 2013 Novutec Inc. (http://www.novutec.com)
  * @license    http://www.apache.org/licenses/LICENSE-2.0
  */
 class Parser
@@ -136,6 +136,14 @@ class Parser
     protected $format = 'object';
 
     /**
+     * Output format for dates
+     * 
+     * @var string
+     * @access protected
+     */
+    protected $dateformat = '%Y-%m-%d %H:%M:%S';
+
+    /**
      * Creates a WhoisParser object
      * 
      * @param  string $format
@@ -143,6 +151,7 @@ class Parser
 	 */
     public function __construct($format = 'object')
     {
+        date_default_timezone_set('UTC');
         $this->setFormat($format);
     }
 
@@ -205,24 +214,8 @@ class Parser
             }
         }
         
-        // small clean up
-        $Config = $this->Config->getCurrent();
-        $this->Result->addItem('whoisserver', $Config['server']);
-        
-        if (isset($this->Result->lastId)) {
-            unset($this->Result->lastId);
-        }
-        
-        if (isset($this->Result->lastHandle)) {
-            unset($this->Result->lastHandle);
-        }
-        
-        // check if contacts have been parsed
-        if (sizeof(get_object_vars($this->Result->contacts)) > 0) {
-            $this->Result->addItem('parsedContacts', true);
-        } else {
-            $this->Result->addItem('parsedContacts', false);
-        }
+        // call cleanUp method
+        $this->Result->cleanUp($this->Config->getCurrent(), $this->dateformat);
         
         // peparing output of Result by format
         switch ($this->format) {
@@ -422,6 +415,12 @@ class Parser
      */
     private function parseTemplate($Template)
     {
+        // check if there is a block to be cutted from HTML response
+        if (isset($Template->htmlBlock)) {
+            preg_match($Template->htmlBlock, $this->rawdata, $htmlMatches);
+            $this->rawdata = strip_tags($htmlMatches[0]);
+        }
+        
         // lookup all blocks of template
         foreach ($Template->blocks as $blockKey => $blockRegEx) {
             // try to match block regex against WHOIS rawdata
@@ -507,6 +506,20 @@ class Parser
     public function setFormat($format = 'object')
     {
         $this->format = filter_var($format, FILTER_SANITIZE_STRING);
+    }
+
+    /**
+     * Set date format
+     * 
+     * You may choose your own date format. Please check http://php.net/strftime for further
+     * details
+     * 
+     * @param  string $dateformat
+     * @return void
+     */
+    public function setDateFormat($dateformat = '%Y-%m-%d %H:%M:%S')
+    {
+        $this->dateformat = $dateformat;
     }
 
     /**
