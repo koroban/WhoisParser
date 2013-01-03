@@ -122,7 +122,7 @@ class Template_Cocca extends AbstractTemplate
      * 
      * Fix address and nameserver in whois output
      * 
-     * @param  object $whoisParser
+     * @param  object &$WhoisParser
      * @return void
      */
     public function postProcess(&$WhoisParser)

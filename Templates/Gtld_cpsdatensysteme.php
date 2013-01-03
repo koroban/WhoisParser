@@ -78,9 +78,9 @@ class Template_Gtld_cpsdatensysteme extends AbstractTemplate
     /**
      * After parsing do something
      *
-     * Clear empty lines at nameservers
+     * Fix nameserver
      *
-     * @param  object $whoisParser
+     * @param  object &$WhoisParser
      * @return void
      */
     public function postProcess(&$WhoisParser)

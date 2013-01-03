@@ -85,7 +85,7 @@ class Template_Bg extends AbstractTemplate
      *
      * Fix address, nameserver and dnssec in WHOIS output
      *
-     * @param  object $whoisParser
+     * @param  object &$WhoisParser
      * @return void
      */
     public function postProcess(&$WhoisParser)

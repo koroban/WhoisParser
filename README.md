@@ -130,7 +130,7 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [ ] BM - webbased
 [ ] BN
 [x] BO
-[ ] BR - possible
+[x] BR
 [ ] BS - webbased
 [ ] BT
 [ ] BV - no domains but it is NORID
@@ -171,7 +171,7 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [x] EE
 [ ] EG
 [ ] ER
-[ ] ES - possible
+[x] ES
 [ ] ET
 [x] EU
 [x] FI
@@ -212,7 +212,7 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [x] IM
 [x] IN
 [x] INFO
-[ ] INT - to few domain names
+[x] INT
 [x] IO
 [x] IQ
 [X] IR
@@ -231,7 +231,7 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [ ] KM
 [ ] KN
 [ ] KP
-[ ] KR - possible
+[x] KR
 [ ] KW
 [ ] KY
 [x] KZ
@@ -263,7 +263,7 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [ ] MQ
 [ ] MR
 [x] MS
-[ ] MT (whois.nic.org.mt)
+[ ] MT (whois.nic.org.mt) mit captcha
 [x] MU
 [x] MUSEUM
 [ ] MV
@@ -424,7 +424,7 @@ Special TLDs
 [x] NET.CC
 ```
 
-gTLDs
+gTLDs and thin registries
 ```
 [ ] 123-Reg.co.uk
 [x] 1API
@@ -466,6 +466,7 @@ gTLDs
 [ ] Namesecure
 [x] Network Solutions
 [ ] Nicline
+[x] Novutec
 [x] Onamae.com
 [ ] OnlineNic
 [ ] OVH

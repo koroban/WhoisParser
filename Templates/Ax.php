@@ -73,7 +73,7 @@ class Template_Ax extends AbstractTemplate
      *
      * Fix UTF-8
      *
-     * @param  object $whoisParser
+     * @param  object &$WhoisParser
      * @return void
      */
     public function postProcess(&$WhoisParser)

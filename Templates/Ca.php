@@ -85,9 +85,9 @@ class Template_Ca extends AbstractTemplate
     /**
      * After parsing do something
      *
-     * Fix address
+     * Fix address and nameservers
      *
-     * @param  object $whoisParser
+     * @param  object &$WhoisParser
      * @return void
      */
     public function postProcess(&$WhoisParser)

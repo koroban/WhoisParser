@@ -80,9 +80,9 @@ class Template_Ck extends AbstractTemplate
     /**
      * After parsing ...
      *
-     * Fix address and nameserver in whois output
+     * Fix dates and addresses in WHOIS output
      *
-     * @param  object $whoisParser
+     * @param  object &$WhoisParser
      * @return void
      */
     public function postProcess(&$WhoisParser)

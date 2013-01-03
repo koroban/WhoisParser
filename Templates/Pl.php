@@ -81,9 +81,9 @@ class Template_Pl extends AbstractTemplate
     /**
      * After parsing ...
      * 
-     * Fix address, registrar handle and nameserver in whois output
+     * Fix address, registrar handle, nameserver and dnssec in whois output
      * 
-     * @param  object $WhoisParser
+     * @param  object &$WhoisParser
      * @return void
      */
     public function postProcess(&$WhoisParser)

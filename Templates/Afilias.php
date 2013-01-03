@@ -149,8 +149,9 @@ class Template_Afilias extends AbstractTemplate
      * After parsing do something
      *
      * Clear empty lines at address and nameservers, also set dnssec
+     * If there was another whois server call it for further information
      *
-     * @param  object $whoisParser
+     * @param  object &$WhoisParser
      * @return void
      */
     public function postProcess(&$WhoisParser)

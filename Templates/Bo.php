@@ -98,7 +98,7 @@ class Template_Bo extends AbstractTemplate
      *
      * Fix email and available in whois output
      *
-     * @param  object $whoisParser
+     * @param  object &$WhoisParser
      * @return void
      */
     public function postProcess(&$WhoisParser)

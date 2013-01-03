@@ -81,7 +81,7 @@ class Template_Im extends AbstractTemplate
      *
      * Fix address in WHOIS output
      *
-     * @param  object $whoisParser
+     * @param  object &$WhoisParser
      * @return void
      */
     public function postProcess(&$WhoisParser)

@@ -80,7 +80,7 @@ class Template_Is extends AbstractTemplate
      *
      * Convert UTF-8 in contact handles and rawdata
      *
-     * @param  object $whoisParser
+     * @param  object &$WhoisParser
      * @return void
      */
     public function postProcess(&$WhoisParser)

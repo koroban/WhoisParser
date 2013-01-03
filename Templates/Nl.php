@@ -82,7 +82,7 @@ class Template_Nl extends AbstractTemplate
      * 
      * Fix address, registrar, dnssec and nameservers
      * 
-	 * @param  object &$whoisParser
+	 * @param  object &$WhoisParser
 	 * @return void
 	 */
     public function postProcess(&$WhoisParser)

@@ -92,9 +92,9 @@ class Template_It extends AbstractTemplate
     /**
      * After parsing ...
      *
-     * Fix address and nameserver in whois output
+     * Fix address in whois output
      *
-     * @param  object $whoisParser
+     * @param  object &$WhoisParser
      * @return void
      */
     public function postProcess(&$WhoisParser)

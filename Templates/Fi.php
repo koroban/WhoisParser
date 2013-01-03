@@ -72,9 +72,9 @@ class Template_Fi extends AbstractTemplate
     /**
      * After parsing ...
      *
-     * If dnssec was matched before it we switch dnssec to true otherwise to false
+     * Fix address
      *
-     * @param  object $whoisParser
+     * @param  object &$WhoisParser
      * @return void
      */
     public function postProcess(&$WhoisParser)

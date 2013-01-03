@@ -85,8 +85,10 @@ class Template_Tr extends AbstractTemplate
 
     /**
      * After parsing do something
+     * 
+     * Fix address and nameserver
      *
-     * @param  object $whoisParser
+     * @param  object &$WhoisParser
      * @return void
      */
     public function postProcess(&$WhoisParser)

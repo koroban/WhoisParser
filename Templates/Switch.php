@@ -72,9 +72,9 @@ class Template_Switch extends AbstractTemplate
     /**
      * After parsing ...
      * 
-     * Fix address and nameserver in whois output
+     * Fix address, nameserver and dnssec in whois output
      * 
-     * @param  object $whoisParser
+     * @param  object &$WhoisParser
      * @return void
      */
     public function postProcess(&$WhoisParser)

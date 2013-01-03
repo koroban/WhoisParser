@@ -75,7 +75,7 @@ class Template_Gtld_melbourneit extends AbstractTemplate
      *
      * Fix address
      *
-     * @param  object $whoisParser
+     * @param  object &$WhoisParser
      * @return void
      */
     public function postProcess(&$WhoisParser)

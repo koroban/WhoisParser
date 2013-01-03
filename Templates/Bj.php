@@ -78,7 +78,7 @@ class Template_Bj extends AbstractTemplate
      *
      * Get contact handles
      *
-     * @param  object $whoisParser
+     * @param  object &$WhoisParser
      * @return void
      */
     public function postProcess(&$WhoisParser)

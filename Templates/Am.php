@@ -83,7 +83,7 @@ class Template_Am extends AbstractTemplate
      *
      * Fix address and nameservers
      *
-     * @param  object $whoisParser
+     * @param  object &$WhoisParser
      * @return void
      */
     public function postProcess(&$WhoisParser)

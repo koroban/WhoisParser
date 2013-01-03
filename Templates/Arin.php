@@ -90,7 +90,7 @@ class Template_Arin extends AbstractTemplate
      * If ARNIC says the organization is different change the whois server and
      * restart parsing.
      *
-     * @param  object &$whoisParser
+     * @param  object &$WhoisParser
      * @return void
      */
     public function postProcess(&$WhoisParser)

@@ -80,7 +80,7 @@ class Template_De extends AbstractTemplate
      *
      * Move the attribute holder to owner
      *
-     * @param  object $whoisParser
+     * @param  object &$WhoisParser
      * @return void
      */
     public function postProcess(&$WhoisParser)

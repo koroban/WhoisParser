@@ -25,14 +25,14 @@
 namespace Novutec\WhoisParser;
 
 /**
- * Template for .CZ
+ * Template for .BR
  *
  * @category   Novutec
  * @package    WhoisParser
  * @copyright  Copyright (c) 2007 - 2013 Novutec Inc. (http://www.novutec.com)
  * @license    http://www.apache.org/licenses/LICENSE-2.0
  */
-class Template_Cz extends AbstractTemplate
+class Template_Br extends AbstractTemplate
 {
 
     /**
@@ -42,9 +42,7 @@ class Template_Cz extends AbstractTemplate
 	 * @access protected
 	 */
     protected $blocks = array(1 => '/domain:(?>[\x20\t]*)(.*?)[\n]{2}/is', 
-            2 => '/contact:(?>[\x20\t]*)(.*?)[\n]{2}/is', 
-            3 => '/nserver:(?>[\x20\t]*)(.*?)[\n](?=tech-c:|registrar:|created:)/is', 
-            4 => '/keyset:(?>[\x20\t]*)(.*?)[\n](?=tech-c:|registrar:|created:)/is');
+            2 => '/nic-hdl-br:(?>[\x20\t]*)(.*?)([\n]{2}|$)/is');
 
     /**
 	 * Items for each block
@@ -54,20 +52,19 @@ class Template_Cz extends AbstractTemplate
 	 */
     protected $blockItems = array(
             1 => array('/^status:(?>[\x20\t]*)(.+)$/im' => 'status', 
-                    '/^registrant:(?>[\x20\t]*)(.+)$/im' => 'network:contacts:owner', 
+                    '/^owner-c:(?>[\x20\t]*)(.+)$/im' => 'network:contacts:owner', 
                     '/^admin-c:(?>[\x20\t]*)(.+)$/im' => 'network:contacts:admin', 
-                    '/^registered:(?>[\x20\t]*)(.+)$/im' => 'created', 
-                    '/^expired:(?>[\x20\t]*)(.+)$/im' => 'expires', 
+                    '/^tech-c:(?>[\x20\t]*)(.+)$/im' => 'network:contacts:tech', 
+                    '/^billing-c:(?>[\x20\t]*)(.+)$/im' => 'network:contacts:zone', 
+                    '/^nserver:(?>[\x20\t]*)(.+)$/im' => 'nameserver', 
+                    '/^created:(?>[\x20\t]*)(.+)$/im' => 'created', 
+                    '/^expires:(?>[\x20\t]*)(.+)$/im' => 'expires', 
                     '/^changed:(?>[\x20\t]*)(.+)$/im' => 'changed'), 
-            2 => array('/^contact:(?>[\x20\t]*)(.+)$/im' => 'contacts:handle', 
-                    '/^org:(?>[\x20\t]*)(.+)$/im' => 'contacts:organization', 
-                    '/^name:(?>[\x20\t]*)(.+)$/im' => 'contacts:name', 
-                    '/^address:(?>[\x20\t]*)(.+)$/im' => 'contacts:address', 
+            2 => array('/^nic-hdl-br:(?>[\x20\t]*)(.+)$/im' => 'contacts:handle', 
+                    '/^person:(?>[\x20\t]*)(.+)$/im' => 'contacts:name', 
                     '/^e-mail:(?>[\x20\t]*)(.+)$/im' => 'contacts:email', 
                     '/^created:(?>[\x20\t]*)(.+)$/im' => 'contacts:created', 
-                    '/^changed:(?>[\x20\t]*)(.+)$/im' => 'contacts:changed'), 
-            3 => array('/^nserver:(?>[\x20\t]*)(.+)$/im' => 'nameserver'), 
-            4 => array('/^ds:(?>[\x20\t]*)(.+)$/im' => 'dnssec'));
+                    '/^changed:(?>[\x20\t]*)(.+)$/im' => 'contacts:changed'));
 
     /**
      * RegEx to check availability of the domain name
@@ -75,24 +72,5 @@ class Template_Cz extends AbstractTemplate
      * @var string
      * @access protected
      */
-    protected $available = '/no entries found/i';
-
-    /**
-     * After parsing ...
-     * 
-     * If dnssec was matched before it we switch dnssec to true otherwise to false
-     * 
-	 * @param  object &$WhoisParser
-	 * @return void
-	 */
-    public function postProcess(&$WhoisParser)
-    {
-        $ResultSet = $WhoisParser->getResult();
-        
-        if ($ResultSet->dnssec != '') {
-            $ResultSet->dnssec = true;
-        } else {
-            $ResultSet->dnssec = false;
-        }
-    }
+    protected $available = '/(No match for domain|release process: reserved)/i';
 }

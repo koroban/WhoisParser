@@ -107,7 +107,7 @@ class Template_Nz extends AbstractTemplate
      *
      * If dnssec was matched before it we switch dnssec to true otherwise to false
      *
-     * @param  object $whoisParser
+     * @param  object &$WhoisParser
      * @return void
      */
     public function postProcess(&$WhoisParser)

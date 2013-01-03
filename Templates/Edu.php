@@ -79,9 +79,9 @@ class Template_Edu extends AbstractTemplate
     /**
      * After parsing ...
      *
-     * Fix address, registrar, dnssec and nameservers
+     * Fix address
      *
-     * @param  object &$whoisParser
+     * @param  object &$WhoisParser
      * @return void
      */
     public function postProcess(&$WhoisParser)

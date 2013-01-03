@@ -87,7 +87,7 @@ class Template_Rs extends AbstractTemplate
      *
      * Fix address, registrar handle and nameserver in whois output
      *
-     * @param  object $WhoisParser
+     * @param  object &$WhoisParser
      * @return void
      */
     public function postProcess(&$WhoisParser)

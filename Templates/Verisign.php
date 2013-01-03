@@ -52,11 +52,13 @@ class Template_Verisign extends AbstractTemplate
     protected $blockItems = array(
             1 => array('/(?>[\x20\t]*)whois server:(?>[\x20\t]*)(.+)$/im' => 'whoisserver', 
                     '/(?>[\x20\t]*)registrar:(?>[\x20\t]*)(.+)$/im' => 'registrar:name', 
+                    '/(?>[\x20\t]*)registrar iana id:(?>[\x20\t]*)(.+)$/im' => 'registrar:id', 
                     '/(?>[\x20\t]*)referral url:(?>[\x20\t]*)(.+)$/im' => 'registrar:url', 
                     '/(?>[\x20\t]*)creation date:(?>[\x20\t]*)(.+)$/im' => 'created', 
                     '/(?>[\x20\t]*)expiration date:(?>[\x20\t]*)(.+)$/im' => 'expires', 
                     '/(?>[\x20\t]*)updated date:(?>[\x20\t]*)(.+)$/im' => 'changed', 
                     '/(?>[\x20\t]*)name server:(?>[\x20\t]*)(.+)$/im' => 'nameserver', 
+                    '/(?>[\x20\t]*)dnssec:(?>[\x20\t]*)(.+)$/im' => 'dnssec', 
                     '/(?>[\x20\t]*)status:(?>[\x20\t]*)(.+)$/im' => 'status'));
 
     /**
@@ -81,6 +83,12 @@ class Template_Verisign extends AbstractTemplate
     {
         $ResultSet = $WhoisParser->getResult();
         $Config = $WhoisParser->getConfig();
+        
+        if (isset($ResultSet->dnssec) && ($ResultSet->dnssec == 'Unsigned delegation')) {
+            $ResultSet->dnssec = false;
+        } else {
+            $ResultSet->dnssec = true;
+        }
         
         // check if registrar name is set, if not then there was an error while
         // parsing

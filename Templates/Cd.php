@@ -110,7 +110,7 @@ class Template_Cd extends AbstractTemplate
      *
      * Fix nameserver in WHOIS output
      *
-     * @param  object $whoisParser
+     * @param  object &$WhoisParser
      * @return void
      */
     public function postProcess(&$WhoisParser)

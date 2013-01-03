@@ -132,7 +132,7 @@ class Template_Neustar extends AbstractTemplate
      *
      * Clear empty lines at address and nameservers
      *
-     * @param  object $whoisParser
+     * @param  object &$WhoisParser
      * @return void
      */
     public function postProcess(&$WhoisParser)

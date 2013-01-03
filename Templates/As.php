@@ -65,25 +65,31 @@ class Template_As extends AbstractTemplate
     /**
      * After parsing ...
      *
-     * Fix  nameserver in whois output
+     * Fix nameserver in whois output
      *
-     * @param  object $whoisParser
+     * @param  object &$WhoisParser
      * @return void
      */
     public function postProcess(&$WhoisParser)
     {
         $ResultSet = $WhoisParser->getResult();
         $filteredNameserver = array();
+        $filteredIps = array();
         
         if (isset($ResultSet->nameserver) && $ResultSet->nameserver != '' &&
                  ! is_array($ResultSet->nameserver)) {
             $explodedNameserver = explode("\n", $ResultSet->nameserver);
             foreach ($explodedNameserver as $key => $line) {
-                if (trim($line) != '') {
-                    $filteredNameserver[] = strtolower(trim($line));
+                $line = strtolower(trim($line));
+                
+                if ($line != '') {
+                    preg_match('/(.+) \((.+)\)$/im', $line, $matches);
+                    $filteredNameserver[] = $matches[1];
+                    $filteredIps[] = $matches[2];
                 }
             }
             $ResultSet->nameserver = $filteredNameserver;
+            $ResultSet->ips = $filteredIps;
         }
     }
 }

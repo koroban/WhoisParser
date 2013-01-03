@@ -78,7 +78,7 @@ class Template_Apnic extends AbstractTemplate
      * If APNIC says the organization is KRNIC then connect to KRNIC and
      * start over again.
      * 
-	 * @param  object $whoisParser
+	 * @param  object &$WhoisParser
 	 * @return void
 	 */
     public function postProcess(&$WhoisParser)
