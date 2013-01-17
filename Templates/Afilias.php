@@ -186,7 +186,7 @@ class Template_Afilias extends AbstractTemplate
             $filteredAddress = array();
         }
         
-        if ($ResultSet->dnssec == 'unsigned') {
+        if (strtolower($ResultSet->dnssec) == 'unsigned' || $ResultSet->dnssec == '') {
             $ResultSet->dnssec = false;
         } else {
             $ResultSet->dnssec = true;

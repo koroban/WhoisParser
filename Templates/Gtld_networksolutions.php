@@ -55,7 +55,7 @@ class Template_Gtld_networksolutions extends AbstractTemplate
 	 */
     protected $blockItems = array(1 => array('/Registrant:\n(.*?)$/is' => 'contacts:owner:address'), 
             2 => array(
-                    '/Administrative Contact, Technical Contact:\n(.*?)$/is' => 'contacts:admin:address'), 
+                    '/Administrative Contact(:|, Technical Contact:)(.*?)$/is' => 'contacts:admin:address'), 
             3 => array('/Technical Contact:\n(.*?)$/is' => 'contacts:tech:address'), 
             4 => array('/Database last updated on (.*?)$/is' => 'changed'), 
             5 => array('/[^Domain servers in listed order] .* (.*)$/im' => 'ips'));
@@ -74,8 +74,7 @@ class Template_Gtld_networksolutions extends AbstractTemplate
         
         foreach ($ResultSet->contacts as $contactType => $contactArray) {
             foreach ($contactArray as $contactObject) {
-                $filteredAddress = explode("\n", $contactObject->address);
-                $contactObject->address = $filteredAddress;
+                $contactObject->address = $filteredAddress = explode("\n", trim($contactObject->address));
                 
                 preg_match('/([a-z0-9\.\-, ]*)(?>[\x20\t]*)(.*)$/i', $filteredAddress[0], $matches);
                 
@@ -87,20 +86,29 @@ class Template_Gtld_networksolutions extends AbstractTemplate
                     $contactObject->email = trim($matches[2]);
                 }
                 
-                preg_match('/([0-9\-\+\.\/]*) fax: ([0-9\-\+\.\/]*)/i', $filteredAddress[5], $matches);
-                
-                if (isset($matches[1])) {
-                    $contactObject->phone = trim($matches[1]);
+                if (strpos(end($filteredAddress), 'fax:')) {
+                    
+                    preg_match('/([0-9\-\+\.\/ ]*) fax: ([ 0-9\-\+\.\/]*)/i', end($filteredAddress), $matches);
+                    
+                    if (isset($matches[1])) {
+                        $contactObject->phone = str_replace(' ', '', $matches[1]);
+                    }
+                    
+                    if (isset($matches[2])) {
+                        $contactObject->fax = str_replace(' ', '', $matches[2]);
+                    }
                 }
                 
-                if (isset($matches[2])) {
-                    $contactObject->fax = trim($matches[2]);
+                if (sizeof($filteredAddress) <= 5) {
+                    $contactObject->address = trim($filteredAddress[1]);
+                    $contactObject->city = trim($filteredAddress[2]);
+                    $contactObject->country = trim($filteredAddress[3]);
+                } else {
+                    $contactObject->organization = trim($filteredAddress[1]);
+                    $contactObject->address = trim($filteredAddress[2]);
+                    $contactObject->city = trim($filteredAddress[3]);
+                    $contactObject->country = trim($filteredAddress[4]);
                 }
-                
-                $contactObject->organization = trim($filteredAddress[1]);
-                $contactObject->address = trim($filteredAddress[2]);
-                $contactObject->city = trim($filteredAddress[3]);
-                $contactObject->country = trim($filteredAddress[4]);
             }
         }
     }
