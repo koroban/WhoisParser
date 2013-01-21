@@ -80,7 +80,7 @@ Known bugs to be fixed in further versions
 ------------------------------------------
 * [Template] gTLD cps-datensysteme - need caching for testing, because after 5 requests you get blocked
 * [Template] .CZ - found a strange behavior by matching the contact handles with google.cz
-* [Template] .BJ - recrusive lookup for handles
+* [Template] .BJ - recursive lookup for handles
 
 Tested with following RIRs and TLDs
 ----------------------------------
@@ -126,7 +126,7 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [ ] BH
 [x] BI
 [x] BIZ
-[ ] BJ - need recrusive calls for handles
+[ ] BJ - need recursive calls for handles
 [ ] BM - webbased
 [ ] BN
 [x] BO
@@ -144,7 +144,7 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [ ] CF
 [ ] CG - webbased with captcha
 [x] CH
-[ ] CI - need recrusive calls for handles
+[ ] CI - need recursive calls for handles
 [x] CK
 [ ] CL - possible
 [x] CM
@@ -280,7 +280,7 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [x] NG
 [ ] NI
 [x] NL
-[ ] NO - possible - need recrusive lookup for nameserver
+[ ] NO - possible - need recursive lookup for nameserver
 [ ] NP
 [ ] NR
 [ ] NU - possible
@@ -424,20 +424,34 @@ Special TLDs
 [x] NET.CC
 ```
 
-gTLDs and thin registries
+gTLDs and thin registries sort by IANA ID (http://www.iana.org/assignments/registrar-ids/registrar-ids.xml)
 ```
-[ ] 123-Reg.co.uk
-[x] 1API
-[ ] 35.com
+[x] 2 (Network Solutions, LLC)
+[x] 13 (Melbourne IT, Ltd)
+[x] 15 (CORE Internet Council of Registrars)
+[x] 48 (eNom, Inc.)
+[x] 49 (GMO Internet, Inc. d/b/a Onamae.com)
+[x] 69 (Tucows Domains Inc.)
+[x] 81 (Gandi SAS)
+[x] 83 (1&1 Internet AG)
+[ ] 106 (Ascio Technologies, Inc. - Denmark)
+[x] 120 (Xin Net Technology Corporation)
+[x] 226 (Deutsche Telekom AG)
+[x] 269 (Key-Systems GmbH)
+[x] 141 (Cronon AG)
+[x] 151 (PSI-USA, Inc. dba Domain Robot)
+[x] 648 (Webagentur.at Internet Services GmbH d/b/a domainname.at)
+[x] 828 (Hetzner Online AG)
+[x] 1239 (CPS-Datensysteme GmbH)
+[x] 1257 (Variomedia AG dba puredomain.com)
+[x] 1328 (RegistryGate GmbH)
+[x] 1387 (1API GmbH)
+[x] 1408 (united-domains AG)
+[x] 1420 (InterNetworX Ltd. & Co. KG)
 [ ] Antagus.de
-[ ] Ascio
 [ ] BasicFusion.com
 [ ] BizCn.com
-[x] Core Nic
 [ ] Corporate Domains
-[x] CPS Datensysteme
-[x] Cronon / Strato
-[x] Deutsche Telekom
 [ ] DirectNic
 [ ] DomainPeople
 [ ] Domainsite.com
@@ -445,43 +459,28 @@ gTLDs and thin registries
 [ ] Dotster
 [ ] Dreamhost
 [ ] Dynadot
-[x] eNom
 [ ] EPAG
-[x] Gandi
 [ ] GoDaddy
-[x] Hetzner.de
 [ ] HTTP.net
 [ ] Joker.com
 [ ] Fabulous.com
 [ ] FastDomain.com
-[x] InterNetWire
-[x] InterNetworkX
-[x] Key-Systems
 [ ] MarkMonitor
-[x] MelbourneIT
 [ ] Name.com
 [ ] NameKing.com
 [ ] Names4ever
 [ ] Namesdirect
 [ ] Namesecure
-[x] Network Solutions
 [ ] Nicline
-[x] Novutec
-[x] Onamae.com
 [ ] OnlineNic
 [ ] OVH
-[x] PSI-USA
 [ ] Register.com
 [ ] Register.it
 [ ] ResellerClub.com
-[x] Schlund
 [ ] Srsplus
-[ ] Tucows
-[x] united-domains
-[x] Variomedia
 [ ] Webnic
 [ ] WildWestDomains
-[x] Xinnet.com
+[x] Novutec Inc.
 ```
 
 3rd Party Libraries

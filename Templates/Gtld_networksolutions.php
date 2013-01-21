@@ -43,7 +43,7 @@ class Template_Gtld_networksolutions extends AbstractTemplate
 	 */
     protected $blocks = array(1 => '/Registrant:(.*?)(?=Domain Name:)/is', 
             2 => '/Administrative Contact(:|, Technical Contact:)(.*?)(?=Record expires on|Technical Contact)/is', 
-            3 => '/Technical Contact:(.*?)(?=Record expires on)/is', 
+            3 => '/Technical Contact:(.*?)(?=Record expires on|Registration Service Provider)/is', 
             4 => '/Database last updated on (.*?)$/im', 
             5 => '/Domain servers in listed order:[\n]{2}(?>[\x20\t]*)(.*?)$/is');
 
@@ -76,7 +76,7 @@ class Template_Gtld_networksolutions extends AbstractTemplate
             foreach ($contactArray as $contactObject) {
                 $contactObject->address = $filteredAddress = explode("\n", trim($contactObject->address));
                 
-                preg_match('/([a-z0-9\.\-, ]*)(?>[\x20\t]*)(.*)$/i', $filteredAddress[0], $matches);
+                preg_match('/([a-z0-9\.\-, ]*)(?>[\x20\t]+)(.*)$/i', $filteredAddress[0], $matches);
                 
                 if (isset($matches[1])) {
                     $contactObject->name = trim($matches[1]);
@@ -86,8 +86,7 @@ class Template_Gtld_networksolutions extends AbstractTemplate
                     $contactObject->email = trim($matches[2]);
                 }
                 
-                if (strpos(end($filteredAddress), 'fax:')) {
-                    
+                if (stripos(end($filteredAddress), 'fax:')) {
                     preg_match('/([0-9\-\+\.\/ ]*) fax: ([ 0-9\-\+\.\/]*)/i', end($filteredAddress), $matches);
                     
                     if (isset($matches[1])) {
@@ -97,6 +96,8 @@ class Template_Gtld_networksolutions extends AbstractTemplate
                     if (isset($matches[2])) {
                         $contactObject->fax = str_replace(' ', '', $matches[2]);
                     }
+                } elseif ($contactType != 'owner') {
+                    $contactObject->phone = trim(end($filteredAddress));
                 }
                 
                 if (sizeof($filteredAddress) <= 5) {
