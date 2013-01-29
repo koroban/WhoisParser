@@ -25,7 +25,7 @@
 namespace Novutec\WhoisParser;
 
 /**
- * Template for Gtld_hetzner
+ * Template for IANA #828
  *
  * @category   Novutec
  * @package    WhoisParser

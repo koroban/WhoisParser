@@ -25,7 +25,7 @@
 namespace Novutec\WhoisParser;
 
 /**
- * Template for Gtld_psiusa
+ * Template for IANA #151
  *
  * @category   Novutec
  * @package    WhoisParser

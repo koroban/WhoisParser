@@ -25,7 +25,7 @@
 namespace Novutec\WhoisParser;
 
 /**
- * Template for Gtld_variomedia
+ * Template for IANA #1257
  *
  * @category   Novutec
  * @package    WhoisParser

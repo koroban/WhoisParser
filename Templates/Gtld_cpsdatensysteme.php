@@ -25,7 +25,7 @@
 namespace Novutec\WhoisParser;
 
 /**
- * Template for Gtld_cpsdatensysteme
+ * Template for IANA #1239
  *
  * @category   Novutec
  * @package    WhoisParser

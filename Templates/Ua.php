@@ -25,14 +25,14 @@
 namespace Novutec\WhoisParser;
 
 /**
- * Template for IANA #226
+ * Template for .UA
  *
  * @category   Novutec
  * @package    WhoisParser
  * @copyright  Copyright (c) 2007 - 2013 Novutec Inc. (http://www.novutec.com)
  * @license    http://www.apache.org/licenses/LICENSE-2.0
  */
-class Template_Gtld_deutschetelekom extends AbstractTemplate
+class Template_Ua extends AbstractTemplate
 {
 
     /**
@@ -41,8 +41,8 @@ class Template_Gtld_deutschetelekom extends AbstractTemplate
 	 * @var array
 	 * @access protected
 	 */
-    protected $blocks = array(1 => '/domain:(?>[\x20\t]*)(.*?)(?=nic-hdl\:)/is', 
-            2 => '/nic-hdl:(?>[\x20\t]*)(.*?)[\n]{2}/is');
+    protected $blocks = array(1 => '/domain:(?>[\x20\t]*)(.*?)(?=\% Administrative Contact)/is', 
+            2 => '/\% (Administrative|Technical) Contact:(.*?)(?=(\% Technical Contact:|\% \% .UA whois))/is');
 
     /**
 	 * Items for each block
@@ -52,26 +52,52 @@ class Template_Gtld_deutschetelekom extends AbstractTemplate
 	 */
     protected $blockItems = array(
             1 => array('/^status:(?>[\x20\t]*)(.+)$/im' => 'status', 
-                    '/^registrant-hdl:(?>[\x20\t]*)(.+)$/im' => 'network:contacts:owner', 
+                    '/^nserver:(?>[\x20\t]*)(.+)$/im' => 'nameserver', 
                     '/^admin-c:(?>[\x20\t]*)(.+)$/im' => 'network:contacts:admin', 
                     '/^tech-c:(?>[\x20\t]*)(.+)$/im' => 'network:contacts:tech', 
-                    '/^zone-c:(?>[\x20\t]*)(.+)$/im' => 'network:contacts:zone', 
-                    '/^nserver:(?>[\x20\t]*)(.+)$/im' => 'nameserver', 
                     '/^created:(?>[\x20\t]*)(.+)$/im' => 'created', 
-                    '/^expires:(?>[\x20\t]*)(.+)$/im' => 'expires', 
                     '/^changed:(?>[\x20\t]*)(.+)$/im' => 'changed'), 
-            2 => array('/^nic-hdl:(?>[\x20\t]*)(.+)$/im' => 'contacts:handle', 
-                    '/^type:(?>[\x20\t]*)(.+)$/im' => 'contacts:type', 
-                    '/^title:(?>[\x20\t]*)(.+)$/im' => 'contacts:title', 
-                    '/^name of the organisation:(?>[\x20\t]*)(.+)$/im' => 'contacts:organization', 
-                    '/^(first|last)name:(?>[\x20\t]*)(.+)$/im' => 'contacts:name', 
+            2 => array('/^nic-handle:(?>[\x20\t]*)(.+)$/im' => 'contacts:handle', 
+                    '/^organization:(?>[\x20\t]*)(.+)$/im' => 'contacts:organization', 
                     '/^address:(?>[\x20\t]*)(.+)$/im' => 'contacts:address', 
-                    '/^city:(?>[\x20\t]*)(.+)$/im' => 'contacts:city', 
-                    '/^state:(?>[\x20\t]*)(.+)$/im' => 'contacts:state', 
-                    '/^pcode:(?>[\x20\t]*)(.+)$/im' => 'contacts:zipcode', 
-                    '/^country:(?>[\x20\t]*)(.+)$/im' => 'contacts:country', 
                     '/^phone:(?>[\x20\t]*)(.+)$/im' => 'contacts:phone', 
                     '/^fax-no:(?>[\x20\t]*)(.+)$/im' => 'contacts:fax', 
-                    '/^e-mail:(?>[\x20\t]*)(.+)$/im' => 'contacts:email', 
-                    '/^changed:(?>[\x20\t]*)(.+)$/im' => 'contacts:changed'));
+                    '/^e-mail:(?>[\x20\t]*)(.+)$/im' => 'contacts:email'));
+
+    /**
+     * RegEx to check availability of the domain name
+     *
+     * @var string
+     * @access protected
+     */
+    protected $available = '/No entries found for/i';
+
+    /**
+     * After parsing ...
+     *
+     * Clean domain dates
+     *
+     * @param  object &$WhoisParser
+     * @return void
+     */
+    public function postProcess(&$WhoisParser)
+    {
+        $ResultSet = $WhoisParser->getResult();
+        
+        if (isset($ResultSet->created) && $ResultSet->created != '') {
+            preg_match('/.* ([0-9]*)$/im', $ResultSet->created, $matches);
+            
+            if (isset($matches[1])) {
+                $ResultSet->created = trim($matches[1]);
+            }
+        }
+        
+        if (isset($ResultSet->changed) && $ResultSet->changed != '') {
+            preg_match('/.* ([0-9]*)$/im', $ResultSet->changed, $matches);
+            
+            if (isset($matches[1])) {
+                $ResultSet->changed = trim($matches[1]);
+            }
+        }
+    }
 }

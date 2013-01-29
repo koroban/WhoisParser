@@ -25,7 +25,7 @@
 namespace Novutec\WhoisParser;
 
 /**
- * Template for Gtld_cronon
+ * Template for IANA #141
  *
  * @category   Novutec
  * @package    WhoisParser

@@ -201,7 +201,7 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [ ] GW
 [x] GY
 [x] HK
-[ ] HM (whois.registry.hm)
+[x] HM
 [x] HN
 [ ] HR - possible
 [x] HT
@@ -263,7 +263,7 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [ ] MQ
 [ ] MR
 [x] MS
-[ ] MT (whois.nic.org.mt) mit captcha
+[ ] MT (whois.nic.org.mt) with captcha
 [x] MU
 [x] MUSEUM
 [ ] MV
@@ -317,13 +317,13 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [x] SH
 [ ] SI - possible
 [ ] SJ - no domains but it is NORID
-[ ] SK - possible
+[x] SK
 [ ] SL
-[ ] SM - possible
+[ ] SM - whois on port 43 broken
 [ ] SN - whois on port 43 broken
 [x] SO
 [ ] SR
-[ ] ST - possible
+[x] ST
 [ ] SU - possible -> RU
 [ ] SV
 [x] SX
@@ -348,7 +348,7 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [x] TV
 [x] TW
 [ ] TZ
-[ ] UA - possible
+[x] UA
 [ ] UG - possible
 [x] UK
 [x] US
@@ -448,7 +448,7 @@ gTLDs and thin registries sort by IANA ID (http://www.iana.org/assignments/regis
 [x] 1387 (1API GmbH)
 [x] 1408 (united-domains AG)
 [x] 1420 (InterNetworX Ltd. & Co. KG)
-[ ] Antagus.de
+[x] 1443 (Vautron Rechenzentrum AG)
 [ ] BasicFusion.com
 [ ] BizCn.com
 [ ] Corporate Domains

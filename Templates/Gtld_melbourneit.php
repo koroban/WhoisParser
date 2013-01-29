@@ -25,7 +25,7 @@
 namespace Novutec\WhoisParser;
 
 /**
- * Template for Gtld_melbourneit
+ * Template for IANA #13
  *
  * @category   Novutec
  * @package    WhoisParser

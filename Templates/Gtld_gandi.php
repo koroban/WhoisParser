@@ -25,7 +25,7 @@
 namespace Novutec\WhoisParser;
 
 /**
- * Template for Gtld_gandi
+ * Template for IANA #81
  *
  * @category   Novutec
  * @package    WhoisParser

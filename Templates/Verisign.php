@@ -84,7 +84,8 @@ class Template_Verisign extends AbstractTemplate
         $ResultSet = $WhoisParser->getResult();
         $Config = $WhoisParser->getConfig();
         
-        if (isset($ResultSet->dnssec) && ($ResultSet->dnssec == 'Unsigned delegation')) {
+        if ((isset($ResultSet->dnssec) || $ResultSet->dnssec == null) &&
+                 ($ResultSet->dnssec == 'Unsigned delegation' || $ResultSet->dnssec == '')) {
             $ResultSet->dnssec = false;
         } else {
             $ResultSet->dnssec = true;

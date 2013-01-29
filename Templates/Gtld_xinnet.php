@@ -25,7 +25,7 @@
 namespace Novutec\WhoisParser;
 
 /**
- * Template for Gtld_xinnet
+ * Template for IANA #120
  *
  * @category   Novutec
  * @package    WhoisParser
