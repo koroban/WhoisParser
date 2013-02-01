@@ -94,7 +94,7 @@ class Template_Sk extends AbstractTemplate
         foreach ($ResultSet->contacts as $contactType => $contactArray) {
             foreach ($contactArray as $contactObject) {
                 if (strpos($contactObject->phone, ',')) {
-                    $contactObject->phone = array_map(trim, explode(',', $contactObject->phone));
+                    $contactObject->phone = array_map('trim', explode(',', $contactObject->phone));
                 }
             }
         }

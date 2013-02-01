@@ -41,9 +41,11 @@ class Template_Gtld_melbourneit extends AbstractTemplate
 	 * @var array
 	 * @access protected
 	 */
-    protected $blocks = array(1 => '/Domain Name(?>[\.]*)(?>[\x20\t]*)(.*?)(?=Admin Name)/is', 
-            2 => '/(?>[\x20\t]*)Admin Name(?>[\.]*)(?>[\x20\t]*)(.*?)(?=Tech Name)/is', 
-            3 => '/(?>[\x20\t]*)Tech Name(?>[\.]*)(?>[\x20\t]*)(.*?)$/is');
+    protected $blocks = array(
+            1 => '/Domain Name(?>[\.]*)(?>[\x20\t]*)(.*?)(?=Organization Contact Id|Administrative Contact Id|Admin Name)/is', 
+            2 => '/(?>[\x20\t]*)(Administrative Contact Id|Admin Name)(?>[\.]*)(?>[\x20\t]*)(.*?)(?=Technical Contact Id|Tech Name)/is', 
+            3 => '/(?>[\x20\t]*)(Technical Contact Id|Tech Name)(?>[\.]*)(?>[\x20\t]*)(.*?)$/is', 
+            4 => '/(?>[\x20\t]*)Organization Contact Id(?>[\.]*)(?>[\x20\t]*)(.*?)(?=Administrative Contact Id|Admin Name)/is');
 
     /**
 	 * Items for each block
@@ -57,18 +59,42 @@ class Template_Gtld_melbourneit extends AbstractTemplate
                     '/^(?>[\x20\t]*)Organisation Name(?>[\.]*)(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:name', 
                     '/^(?>[\x20\t]*)Organisation Address(?>[\.]*)(?>[\x20\t]*)(.*)$/im' => 'contacts:owner:address'), 
             2 => array(
-                    '/^(?>[\x20\t]*)Admin Name(?>[\.]*)(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:name', 
+                    '/^(?>[\x20\t]*)(Admin|Administrative) Name(?>[\.]*)(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:name', 
                     '/^(?>[\x20\t]*)Admin Address(?>[\.]*)(?>[\x20\t]*)(.*)$/im' => 'contacts:admin:address', 
-                    '/^(?>[\x20\t]*)Admin Email(?>[\.]*)(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:email', 
-                    '/^(?>[\x20\t]*)Admin Phone(?>[\.]*)(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:phone', 
-                    '/^(?>[\x20\t]*)Admin Fax(?>[\.]*)(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:fax'), 
+                    '/^(?>[\x20\t]*)(Admin|Administrative) Contact Id(?>[\.]*)(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:handle', 
+                    '/^(?>[\x20\t]*)(Admin|Administrative) Org(?>[\.]*)(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:organization', 
+                    '/^(?>[\x20\t]*)(Admin|Administrative) Street(?>[\.]*)(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:address', 
+                    '/^(?>[\x20\t]*)(Admin|Administrative) City(?>[\.]*)(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:city', 
+                    '/^(?>[\x20\t]*)(Admin|Administrative) State(?>[\.]*)(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:state', 
+                    '/^(?>[\x20\t]*)(Admin|Administrative) PC(?>[\.]*)(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:zipcode', 
+                    '/^(?>[\x20\t]*)(Admin|Administrative) (Email|e-mail)(?>[\.]*)(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:email', 
+                    '/^(?>[\x20\t]*)(Admin|Administrative) Phone(?>[\.]*)(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:phone', 
+                    '/^(?>[\x20\t]*)(Admin|Administrative) Fax(?>[\.]*)(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:fax'), 
             3 => array(
-                    '/^(?>[\x20\t]*)Tech Name(?>[\.]*)(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:name', 
+                    '/^(?>[\x20\t]*)(Tech|Technical) Name(?>[\.]*)(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:name', 
                     '/^(?>[\x20\t]*)Tech Address(?>[\.]*)(?>[\x20\t]*)(.*)$/im' => 'contacts:tech:address', 
-                    '/^(?>[\x20\t]*)Tech Email(?>[\.]*)(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:email', 
-                    '/^(?>[\x20\t]*)Tech Phone(?>[\.]*)(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:phone', 
-                    '/^(?>[\x20\t]*)Tech Fax(?>[\.]*)(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:fax', 
-                    '/^(?>[\x20\t]*)Name Server(?>[\.]*)(?>[\x20\t]*)(.+)$/im' => 'nameserver'));
+                    '/^(?>[\x20\t]*)(Tech|Technical) Contact Id(?>[\.]*)(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:handle', 
+                    '/^(?>[\x20\t]*)(Tech|Technical) Org(?>[\.]*)(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:organization', 
+                    '/^(?>[\x20\t]*)(Tech|Technical) Street(?>[\.]*)(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:address', 
+                    '/^(?>[\x20\t]*)(Tech|Technical) City(?>[\.]*)(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:city', 
+                    '/^(?>[\x20\t]*)(Tech|Technical) State(?>[\.]*)(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:state', 
+                    '/^(?>[\x20\t]*)(Tech|Technical) PC(?>[\.]*)(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:zipcode', 
+                    '/^(?>[\x20\t]*)(Tech|Technical) (Email|e-mail)(?>[\.]*)(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:email', 
+                    '/^(?>[\x20\t]*)(Tech|Technical) Phone(?>[\.]*)(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:phone', 
+                    '/^(?>[\x20\t]*)(Tech|Technical) Fax(?>[\.]*)(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:fax', 
+                    '/^(?>[\x20\t]*)Name Server(?>[\.]*)(?>[\x20\t]*)(.+)$/im' => 'nameserver'), 
+            4 => array(
+                    '/^(?>[\x20\t]*)Organization Name(?>[\.]*)(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:name', 
+                    '/^(?>[\x20\t]*)Organization Address(?>[\.]*)(?>[\x20\t]*)(.*)$/im' => 'contacts:owner:address', 
+                    '/^(?>[\x20\t]*)Organization Contact Id(?>[\.]*)(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:handle', 
+                    '/^(?>[\x20\t]*)Organization Org(?>[\.]*)(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:organization', 
+                    '/^(?>[\x20\t]*)Organization Street(?>[\.]*)(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:address', 
+                    '/^(?>[\x20\t]*)Organization City(?>[\.]*)(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:city', 
+                    '/^(?>[\x20\t]*)Organization State(?>[\.]*)(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:state', 
+                    '/^(?>[\x20\t]*)Organization PC(?>[\.]*)(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:zipcode', 
+                    '/^(?>[\x20\t]*)Organization (Email|e-mail)(?>[\.]*)(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:email', 
+                    '/^(?>[\x20\t]*)Organization Phone(?>[\.]*)(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:phone', 
+                    '/^(?>[\x20\t]*)Organization Fax(?>[\.]*)(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:fax'));
 
     /**
      * After parsing do something

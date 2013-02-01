@@ -1,4 +1,4 @@
-Novutec WhoisParser
+Novutec WHOIS Parser
 ===================
 
 Lookup domain names, IP addresses and AS numbers by WHOIS.
@@ -16,7 +16,7 @@ Installation
 
 Installing from source: `git clone git://github.com/novutec/WhoisParser.git` or [download the latest release](https://github.com/novutec/WhoisParser/zipball/master)
 
-See Novutec DomainParser (http://github.com/novutec/DomainParser) or [download the latest release](https://github.com/novutec/DomainParser/zipball/master) and install it as well.
+See Novutec Domain Parser (http://github.com/novutec/DomainParser) or [download the latest release](https://github.com/novutec/DomainParser/zipball/master) and install it as well.
 
 Move the source code to your preferred project folder.
 
@@ -164,7 +164,7 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [ ] DJ
 [x] DK
 [x] DM
-[ ] DO
+[ ] DO - whois.nic.do is broken
 [ ] DZ - whois server on port 43 is broken, http get whois possible
 [x] EC
 [x] EDU
@@ -296,10 +296,10 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [x] PL
 [x] PM
 [ ] PN
-[ ] PR - whois on port 43 broken
+[x] PR
 [x] PRO
-[ ] PS
-[ ] PT - possible
+[x] PS
+[x] PT
 [x] PW
 [ ] PY
 [x] QA
@@ -339,7 +339,7 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [ ] TK - possible
 [x] TL
 [x] TM
-[ ] TN - whois server on port 43 broken
+[x] TN
 [ ] TO - useless
 [ ] TP
 [x] TR
@@ -349,62 +349,53 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [x] TW
 [ ] TZ
 [x] UA
-[ ] UG - possible
+[x] UG
 [x] UK
 [x] US
-[ ] UY - possible
+[x] UY
 [ ] UZ - possible
 [ ] VA
 [x] VC
-[ ] VE - whois server on port 43 broken
+[x] VE
 [x] VG
 [ ] VI
 [ ] VN
 [ ] VU
 [x] WF
 [x] WS
-[ ] XN--0ZWM56D
-[ ] XN--11B5BS3A9AJ6G
 [ ] XN--3E0B707E - possible .kr
 [x] XN--45BRJ9C - .in
-[ ] XN--80AKHBYKNJ4F
 [ ] XN--80AO21A - possible .kz
 [ ] XN--90A3AC - possible .rs
-[ ] XN--9T4B11YI5A
 [ ] XN--CLCHC0EA0B2G2A9GCD - possible .sg
-[ ] XN--DEBA0AD
 [x] XN--FIQS8S - .cn
 [x] XN--FIQZ9S - .cn
 [x] XN--FPCRJ9C3D - .in
-[ ] XN--FZC2C9E2C
-[ ] XN--G6W251D
+[ ] XN--FZC2C9E2C - .lk
 [x] XN--GECRJ9C - .in
 [x] XN--H2BRJ9C - .in
 [ ] XN--HGBK6AJ7F53BBA
 [ ] XN--HLCJ6AYA9ESC7A
 [x] XN--J6W193G - .hk
-[ ] XN--JXALPDLP
-[ ] XN--KGBECHTV
 [x] XN--KPRW13D - .tw
 [x] XN--KPRY57D - .tw
 [ ] XN--LGBBAT1AD8J - possible .dz
 [ ] XN--MGBAAM7A8H - possible .ae
-[ ] XN--MGBAYH7GPA
+[ ] XN--MGBAYH7GPA - .jo
 [x] XN--MGBBH1A71E - .in
-[ ] XN--MGBC0A9AZCG - don't know but it is .ma
+[ ] XN--MGBC0A9AZCG - .ma
 [ ] XN--MGBERP4A5D4AR - possible .sa
 [ ] XN--O3CW4H - possible .th
-[ ] XN--OGBPF8FL
+[ ] XN--OGBPF8FL - possible .sy
 [ ] XN--P1AI - possible .ru
-[ ] XN--PGBS0DH
+[ ] XN--PGBS0DH - .tn
 [x] XN--S9BRJ9C - .in
-[ ] XN--WGBH1C
-[ ] XN--WGBL6A - possible .qa
-[ ] XN--XKC2AL3HYE2A
+[ ] XN--WGBH1C - .eg
+[x] XN--WGBL6A - .qa
+[ ] XN--XKC2AL3HYE2A -.lk
 [x] XN--XKC2DL3A5EE0H - .in
 [ ] XN--YFRO4I67O - possible sgnic
 [ ] XN--YGBI2AMMX - possible .ps
-[ ] XN--ZCKZAH
 [x] XXX
 [ ] YE
 [x] YT
@@ -427,65 +418,65 @@ Special TLDs
 gTLDs and thin registries sort by IANA ID (http://www.iana.org/assignments/registrar-ids/registrar-ids.xml)
 ```
 [x] 2 (Network Solutions, LLC)
+[x] 9 (Register.com, Inc.)
 [x] 13 (Melbourne IT, Ltd)
 [x] 15 (CORE Internet Council of Registrars)
+[x] 30 (NameSecure LLC)
 [x] 48 (eNom, Inc.)
 [x] 49 (GMO Internet, Inc. d/b/a Onamae.com)
+[x] 52 (Hostopia.com Inc. d/b/a Aplus.net)
+[ ] 65 (DomainPeople, Inc.)
+[x] 66 (Enameco, LLC)
 [x] 69 (Tucows Domains Inc.)
+[x] 79 (Easyspace Limited)
 [x] 81 (Gandi SAS)
 [x] 83 (1&1 Internet AG)
-[ ] 106 (Ascio Technologies, Inc. - Denmark)
-[x] 120 (Xin Net Technology Corporation)
-[x] 226 (Deutsche Telekom AG)
-[x] 269 (Key-Systems GmbH)
+[x] 85 (EPAG Domainservices GmbH)
+[x] 88 (Namebay SAM)
+[x] 91 (007Names, Inc.)
+[x] 106 (Ascio Technologies, Inc. - Denmark)
+[ ] 113 (CSL Computer Service Langenbach GmbH d/b/a joker.com)
+[ ] 120 (Xin Net Technology Corporation)
+[x] 131 (Total Web Solutions Limited trading as TotalRegistrations)
+[x] 140 (Acens Technologies, S.L.U.)
 [x] 141 (Cronon AG)
 [x] 151 (PSI-USA, Inc. dba Domain Robot)
+[x] 226 (Deutsche Telekom AG)
+[x] 228 (Moniker Online Services LLC)
+[x] 240 (PlanetDomain Pty Ltd)
+[x] 269 (Key-Systems GmbH)
+[x] 291 (DNC Holdings, Inc.)
+[x] 320 (TLDS L.L.C. d/b/a SRSPlus)
+[x] 363 (Funpeas Media Ventures, LLC dba DomainProcessor.com)
+[x] 378 (2030138 Ontario Inc. dba NamesBeyond.com and dba GoodLuckDomain.com)
+[x] 380 (Tuonome.it Srl d/b/a APIsrs.com)
+[x] 401 (Misk.com, Inc.)
+[x] 430 (Net Searchers International Ltd.)
+[ ] 471 (Bizcn.com, Inc.)
 [x] 648 (Webagentur.at Internet Services GmbH d/b/a domainname.at)
 [x] 828 (Hetzner Online AG)
+[x] 886 (Domain.com, LLC)
+[x] 913 (PocketDomain.com Inc.)
+[x] 931 (UdomainName.com LLC)
+[x] 996 (DomainAdministration.com, LLC)
+[x] 1040 (Dynamic Network Services, Inc.)
 [x] 1239 (CPS-Datensysteme GmbH)
 [x] 1257 (Variomedia AG dba puredomain.com)
 [x] 1328 (RegistryGate GmbH)
+[x] 1376 (Instra Corporation Pty Ltd.)
 [x] 1387 (1API GmbH)
 [x] 1408 (united-domains AG)
 [x] 1420 (InterNetworX Ltd. & Co. KG)
 [x] 1443 (Vautron Rechenzentrum AG)
-[ ] BasicFusion.com
-[ ] BizCn.com
-[ ] Corporate Domains
-[ ] DirectNic
-[ ] DomainPeople
-[ ] Domainsite.com
-[ ] DotRegistrar
-[ ] Dotster
-[ ] Dreamhost
-[ ] Dynadot
-[ ] EPAG
-[ ] GoDaddy
-[ ] HTTP.net
-[ ] Joker.com
-[ ] Fabulous.com
-[ ] FastDomain.com
-[ ] MarkMonitor
-[ ] Name.com
-[ ] NameKing.com
-[ ] Names4ever
-[ ] Namesdirect
-[ ] Namesecure
-[ ] Nicline
-[ ] OnlineNic
-[ ] OVH
-[ ] Register.com
-[ ] Register.it
-[ ] ResellerClub.com
-[ ] Srsplus
-[ ] Webnic
-[ ] WildWestDomains
+[x] 1448 (Blacknight Internet Solutions Ltd.)
+[x] 1454 (Nics Telekomünikasyon Ticaret Ltd. Şti.)
+[x] 1505 (Gransy s.r.o. d/b/a subreg.cz)
 [x] Novutec Inc.
 ```
 
 3rd Party Libraries
 -------------------
-We are using our own DomainParser:
+We are using our own Domain Parser:
 * Novutec: http://github.com/novutec/DomainParser (Version 1.1.5 and above)
 
 ChangeLog
