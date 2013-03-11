@@ -42,14 +42,14 @@ class Template_Afilias extends AbstractTemplate
 	 * @access protected
 	 */
     protected $blocks = array(
-            1 => '/Domain (ID|Name)(?>[\x20\t]*):(?>[\x20\t]*)(.*?)(?=Registrant(\-| )ID|Name Server|Registrant Name|Owner Organization)/is', 
+            1 => '/Domain (ID|Name)(?>[\x20\t]*):(?>[\x20\t]*)(.*?)(?=Registrant(\-| )ID|Name Server|Registrant (ID|Name)|Owner Organization|$)/is', 
             2 => '/(Registrant|Owner)(\-| )(ID|Name|Organization)(?>[\x20\t]*):(?>[\x20\t]*)(.*?)(?=(Admin(\-| )(ID|Organization|Name)|Administrative (ID|Name|Organization)|Name Server))/is', 
             3 => '/(Admin|Administrative)(\-| )(ID|Name|Organization)(?>[\x20\t]*):(?>[\x20\t]*)(.*?)(?=(Billing(\-| )(ID|Name)|(Tech|Technical)(\-| )(ID|Name|Organization)))/is', 
             4 => '/Billing(\-| )(ID|Name|Organization)(?>[\x20\t]*):(?>[\x20\t]*)(.*?)(?=(Tech(\-| )(Name|ID)|Technical ID|CED ID|Name Server|Nameserver))/is', 
-            5 => '/(Tech|Technical)(\-| )(ID|Name|Organization)(?>[\x20\t]*):(?>[\x20\t]*)(.*?)(?=(Name Server|Nameservers|Nameserver|Billing Name))/is', 
+            5 => '/(Tech|Technical)(\-| )(ID|Name|Organization)(?>[\x20\t]*):(?>[\x20\t]*)(.*?)(?=(Name Server|Nameservers|Nameserver|Billing (Name|ID)))/is', 
             6 => '/(Name Server|Nameservers)(?>[\x20\t]*):(?>[\x20\t]*)(.*?)$/is', 
             7 => '/CED ID(?>[\x20\t]*):(?>[\x20\t]*)(.*?)(?=Operations and Notifications ID\:)/is', 
-            8 => '/Registration Date(?>[\x20\t]*):(?>[\x20\t]*)(.*?)$/is', 
+            8 => '/(Registration Date|Created On)(?>[\x20\t]*):(?>[\x20\t]*)(.*?)$/is', 
             9 => '/Zone (ID|Name)(?>[\x20\t]*):(?>[\x20\t]*)(.*?)(?=(Name Server\:|Nameservers\:))/is');
 
     /**
@@ -130,8 +130,11 @@ class Template_Afilias extends AbstractTemplate
                     '/^CED Form of Identification(?>[\x20\t]*):(?>[\x20\t]*)(.+)$/im' => 'contacts:ced:identification_form', 
                     '/^CED Form of ID \(Other\)(?>[\x20\t]*):(?>[\x20\t]*)(.+)$/im' => 'contacts:ced:identification_description', 
                     '/^CED Identification Number(?>[\x20\t]*):(?>[\x20\t]*)(.+)$/im' => 'contacts:ced:id'), 
-            8 => array('/^Registration Date(?>[\x20\t]*):(?>[\x20\t]*)(.+)$/im' => 'created', 
-                    '/^Expiration Date(?>[\x20\t]*):(?>[\x20\t]*)(.+)$/im' => 'expires', 
+            8 => array('/^Registration Date(?>[\x20\t]*):(?>[\x20\t]*)(.+)$/im' => 'created',
+                    '/^Created On(?>[\x20\t]*):(?>[\x20\t]*)(.+)$/im' => 'created',
+                    '/^Expires On(?>[\x20\t]*):(?>[\x20\t]*)(.+)$/im' => 'expires',
+                    '/^Expiration Date(?>[\x20\t]*):(?>[\x20\t]*)(.+)$/im' => 'expires',
+                    '/^Updated On(?>[\x20\t]*):(?>[\x20\t]*)(.+)$/im' => 'changed',
                     '/^DNSSEC(?>[\x20\t]*):(?>[\x20\t]*)(.+)$/im' => 'dnssec'), 
             9 => array('/^Zone ID(?>[\x20\t]*):(?>[\x20\t]*)(.+)$/im' => 'contacts:zone:handle', 
                     '/^Zone Name(?>[\x20\t]*):(?>[\x20\t]*)(.+)$/im' => 'contacts:zone:name', 

@@ -1,5 +1,5 @@
 Novutec WHOIS Parser
-===================
+====================
 
 Lookup domain names, IP addresses and AS numbers by WHOIS.
 
@@ -73,8 +73,7 @@ $Parser->setSepcialWhois('it' => array('server' => 'whois.nic.it', 'port' => 43,
 
 ToDos
 -----
-* Caching of data for better performance and to reduce requests
-* Optional logging of raw data and/or parsed data for audit proposes 
+* Caching of data for better performance and to reduce requests 
 
 Known bugs to be fixed in further versions
 ------------------------------------------
@@ -245,10 +244,10 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [x] LT
 [x] LU
 [x] LV
-[ ] LY - possible
+[x] LY
 [ ] MA - possible
 [ ] MC
-[ ] MD - possible
+[x] MD
 [x] ME
 [x] MG
 [ ] MH
@@ -272,7 +271,8 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [ ] MY - possible
 [ ] MZ
 [x] NA
-[ ] NAME - possible
+[x] NAME
+[x] NAME Registrar WHOIS
 [ ] NC - possible
 [ ] NE
 [x] NET
@@ -304,7 +304,7 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [ ] PY
 [x] QA
 [x] RE
-[ ] RO - possible
+[x] RO
 [x] RS
 [ ] RU - possible
 [ ] RW

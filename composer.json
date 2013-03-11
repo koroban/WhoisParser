@@ -1,0 +1,12 @@
+{
+    "name": "novutec/WhoisParser"
+  , "description": "Lookup domain names, IP addresses and AS numbers by WHOIS."
+  , "keywords": ["whoisparser", "whois", "php"]
+  , "homepage": "https://github.com/novutec/WhoisParser/"
+  , "author": "Novutec Inc."
+  , "license": "Apache-2.0"
+  , "require": {
+  		"novutec/DomainParser": ">=1.1.5"
+  	}
+  , "version": "1.3.1"
+}
