@@ -74,13 +74,21 @@ class Config
 
     /**
 	 * Returns configuration for whois server by template
+	 * You may specify a tld. If tld is given it will look up for the tld instead
+	 * of looking up for template. This is needed if tlds are within the same
+	 * group but have different templates like CentralNic
 	 * 
 	 * @param  string $template
+	 * @param  string $tld
 	 * @return array
 	 */
-    public function get($template)
+    public function get($template, $tld = '')
     {
         $template = strtolower($template);
+        
+        if ($tld != '' && isset($this->config[$tld])) {
+            $template = strtolower($tld);
+        }
         
         return array(
                 'server' => isset($this->config[$template]['server']) ? $this->config[$template]['server'] : '', 

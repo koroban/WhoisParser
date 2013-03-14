@@ -41,8 +41,12 @@ class Template_Iana extends AbstractTemplate
 	 * @var array
 	 * @access protected
 	 */
-    protected $blocks = array(1 => '/whois:[\s]*(.*?)[\n]{2}/is', 
-            2 => '/domain:[\s]*(.*?)[\n]{2}/is');
+    protected $blocks = array(1 => '/whois:(?>[\x20\t]*)(.*?)[\n]{2}/is', 
+            2 => '/domain:(?>[\x20\t]*)(.*?)[\n]{2}/is', 
+            3 => '/organisation:(?>[\x20\t]*)(.*?)(?=Contact:(?>[\x20\t]*)Administrative)/is', 
+            4 => '/Contact:(?>[\x20\t]*)Administrative(.*?)(?=Contact:(?>[\x20\t]*)Technical)/is', 
+            5 => '/Contact:(?>[\x20\t]*)Technical(.*?)(?=nserver)/is', 
+            6 => '/nserver:(?>[\x20\t]*)(.*?)(?=created)/is', 7 => '/created:(?>[\x20\t]*)(.*?)$/is');
 
     /**
 	 * Items for each block
@@ -50,8 +54,24 @@ class Template_Iana extends AbstractTemplate
 	 * @var array
 	 * @access protected
 	 */
-    protected $blockItems = array(1 => array('/^whois:[\s]*(.+)$/im' => 'whoisserver'), 
-            2 => array('/^domain:[\s]*(.+)$/im' => 'name'));
+    protected $blockItems = array(1 => array('/^whois:(?>[\x20\t]*)(.+)$/im' => 'whoisserver'), 
+            2 => array('/^domain:(?>[\x20\t]*)(.+)$/im' => 'name'), 
+            3 => array('/organisation:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:organization', 
+                    '/address:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:address'), 
+            4 => array('/organisation:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:organization', 
+                    '/address:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:address', 
+                    '/phone:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:phone', 
+                    '/fax-no:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:fax', 
+                    '/e-mail:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:email'), 
+            5 => array('/organisation:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:organization', 
+                    '/address:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:address', 
+                    '/phone:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:phone', 
+                    '/fax-no:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:fax', 
+                    '/e-mail:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:email'), 
+            6 => array('/nserver:(?>[\x20\t]*)(.+)$/im' => 'nameserver', 
+                    '/ds-rdata:(?>[\x20\t]*)(.+)$/im' => 'dnssec'), 
+            7 => array('/created:(?>[\x20\t]*)(.+)$/im' => 'created', 
+                    '/changed:(?>[\x20\t]*)(.+)$/im' => 'changed'));
 
     /**
      * After parsing do something
@@ -91,8 +111,29 @@ class Template_Iana extends AbstractTemplate
                 $newConfig = $Config->get($mapping['template']);
             }
             
+            $Result->reset();
             $Config->setCurrent($newConfig);
             $WhoisParser->call();
+        } else {
+            if ($Result->dnssec != '') {
+                $Result->dnssec = true;
+            } else {
+                $Result->dnssec = false;
+            }
+            
+            if (is_array($Result->nameserver)) {
+                $ips = array();
+                $ns = array();
+                
+                foreach ($Result->nameserver as $nameserver) {
+                    $filteredNameserver = explode(' ', $nameserver);
+                    $ns[] = strtolower($filteredNameserver[0]);
+                    $ips[] = end($filteredNameserver);
+                }
+                
+                $Result->nameserver = $ns;
+                $Result->ips = $ips;
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 {
     "name": "novutec/WhoisParser"
+  , "type": "library"
   , "description": "Lookup domain names, IP addresses and AS numbers by WHOIS."
   , "keywords": ["whoisparser", "whois", "php"]
   , "homepage": "https://github.com/novutec/WhoisParser/"

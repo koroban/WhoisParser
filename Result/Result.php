@@ -187,6 +187,14 @@ class Result extends AbstractResult
     protected $parsedContacts;
 
     /**
+     * Name of the actual template
+     *
+     * @var string
+     * @access protected
+     */
+    protected $template;
+
+    /**
 	 * Creates a WhoisParserResult object
 	 *
 	 * @return void
@@ -490,6 +498,7 @@ class Result extends AbstractResult
         }
         
         // format dates
+        $this->template = $config['template'];
         $this->changed = $this->formatDate($dateformat, $this->changed);
         $this->created = $this->formatDate($dateformat, $this->created);
         $this->expires = $this->formatDate($dateformat, $this->expires);

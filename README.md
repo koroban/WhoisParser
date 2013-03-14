@@ -108,7 +108,7 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [ ] AO
 [ ] AQ
 [ ] AR - webbased
-[ ] ARPA
+[x] ARPA
 [x] AS
 [x] ASIA
 [x] AT
@@ -164,7 +164,7 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [x] DK
 [x] DM
 [ ] DO - whois.nic.do is broken
-[ ] DZ - whois server on port 43 is broken, http get whois possible
+[x] DZ
 [x] EC
 [x] EDU
 [x] EE
@@ -174,7 +174,7 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [ ] ET
 [x] EU
 [x] FI
-[ ] FJ (whois.usp.ac.fj)
+[x] FJ
 [ ] FK
 [x] FM
 [x] FO
@@ -256,7 +256,7 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [ ] ML
 [ ] MM
 [x] MN
-[ ] MO
+[ ] MO - near useless, better whois webbased but with captcha
 [x] MOBI
 [ ] MP - whois on port 43 broken
 [ ] MQ
@@ -319,7 +319,7 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [ ] SJ - no domains but it is NORID
 [x] SK
 [ ] SL
-[ ] SM - whois on port 43 broken
+[x] SM
 [ ] SN - whois on port 43 broken
 [x] SO
 [ ] SR
@@ -327,14 +327,14 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [ ] SU - possible -> RU
 [ ] SV
 [x] SX
-[ ] SY
+[x] SY
 [ ] SZ
 [x] TC 
 [ ] TD 
 [x] TEL
 [x] TF
 [ ] TG
-[ ] TH - possible
+[x] TH
 [ ] TJ
 [ ] TK - possible
 [x] TL
@@ -347,7 +347,7 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [ ] TT - webbased 
 [x] TV
 [x] TW
-[ ] TZ
+[x] TZ
 [x] UA
 [x] UG
 [x] UK
@@ -363,10 +363,10 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [ ] VU
 [x] WF
 [x] WS
-[ ] XN--3E0B707E - possible .kr
+[x] XN--3E0B707E - .kr
 [x] XN--45BRJ9C - .in
-[ ] XN--80AO21A - possible .kz
-[ ] XN--90A3AC - possible .rs
+[x] XN--80AO21A - .kz
+[x] XN--90A3AC - .rs
 [ ] XN--CLCHC0EA0B2G2A9GCD - possible .sg
 [x] XN--FIQS8S - .cn
 [x] XN--FIQZ9S - .cn
@@ -379,14 +379,14 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [x] XN--J6W193G - .hk
 [x] XN--KPRW13D - .tw
 [x] XN--KPRY57D - .tw
-[ ] XN--LGBBAT1AD8J - possible .dz
-[ ] XN--MGBAAM7A8H - possible .ae
+[x] XN--LGBBAT1AD8J - .dz
+[x] XN--MGBAAM7A8H - .ae
 [ ] XN--MGBAYH7GPA - .jo
 [x] XN--MGBBH1A71E - .in
 [ ] XN--MGBC0A9AZCG - .ma
 [ ] XN--MGBERP4A5D4AR - possible .sa
-[ ] XN--O3CW4H - possible .th
-[ ] XN--OGBPF8FL - possible .sy
+[x] XN--O3CW4H - .th
+[x] XN--OGBPF8FL - .sy
 [ ] XN--P1AI - possible .ru
 [ ] XN--PGBS0DH - .tn
 [x] XN--S9BRJ9C - .in
@@ -394,8 +394,8 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [x] XN--WGBL6A - .qa
 [ ] XN--XKC2AL3HYE2A -.lk
 [x] XN--XKC2DL3A5EE0H - .in
-[ ] XN--YFRO4I67O - possible sgnic
-[ ] XN--YGBI2AMMX - possible .ps
+[ ] XN--YFRO4I67O - possible .sg
+[x] XN--YGBI2AMMX - .ps
 [x] XXX
 [ ] YE
 [x] YT
@@ -452,6 +452,7 @@ gTLDs and thin registries sort by IANA ID (http://www.iana.org/assignments/regis
 [x] 380 (Tuonome.it Srl d/b/a APIsrs.com)
 [x] 401 (Misk.com, Inc.)
 [x] 430 (Net Searchers International Ltd.)
+[x] 455 (EnCirca, Inc.)
 [ ] 471 (Bizcn.com, Inc.)
 [x] 648 (Webagentur.at Internet Services GmbH d/b/a domainname.at)
 [x] 828 (Hetzner Online AG)
@@ -481,7 +482,7 @@ We are using our own Domain Parser:
 
 ChangeLog
 ---------
-See ChangeLog at https://github.com/novutec/WhoisParser/wiki/ChangeLog
+See ChangeLog at https://github.com/novutec/WhoisParser/blob/master/CHANGELOG.md
 
 Issues
 ------

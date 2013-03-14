@@ -52,10 +52,12 @@ class Template_De extends AbstractTemplate
 	 */
     protected $blockItems = array(
             1 => array('/^Nserver: (.+)$/im' => 'nameserver', '/^Status: (.+)$/im' => 'status', 
-                    '/^Changed: (.+)$/im' => 'changed', '/^RegAccName: (.+)$/im' => 'registrar:name', 
+                    '/Dnskey: (.+)$/im' => 'dnssec', '/^Changed: (.+)$/im' => 'changed', 
+                    '/^RegAccName: (.+)$/im' => 'registrar:name', 
                     '/^RegAccId: (.+)$/im' => 'registrar:id'), 
             
             2 => array('/^\[(Holder|Zone|Tech|Admin)/i' => 'contacts:reservedType', 
+                    '/^type:(?>[\x20\t]*)(.+)$/im' => 'contacts:type', 
                     '/^name:(?>[\x20\t]*)(.+)$/im' => 'contacts:name', 
                     '/^organisation:(?>[\x20\t]*)(.+)$/im' => 'contacts:organization', 
                     '/^Address:(?>[\x20\t]*)(.+)$/im' => 'contacts:address', 
@@ -78,7 +80,7 @@ class Template_De extends AbstractTemplate
     /**
      * After parsing ...
      *
-     * Move the attribute holder to owner
+     * Move the attribute holder to owner and fix dnssec
      *
      * @param  object &$WhoisParser
      * @return void
@@ -86,6 +88,12 @@ class Template_De extends AbstractTemplate
     public function postProcess(&$WhoisParser)
     {
         $ResultSet = $WhoisParser->getResult();
+        
+        if ($ResultSet->dnssec != '') {
+            $ResultSet->dnssec = true;
+        } else {
+            $ResultSet->dnssec = false;
+        }
         
         if (isset($ResultSet->contacts->holder)) {
             $ResultSet->contacts->owner = $ResultSet->contacts->holder;

@@ -190,9 +190,13 @@ class Parser
             if (isset($this->Query->ip)) {
                 $config = $this->Config->get('iana');
             } else {
-                $config = $this->Config->get($this->Query->idnTld);
+                if (isset($this->Query->tldGroup)) {
+                    $config = $this->Config->get($this->Query->tldGroup, $this->Query->idnTld);
+                } else {
+                    $config = $this->Config->get($this->Query->asn);
+                }
                 
-                if ($config['server'] == '') {
+                if ($config['server'] == '' || $this->Query->domain == '') {
                     $config = $this->Config->get('iana');
                 }
             }

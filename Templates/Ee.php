@@ -64,6 +64,9 @@ class Template_Ee extends AbstractTemplate
             3 => array('/^contact:(?>[\x20\t]*)(.+)$/im' => 'contacts:handle', 
                     '/^org:(?>[\x20\t]*)(.+)$/im' => 'contacts:organization', 
                     '/^e-mail:(?>[\x20\t]*)(.+)$/im' => 'contacts:email', 
+                    '/^phone:(?>[\x20\t]*)(.+)$/im' => 'contacts:phone', 
+                    '/^fax-no:(?>[\x20\t]*)(.+)$/im' => 'contacts:fax', 
+                    '/^address:(?>[\x20\t]*)(.+)$/im' => 'contacts:address', 
                     '/^name:(?>[\x20\t]*)(.+)$/im' => 'contacts:name'));
 
     /**

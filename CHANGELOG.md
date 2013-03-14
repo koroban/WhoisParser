@@ -1,3 +1,20 @@
+### 2.0.0 (Jan xx, 2013)
+###### Note: You will need the [DomainParser](https://github.com/novutec/DomainParser) version 2.0.0 and above!
+* added property template to Result class
+* added support to query all TLDs directly at IANA
+* added support for IANA #455, .ARPA, .DZ, .FJ, .SM, .SY, .TH, .TZ, .XN--80AO21A, .XN--3E0B707E, .XN--90A3AC, .XN--LGBBAT1AD8J, .XN--MGBAAM7A8H, .XN--O3CW4H, .XN--OGBPF8FL and .XN--YGBI2AMMX
+* added type to composer.json
+* added DNSSEC and TYPE to .DE template
+* fixed AS number look up 
+* changed Config lookup to tldGroup based on new DomainParser
+* changed WHOIS Config to TLD instead of each SLD
+* changed WHOIS template for .EE to fit for .TZ
+* changed WHOIS template for IANA to fit for .ARPA
+* changed WHOIS template Afilias to fit for IANA #455
+* changed link to changelog in README.md
+* refreshed supported TLD list in README.md
+* refreshed CHANGELOG.md
+
 ### 1.3.1 (Jan 11, 2013)
 * added composer.json
 * added CHANGELOG.md for faster lookup on changes
