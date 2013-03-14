@@ -1,4 +1,9 @@
-### 2.0.0 (Jan xx, 2013)
+### 2.0.1 (Jan 14, 2013)
+* raised own version in composer.json
+* fixed date for version 2.0.0 in CHANGELOG.md
+* fixed required version of Domain Parser in composer.json
+
+### 2.0.0 (Jan 14, 2013)
 ###### Note: You will need the [DomainParser](https://github.com/novutec/DomainParser) version 2.0.0 and above!
 * added property template to Result class
 * added support to query all TLDs directly at IANA
