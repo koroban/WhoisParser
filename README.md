@@ -150,7 +150,7 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [x] CN
 [x] CO
 [x] COM
-[ ] COOP - to few domain names
+[x] COOP
 [ ] CR
 [ ] CU
 [ ] CV
@@ -205,8 +205,8 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [ ] HR - possible
 [x] HT
 [ ] HU - webbased with captcha
-[ ] ID (whois.idnic.net.id)
-[ ] IE - possible
+[x] ID
+[x] IE
 [X] IL
 [x] IM
 [x] IN
@@ -273,7 +273,7 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [x] NA
 [x] NAME
 [x] NAME Registrar WHOIS
-[ ] NC - possible
+[x] NC
 [ ] NE
 [x] NET
 [x] NF
@@ -283,7 +283,7 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [ ] NO - possible - need recursive lookup for nameserver
 [ ] NP
 [ ] NR
-[ ] NU - possible
+[x] NU
 [x] NZ
 [x] OM
 [x] ORG
@@ -313,7 +313,7 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [x] SC
 [ ] SD
 [ ] SE - possible
-[ ] SG - possible
+[x] SG
 [x] SH
 [ ] SI - possible
 [ ] SJ - no domains but it is NORID
@@ -336,7 +336,7 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [ ] TG
 [x] TH
 [ ] TJ
-[ ] TK - possible
+[x] TK
 [x] TL
 [x] TM
 [x] TN
@@ -394,7 +394,7 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [x] XN--WGBL6A - .qa
 [ ] XN--XKC2AL3HYE2A -.lk
 [x] XN--XKC2DL3A5EE0H - .in
-[ ] XN--YFRO4I67O - possible .sg
+[x] XN--YFRO4I67O - .sg
 [x] XN--YGBI2AMMX - .ps
 [x] XXX
 [ ] YE
@@ -435,7 +435,7 @@ gTLDs and thin registries sort by IANA ID (http://www.iana.org/assignments/regis
 [x] 88 (Namebay SAM)
 [x] 91 (007Names, Inc.)
 [x] 106 (Ascio Technologies, Inc. - Denmark)
-[ ] 113 (CSL Computer Service Langenbach GmbH d/b/a joker.com)
+[x] 113 (CSL Computer Service Langenbach GmbH d/b/a joker.com)
 [ ] 120 (Xin Net Technology Corporation)
 [x] 131 (Total Web Solutions Limited trading as TotalRegistrations)
 [x] 140 (Acens Technologies, S.L.U.)
@@ -446,6 +446,7 @@ gTLDs and thin registries sort by IANA ID (http://www.iana.org/assignments/regis
 [x] 240 (PlanetDomain Pty Ltd)
 [x] 269 (Key-Systems GmbH)
 [x] 291 (DNC Holdings, Inc.)
+[x] 292 (MarkMonitor Inc.)
 [x] 320 (TLDS L.L.C. d/b/a SRSPlus)
 [x] 363 (Funpeas Media Ventures, LLC dba DomainProcessor.com)
 [x] 378 (2030138 Ontario Inc. dba NamesBeyond.com and dba GoodLuckDomain.com)
@@ -478,7 +479,7 @@ gTLDs and thin registries sort by IANA ID (http://www.iana.org/assignments/regis
 3rd Party Libraries
 -------------------
 We are using our own Domain Parser:
-* Novutec: http://github.com/novutec/DomainParser (Version 1.1.5 and above)
+* Novutec: http://github.com/novutec/DomainParser (Version 2.0.0 and above)
 
 ChangeLog
 ---------

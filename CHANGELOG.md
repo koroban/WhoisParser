@@ -1,9 +1,18 @@
-### 2.0.1 (Jan 14, 2013)
-* raised own version in composer.json
+### 2.0.2 (Mar 18, 2013)
+* added support for IANA #113, #292, .COOP, .ID, .IE, .NC, .NU, .SG, .TK and .XN--WGBL6A
+* changed own version in composer.json
+* changed WHOIS template Afilias to fit for .ID
+* fixed released dates in CHANGELOG.md
+* refreshed supported TLD list in README.md
+* refreshed CHANGELOG.md
+
+### 2.0.1 (Mar 14, 2013)
+* changed own version in composer.json
 * fixed date for version 2.0.0 in CHANGELOG.md
 * fixed required version of Domain Parser in composer.json
+* refreshed CHANGELOG.md
 
-### 2.0.0 (Jan 14, 2013)
+### 2.0.0 (Mar 14, 2013)
 ###### Note: You will need the [DomainParser](https://github.com/novutec/DomainParser) version 2.0.0 and above!
 * added property template to Result class
 * added support to query all TLDs directly at IANA
@@ -20,7 +29,7 @@
 * refreshed supported TLD list in README.md
 * refreshed CHANGELOG.md
 
-### 1.3.1 (Jan 11, 2013)
+### 1.3.1 (Mar 11, 2013)
 * added composer.json
 * added CHANGELOG.md for faster lookup on changes
 * added support for .LY, .MD, .NAME, .NAME Registrar WHOIS and .RO

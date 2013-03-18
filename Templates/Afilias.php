@@ -43,10 +43,10 @@ class Template_Afilias extends AbstractTemplate
 	 */
     protected $blocks = array(
             1 => '/Domain (ID|Name)(?>[\x20\t]*):(?>[\x20\t]*)(.*?)(?=Registrant(\-| )ID|Name Server|Registrant (ID|Name)|Owner Organization|$)/is', 
-            2 => '/(Registrant|Owner)(\-| )(ID|Name|Organization)(?>[\x20\t]*):(?>[\x20\t]*)(.*?)(?=(Admin(\-| )(ID|Organization|Name)|Administrative (ID|Name|Contact Name|Organization)|Name Server))/is', 
-            3 => '/(Admin|Administrative)(\-| )(ID|Name|Contact Name|Organization)(?>[\x20\t]*):(?>[\x20\t]*)(.*?)(?=(Billing(\-| )(ID|Name)|(Tech|Technical)(\-| )(ID|Name|Contact Name|Organization)))/is', 
-            4 => '/Billing(\-| )(ID|Name|Organization)(?>[\x20\t]*):(?>[\x20\t]*)(.*?)(?=(Tech(\-| )(Name|ID)|Technical ID|CED ID|Name Server|Nameserver))/is', 
-            5 => '/(Tech|Technical)(\-| )(ID|Name|Contact Name|Organization)(?>[\x20\t]*):(?>[\x20\t]*)(.*?)(?=(Name Server|Nameservers|Nameserver|Billing (Name|ID)))/is', 
+            2 => '/(Registrant|Owner)(\-| )(ID|Name|Organization)(?>[\x20\t]*):(?>[\x20\t]*)(.*?)(?=(Admin(\-| )(ID|Organization|Name)|Administrative (ID|Name|Contact (Name|ID)|Organization)|Name Server))/is', 
+            3 => '/(Admin|Administrative)(\-| )(ID|Name|Contact (Name|ID)|Organization)(?>[\x20\t]*):(?>[\x20\t]*)(.*?)(?=(Billing(\-| )(ID|Name)|(Tech|Technical)(\-| )(ID|Name|Contact (Name|ID)|Organization)|Name Server))/is', 
+            4 => '/Billing(\-| )(ID|Name|Contact (Name|ID)|Organization)(?>[\x20\t]*):(?>[\x20\t]*)(.*?)(?=(Tech(\-| )(Name|ID|Contact (Name|ID))|Technical ID|CED ID|Name Server|Nameserver))/is', 
+            5 => '/(Tech|Technical)(\-| )(ID|Name|Contact (Name|ID)|Organization)(?>[\x20\t]*):(?>[\x20\t]*)(.*?)(?=(Name Server|Nameservers|Nameserver|Billing (Name|ID)))/is', 
             6 => '/(Name Server|Name Server Name|Nameservers)(?>[\x20\t]*):(?>[\x20\t]*)(.*?)$/is', 
             7 => '/CED ID(?>[\x20\t]*):(?>[\x20\t]*)(.*?)(?=Operations and Notifications ID\:)/is', 
             8 => '/(Registration Date|Created On)(?>[\x20\t]*):(?>[\x20\t]*)(.*?)$/is', 
