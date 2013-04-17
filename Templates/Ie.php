@@ -41,7 +41,7 @@ class Template_Ie extends AbstractTemplate
 	 * @var array
 	 * @access protected
 	 */
-    protected $blocks = array(1 => '/domain:(?>[\x20\t]*)(.*?)(?=person)/is', 
+    protected $blocks = array(1 => '/descr:(?>[\x20\t]*)(.*?)(?=person)/is', 
             2 => '/person:(?>[\x20\t]*).*?[\n]{2}/is');
 
     /**
@@ -51,16 +51,16 @@ class Template_Ie extends AbstractTemplate
 	 * @access protected
 	 */
     protected $blockItems = array(
-            1 => array('/^descr:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:address', 
-                    '/^admin-c:(?>[\x20\t]*)(.+)$/im' => 'network:contacts:admin', 
-                    '/^tech-c:(?>[\x20\t]*)(.+)$/im' => 'network:contacts:tech', 
-                    '/^status:(?>[\x20\t]*)(.+)$/im' => 'status', 
-                    '/^nserver:(?>[\x20\t]*)(.+)$/im' => 'nameserver', 
-                    '/^registration:(?>[\x20\t]*)(.+)$/im' => 'created', 
-                    '/^renewal:(?>[\x20\t]*)(.+)$/im' => 'expires'), 
+            1 => array('/^descr:(?>[\x20\t]*)(.+)\n/i' => 'contacts:owner:name', 
+                    '/admin-c:(?>[\x20\t]*)(.+)$/im' => 'network:contacts:admin', 
+                    '/tech-c:(?>[\x20\t]*)(.+)$/im' => 'network:contacts:tech', 
+                    '/status:(?>[\x20\t]*)(.+)$/im' => 'status', 
+                    '/nserver:(?>[\x20\t]*)(.+)$/im' => 'nameserver', 
+                    '/registration:(?>[\x20\t]*)(.+)$/im' => 'created', 
+                    '/renewal:(?>[\x20\t]*)(.+)$/im' => 'expires'), 
             
-            2 => array('/^nic-hdl:(?>[\x20\t]*)(.+)$/im' => 'contacts:handle', 
-                    '/^person:(?>[\x20\t]*)(.+)$/im' => 'contacts:name'));
+            2 => array('/nic-hdl:(?>[\x20\t]*)(.+)$/im' => 'contacts:handle', 
+                    '/person:(?>[\x20\t]*)(.+)$/im' => 'contacts:name'));
 
     /**
      * RegEx to check availability of the domain name
@@ -69,22 +69,4 @@ class Template_Ie extends AbstractTemplate
      * @access protected
      */
     protected $available = '/Not Registered/i';
-
-    /**
-     * After parsing do something
-     *
-     * Fix owner name
-     *
-     * @param  object &$WhoisParser
-     * @return void
-     */
-    public function postProcess(&$WhoisParser)
-    {
-        $ResultSet = $WhoisParser->getResult();
-        
-        if (isset($ResultSet->contacts->owner[0]->address[0])) {
-            $ResultSet->contacts->owner[0]->name = $ResultSet->contacts->owner[0]->address[0];
-            $ResultSet->contacts->owner[0]->address = null;
-        }
-    }
 }

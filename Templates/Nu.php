@@ -41,9 +41,9 @@ class Template_Nu extends AbstractTemplate
 	 * @var array
 	 * @access protected
 	 */
-    protected $blocks = array(1 => '/Technical Contact:(.*?)(?=Record last updated)/is', 
-            2 => '/Record last updated on (.*?)(?=Domain servers in listed order)/is', 
-            3 => '/Domain servers in listed order:\n(?>[\x20\t]*)(.*?)(?=Owner and Administrative)/is');
+    protected $blocks = array(1 => '/technical contact:(.*?)(?=Record last updated)/is', 
+            2 => '/record last updated on (.*?)(?=domain servers in listed order)/is', 
+            3 => '/domain servers in listed order:\n(?>[\x20\t]*)(.*?)(?=owner and administrative)/is');
 
     /**
 	 * Items for each block
@@ -52,14 +52,16 @@ class Template_Nu extends AbstractTemplate
 	 * @access protected
 	 */
     protected $blockItems = array(
-            1 => array('/Technical Contact:(.*?)$/is' => 'contacts:tech:address'), 
-            2 => array('/Record last updated on(?>[\x20\t]*)(.+)$/im' => 'changed', 
-                    '/Record expires on(?>[\x20\t]*)(.+)$/im' => 'expires', 
-                    '/Record created on(?>[\x20\t]*)(.+)$/im' => 'created', 
-                    '/Record status:(?>[\x20\t]*)(.+)$/im' => 'status', 
-                    '/Registrar of record:(?>[\x20\t]*)(.+)$/im' => 'registrar:name', 
-                    '/Referral URL:(?>[\x20\t]*)(.+)$/im' => 'registrar:url'), 
-            3 => array('/[^Domain servers in listed order](?>[\x20\t]*)(.*)$/im' => 'nameserver'));
+            1 => array('/technical contact:(.*?)$/is' => 'contacts:tech:address'), 
+            2 => array('/record last updated on(?>[\x20\t]*)(.+)$/im' => 'changed', 
+                    '/record expires on(?>[\x20\t]*)(.+)$/im' => 'expires', 
+                    '/record created on(?>[\x20\t]*)(.+)$/im' => 'created', 
+                    '/record status:(?>[\x20\t]*)(.+)$/im' => 'status', 
+                    '/registrar of record:(?>[\x20\t]*)(.+)$/im' => 'registrar:name', 
+                    '/referral url:(?>[\x20\t]*)(.+)$/im' => 'registrar:url'), 
+            3 => array('/\n(?>[\x20\t]+)(.+)$/im' => 'nameserver', 
+                    '/\n(?>[\x20\t]+)(.+)(?>[\x20\t]+).+$/im' => 'nameserver', 
+                    '/\n(?>[\x20\t]+).+(?>[\x20\t]+)(.+)$/im' => 'ips'));
 
     /**
      * RegEx to check availability of the domain name
@@ -72,7 +74,7 @@ class Template_Nu extends AbstractTemplate
     /**
      * After parsing do something
      *
-     * Fix address and namesever
+     * Fix contact address
      *
      * @param  object &$WhoisParser
      * @return void
@@ -80,72 +82,29 @@ class Template_Nu extends AbstractTemplate
     public function postProcess(&$WhoisParser)
     {
         $ResultSet = $WhoisParser->getResult();
-        $filteredAddress = array();
-        $filteredNameserver = array();
-        $filteredIps = array();
-        
-        if (is_array($ResultSet->nameserver)) {
-            foreach ($ResultSet->nameserver as $key => $line) {
-                $line = strtolower(trim($line));
-                if ($line != '') {
-                    preg_match('/([a-z0-9\.]+)(?>[\x20\t]*)([a-z0-9\.]+)?/i', $line, $matches);
-                    
-                    if (isset($matches[1])) {
-                        $filteredNameserver[] = $matches[1];
-                    }
-                    
-                    if (isset($matches[2])) {
-                        $filteredIps[] = $matches[2];
-                    }
-                }
-            }
-            
-            if (sizeof($filteredIps) > 0) {
-                $ResultSet->ips = $filteredIps;
-            }
-            
-            $ResultSet->nameserver = $filteredNameserver;
-        }
         
         if (isset($ResultSet->contacts->tech[0]->address)) {
             $filteredAddress = array_map('trim', explode("\n", trim($ResultSet->contacts->tech[0]->address)));
             
-            $ResultSet->contacts->tech[0]->address = $filteredAddress;
+            preg_match('/(?>[\x20\t]*)([a-z0-9\.\-, ]*)(?>[\x20\t]{1,})(.*@.*)/i', $filteredAddress[0], $matches);
             
-            if (sizeof($ResultSet->contacts->tech[0]->address) == 6) {
-                preg_match('/(?>[\x20\t]*)([a-z0-9\.\-, ]*)(?>[\x20\t]{1,})(.*@.*)/i', $filteredAddress[0], $matches);
-                $ResultSet->contacts->tech[0]->name = $matches[1];
-                $ResultSet->contacts->tech[0]->email = $matches[2];
-                
-                $ResultSet->contacts->tech[0]->organization = $ResultSet->contacts->tech[0]->address[1];
-                $ResultSet->contacts->tech[0]->city = $ResultSet->contacts->tech[0]->address[3];
-                $ResultSet->contacts->tech[0]->country = $ResultSet->contacts->tech[0]->address[4];
-                
-                preg_match('/Phone: ([0-9\-\+\.\/\(\) ]*)(?>[\x20\t]*)\(voice\)(?>[\x20\t]*)([ 0-9\-\+\.\/ \(\)]*)\(fax\)/i', $ResultSet->contacts->tech[0]->address[5], $matches);
-                
-                $ResultSet->contacts->tech[0]->phone = $matches[1];
-                $ResultSet->contacts->tech[0]->fax = $matches[2];
-                
-                $ResultSet->contacts->tech[0]->address = $ResultSet->contacts->tech[0]->address[2];
+            $ResultSet->contacts->tech[0]->name = $matches[1];
+            $ResultSet->contacts->tech[0]->email = $matches[2];
+            
+            $ResultSet->contacts->tech[0]->organization = $filteredAddress[1];
+            $ResultSet->contacts->tech[0]->city = $filteredAddress[3];
+            $ResultSet->contacts->tech[0]->country = $filteredAddress[4];
+            
+            if (sizeof($filteredAddress) === 7) {
+                $ResultSet->contacts->tech[0]->country = $filteredAddress[5];
             }
             
-            if (sizeof($ResultSet->contacts->tech[0]->address) == 7) {
-                preg_match('/(?>[\x20\t]*)([a-z0-9\.\-, ]*)(?>[\x20\t]{1,})(.*@.*)/i', $filteredAddress[0], $matches);
-                $ResultSet->contacts->tech[0]->name = $matches[1];
-                $ResultSet->contacts->tech[0]->email = $matches[2];
-                
-                $ResultSet->contacts->tech[0]->organization = $ResultSet->contacts->tech[0]->address[1];
-                $ResultSet->contacts->tech[0]->city = $ResultSet->contacts->tech[0]->address[3];
-                $ResultSet->contacts->tech[0]->state = $ResultSet->contacts->tech[0]->address[4];
-                $ResultSet->contacts->tech[0]->country = $ResultSet->contacts->tech[0]->address[5];
-                
-                preg_match('/Phone: ([0-9\-\+\.\/\(\) ]*)(?>[\x20\t]*)\(voice\)(?>[\x20\t]*)([ 0-9\-\+\.\/\(\)]*)\(fax\)/i', $ResultSet->contacts->tech[0]->address[6], $matches);
-                
-                $ResultSet->contacts->tech[0]->phone = $matches[1];
-                $ResultSet->contacts->tech[0]->fax = $matches[2];
-                
-                $ResultSet->contacts->tech[0]->address = $ResultSet->contacts->tech[0]->address[2];
-            }
+            preg_match('/Phone: ([0-9\-\+\.\/\(\) ]*)(?>[\x20\t]*)\(voice\)(?>[\x20\t]*)([ 0-9\-\+\.\/\(\)]*)\(fax\)/i', end($filteredAddress), $matches);
+            
+            $ResultSet->contacts->tech[0]->phone = $matches[1];
+            $ResultSet->contacts->tech[0]->fax = $matches[2];
+            
+            $ResultSet->contacts->tech[0]->address = $filteredAddress[2];
         }
     }
 }

@@ -41,12 +41,12 @@ class Template_Cd extends AbstractTemplate
 	 * @var array
 	 * @access protected
 	 */
-    protected $blocks = array(1 => '/Registrar:(?>[\x20\t]*)(.*?)(?=Owner\/Main Contact:)/is', 
-            2 => '/Owner\/Main Contact:(?>[\x20\t]*)(.*?)(?=Administrative Contact:)/is', 
-            3 => '/Administrative Contact:(?>[\x20\t]*)(.*?)(?=Technical Contact)/is', 
-            4 => '/Technical Contact:(?>[\x20\t]*)(.*?)(?=Billing Contact)/is', 
-            5 => '/Billing Contact:(?>[\x20\t]*)(.*?)(?=Name Servers)/is', 
-            6 => '/Name Servers:(?>[\x20\t]*)(.*?)$/is');
+    protected $blocks = array(1 => '/registrar:(?>[\x20\t]*)(.*?)(?=owner\/main Contact)/is', 
+            2 => '/owner\/main contact:(?>[\x20\t]*)(.*?)(?=administrative contact)/is', 
+            3 => '/administrative contact:(?>[\x20\t]*)(.*?)(?=technical contact)/is', 
+            4 => '/technical contact:(?>[\x20\t]*)(.*?)(?=billing contact)/is', 
+            5 => '/billing contact:(?>[\x20\t]*)(.*?)(?=name servers)/is', 
+            6 => '/name servers:(?>[\x20\t]*)(.*?)$/is');
 
     /**
 	 * Items for each block
@@ -55,47 +55,47 @@ class Template_Cd extends AbstractTemplate
 	 * @access protected
 	 */
     protected $blockItems = array(
-            1 => array('/Registrar:(?>[\x20\t]*)(.+)$/im' => 'registrar:name', 
-                    '/Creation Date:(?>[\x20\t]*)(.+)$/im' => 'created', 
-                    '/Expiration Date:(?>[\x20\t]*)(.+)$/im' => 'expires', 
-                    '/Domain Status:(?>[\x20\t]*)(.+)$/im' => 'status'), 
-            2 => array('/Name:(?>[\x20\t]*)(.+)\([0-9a-z\-]+\)/im' => 'contacts:owner:name', 
-                    '/Name:(?>[\x20\t]*).+\(([0-9a-z\-]+)\)/im' => 'contacts:owner:handle', 
-                    '/Registered Address(line[0-9]):(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:address', 
-                    '/Registered State:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:state', 
-                    '/Registered Country:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:country', 
-                    '/Registered Postalcode:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:zipcode', 
-                    '/Telephone:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:phone', 
-                    '/Facsimile:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:fax', 
-                    '/EMAIL:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:email'), 
-            3 => array('/Name:(?>[\x20\t]*)(.+)\([0-9a-z\-]+\)/im' => 'contacts:admin:name', 
-                    '/Name:(?>[\x20\t]*).+\(([0-9a-z\-]+)\)/im' => 'contacts:admin:handle', 
-                    '/Registered Address(line[0-9]):(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:address', 
-                    '/Registered State:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:state', 
-                    '/Registered Country:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:country', 
-                    '/Registered Postalcode:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:zipcode', 
-                    '/Telephone:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:phone', 
-                    '/Facsimile:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:fax', 
-                    '/EMAIL:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:email'), 
-            4 => array('/Name:(?>[\x20\t]*)(.+)\([0-9a-z\-]+\)/im' => 'contacts:tech:name', 
-                    '/Name:(?>[\x20\t]*).+\(([0-9a-z\-]+)\)/im' => 'contacts:tech:handle', 
-                    '/Registered Address(line[0-9]):(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:address', 
-                    '/Registered State:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:state', 
-                    '/Registered Country:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:country', 
-                    '/Registered Postalcode:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:zipcode', 
-                    '/Telephone:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:phone', 
-                    '/Facsimile:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:fax', 
-                    '/EMAIL:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:email'), 
-            5 => array('/Name:(?>[\x20\t]*)(.+)\([0-9a-z\-]+\)/im' => 'contacts:billing:name', 
-                    '/Name:(?>[\x20\t]*).+\(([0-9a-z\-]+)\)/im' => 'contacts:billing:handle', 
-                    '/Registered Address(line[0-9]):(?>[\x20\t]*)(.+)$/im' => 'contacts:billing:address', 
-                    '/Registered State:(?>[\x20\t]*)(.+)$/im' => 'contacts:billing:state', 
-                    '/Registered Country:(?>[\x20\t]*)(.+)$/im' => 'contacts:billing:country', 
-                    '/Registered Postalcode:(?>[\x20\t]*)(.+)$/im' => 'contacts:billing:zipcode', 
-                    '/Telephone:(?>[\x20\t]*)(.+)$/im' => 'contacts:billing:phone', 
-                    '/Facsimile:(?>[\x20\t]*)(.+)$/im' => 'contacts:billing:fax', 
-                    '/EMAIL:(?>[\x20\t]*)(.+)$/im' => 'contacts:billing:email'), 
-            6 => array('/Name Servers:[\n](?>[\x20\t]*)(.+)$/is' => 'nameserver'));
+            1 => array('/registrar:(?>[\x20\t]*)(.+)$/im' => 'registrar:name', 
+                    '/creation date:(?>[\x20\t]*)(.+)$/im' => 'created', 
+                    '/expiration date:(?>[\x20\t]*)(.+)$/im' => 'expires', 
+                    '/domain status:(?>[\x20\t]*)(.+)$/im' => 'status'), 
+            2 => array('/name:(?>[\x20\t]*)(.+)\([0-9a-z\-]+\)/im' => 'contacts:owner:name', 
+                    '/name:(?>[\x20\t]*).+\(([0-9a-z\-]+)\)/im' => 'contacts:owner:handle', 
+                    '/registered address\(line[0-9]\):(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:address', 
+                    '/registered state:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:state', 
+                    '/registered country:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:country', 
+                    '/registered postalcode:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:zipcode', 
+                    '/telephone:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:phone', 
+                    '/facsimile:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:fax', 
+                    '/email:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:email'), 
+            3 => array('/name:(?>[\x20\t]*)(.+)\([0-9a-z\-]+\)/im' => 'contacts:admin:name', 
+                    '/name:(?>[\x20\t]*).+\(([0-9a-z\-]+)\)/im' => 'contacts:admin:handle', 
+                    '/registered address\(line[0-9]\):(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:address', 
+                    '/registered state:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:state', 
+                    '/registered country:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:country', 
+                    '/registered postalcode:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:zipcode', 
+                    '/telephone:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:phone', 
+                    '/facsimile:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:fax', 
+                    '/email:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:email'), 
+            4 => array('/name:(?>[\x20\t]*)(.+)\([0-9a-z\-]+\)/im' => 'contacts:tech:name', 
+                    '/name:(?>[\x20\t]*).+\(([0-9a-z\-]+)\)/im' => 'contacts:tech:handle', 
+                    '/registered address\(line[0-9]\):(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:address', 
+                    '/registered state:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:state', 
+                    '/registered country:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:country', 
+                    '/registered postalcode:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:zipcode', 
+                    '/telephone:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:phone', 
+                    '/facsimile:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:fax', 
+                    '/email:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:email'), 
+            5 => array('/name:(?>[\x20\t]*)(.+)\([0-9a-z\-]+\)/im' => 'contacts:billing:name', 
+                    '/name:(?>[\x20\t]*).+\(([0-9a-z\-]+)\)/im' => 'contacts:billing:handle', 
+                    '/registered address\(line[0-9]\):(?>[\x20\t]*)(.+)$/im' => 'contacts:billing:address', 
+                    '/registered state:(?>[\x20\t]*)(.+)$/im' => 'contacts:billing:state', 
+                    '/registered country:(?>[\x20\t]*)(.+)$/im' => 'contacts:billing:country', 
+                    '/registered postalcode:(?>[\x20\t]*)(.+)$/im' => 'contacts:billing:zipcode', 
+                    '/telephone:(?>[\x20\t]*)(.+)$/im' => 'contacts:billing:phone', 
+                    '/facsimile:(?>[\x20\t]*)(.+)$/im' => 'contacts:billing:fax', 
+                    '/email:(?>[\x20\t]*)(.+)$/im' => 'contacts:billing:email'), 
+            6 => array('/\n(?>[\x20\t]+)(.+)$/im' => 'nameserver'));
 
     /**
      * RegEx to check availability of the domain name
@@ -103,30 +103,5 @@ class Template_Cd extends AbstractTemplate
      * @var string
      * @access protected
      */
-    protected $available = '/Domain Not Found/i';
-
-    /**
-     * After parsing ...
-     *
-     * Fix nameserver in WHOIS output
-     *
-     * @param  object &$WhoisParser
-     * @return void
-     */
-    public function postProcess(&$WhoisParser)
-    {
-        $ResultSet = $WhoisParser->getResult();
-        $filteredNameserver = array();
-        
-        if (isset($ResultSet->nameserver) && $ResultSet->nameserver != '' &&
-                 ! is_array($ResultSet->nameserver)) {
-            $explodedNameserver = explode("\n", $ResultSet->nameserver);
-            foreach ($explodedNameserver as $key => $line) {
-                if (trim($line) != '') {
-                    $filteredNameserver[] = strtolower(trim($line));
-                }
-            }
-            $ResultSet->nameserver = $filteredNameserver;
-        }
-    }
+    protected $available = '/domain not found/i';
 }

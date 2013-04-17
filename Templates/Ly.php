@@ -25,7 +25,7 @@
 namespace Novutec\WhoisParser;
 
 /**
- * Template for .LY Domains
+ * Template for .LY
  *
  * @category   Novutec
  * @package    WhoisParser
@@ -60,28 +60,22 @@ class Template_Ly extends AbstractTemplate
                     '/Zip\/Postal code: (.+)$/im' => 'contacts:owner:zipcode', 
                     '/Phone: (.+)$/im' => 'contacts:owner:phone', 
                     '/Fax: (.+)$/im' => 'contacts:owner:fax'), 
-            
             2 => array('/Administrative Contact:\n(.*)$/is' => 'contacts:admin:address', 
                     '/Zip\/Postal code: (.+)$/im' => 'contacts:admin:zipcode', 
                     '/Phone: (.+)$/im' => 'contacts:admin:phone', 
                     '/Fax: (.+)$/im' => 'contacts:admin:fax'), 
-            
             3 => array('/Technical Contact:\n(.*)$/is' => 'contacts:tech:address', 
                     '/Zip\/Postal code: (.+)$/im' => 'contacts:tech:zipcode', 
                     '/Phone: (.+)$/im' => 'contacts:tech:phone', 
                     '/Fax: (.+)$/im' => 'contacts:tech:fax'), 
-            
             4 => array('/Billing Contact:\n(.*)$/is' => 'contacts:billing:address', 
                     '/Zip\/Postal code: (.+)$/im' => 'contacts:billing:zipcode', 
                     '/Phone: (.+)$/im' => 'contacts:billing:phone', 
                     '/Fax: (.+)$/im' => 'contacts:billing:fax'), 
-            
             5 => array('/Created:(?>[\x20\t]*)(.+)$/im' => 'created', 
                     '/Updated:(?>[\x20\t]*)(.+)$/im' => 'changed', 
                     '/Expired:(?>[\x20\t]*)(.+)$/im' => 'expires'), 
-            
-            6 => array('/Domain servers in listed order:\n(.+)$/is' => 'nameserver'), 
-            
+            6 => array('/\n(?>[\x20\t]*)(.+)$/im' => 'nameserver'), 
             7 => array('/Domain Status:(?>[\x20\t]*)(.+)$/im' => 'status'));
 
     /**
@@ -95,7 +89,7 @@ class Template_Ly extends AbstractTemplate
     /**
      * After parsing ...
      * 
-     * Fix address and nameserver in whois output
+     * Fix contact addresses
      * 
      * @param  object &$WhoisParser
      * @return void
@@ -104,41 +98,25 @@ class Template_Ly extends AbstractTemplate
     {
         $ResultSet = $WhoisParser->getResult();
         $filteredAddress = array();
-        $filteredNameserver = array();
         
         foreach ($ResultSet->contacts as $contactType => $contactArray) {
             foreach ($contactArray as $contactObject) {
-                if (! is_array($contactObject->address)) {
-                    $filteredAddress = array_map('trim', explode("\n", trim($contactObject->address)));
-                    
-                    $contactObject->organization = $filteredAddress[0];
-                    $contactObject->name = $filteredAddress[1];
-                    $contactObject->address = $filteredAddress[2];
-                    $contactObject->city = $filteredAddress[3];
-                    
-                    if (stripos($filteredAddress[5], 'Zip/Postal code') !== false) {
-                        $contactObject->country = $filteredAddress[4];
-                    } else {
-                        $contactObject->state = $filteredAddress[4];
-                        $contactObject->country = $filteredAddress[5];
-                    }
-                    
-                    $contactObject->email = end($filteredAddress);
-                    
-                    $filteredAddress = array();
+                $filteredAddress = array_map('trim', explode("\n", trim($contactObject->address)));
+                
+                $contactObject->organization = $filteredAddress[0];
+                $contactObject->name = $filteredAddress[1];
+                $contactObject->address = $filteredAddress[2];
+                $contactObject->city = $filteredAddress[3];
+                
+                if (stripos($filteredAddress[5], 'Zip/Postal code') !== false) {
+                    $contactObject->country = $filteredAddress[4];
+                } else {
+                    $contactObject->state = $filteredAddress[4];
+                    $contactObject->country = $filteredAddress[5];
                 }
+                
+                $contactObject->email = end($filteredAddress);
             }
-        }
-        
-        if (isset($ResultSet->nameserver) && $ResultSet->nameserver != '' &&
-                 ! is_array($ResultSet->nameserver)) {
-            $explodedNameserver = explode("\n", $ResultSet->nameserver);
-            foreach ($explodedNameserver as $key => $line) {
-                if (trim($line) != '') {
-                    $filteredNameserver[] = strtolower(trim($line));
-                }
-            }
-            $ResultSet->nameserver = $filteredNameserver;
         }
     }
 }

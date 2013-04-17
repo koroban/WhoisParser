@@ -41,10 +41,10 @@ class Template_Be extends AbstractTemplate
 	 * @var array
 	 * @access protected
 	 */
-    protected $blocks = array(1 => '/domain:(?>[\x20\t]*)(.*?)[\n]{2}/is', 
-            2 => '/registrar technical contacts:[\n](.*?)[\n]{2}/is', 
-            3 => '/registrar:[\n](.*?)[\n]{2}/is', 4 => '/nameservers:[\n](.*?)[\n]{2}/is', 
-            5 => '/keys:[\n](.*?)[\n]{2}/is');
+    protected $blocks = array(1 => '/domain:(?>[\x20\t]*)(.*?)(?=registrant)/is', 
+            2 => '/registrar technical contacts:\n(.*?)(?=registrar:)/is', 
+            3 => '/registrar:\n(.*?)(?=nameservers)/is', 4 => '/nameservers:\n(.*?)(?=keys:)/is', 
+            5 => '/keys:\n(.*?)(?=Please visit)/is');
 
     /**
 	 * Items for each block
@@ -53,22 +53,20 @@ class Template_Be extends AbstractTemplate
 	 * @access protected
 	 */
     protected $blockItems = array(
-            1 => array('/^status:(?>[\x20\t]*)(.+)$/im' => 'status', 
-                    '/^Registered:(?>[\x20\t]*)(.+)$/im' => 'created'), 
-            
-            2 => array('/^(?>[\x20\t]*)name:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:name', 
-                    '/^(?>[\x20\t]*)organisation:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:organization', 
-                    '/^(?>[\x20\t]*)language:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:language', 
-                    '/^(?>[\x20\t]*)phone:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:phone', 
-                    '/^(?>[\x20\t]*)fax:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:fax', 
-                    '/^(?>[\x20\t]*)email:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:email'), 
-            
-            3 => array('/^(?>[\x20\t]*)name:(?>[\x20\t]*)(.+)$/im' => 'registrar:name', 
-                    '/^(?>[\x20\t]*)website:(?>[\x20\t]*)(.+)$/im' => 'registrar:url'), 
-            
-            4 => array('/^(?>[\x20\t]+)(.+)$/im' => 'nameserver'), 
-            
-            5 => array('/^(?>[\x20\t]*)keyTag:(.+)$/im' => 'dnssec'));
+            1 => array('/status:(?>[\x20\t]*)(.+)$/im' => 'status', 
+                    '/Registered:(?>[\x20\t]*)(.+)$/im' => 'created'), 
+            2 => array('/name:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:name', 
+                    '/organisation:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:organization', 
+                    '/language:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:language', 
+                    '/phone:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:phone', 
+                    '/fax:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:fax', 
+                    '/email:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:email'), 
+            3 => array('/name:(?>[\x20\t]*)(.+)$/im' => 'registrar:name', 
+                    '/website:(?>[\x20\t]*)(.+)$/im' => 'registrar:url'), 
+            4 => array('/\n(?>[\x20\t]+)(.+)$/im' => 'nameserver', 
+                    '/\n(?>[\x20\t]+)(.+) \(.+\)$/im' => 'nameserver', 
+                    '/\n(?>[\x20\t]+).+ \((.+)\)$/im' => 'ips'), 
+            5 => array('/keyTag:(.+)$/im' => 'dnssec'));
 
     /**
      * RegEx to check availability of the domain name
@@ -76,12 +74,12 @@ class Template_Be extends AbstractTemplate
      * @var string
      * @access protected
      */
-    protected $available = '/(Status:(?>[\x20\t]*)AVAILABLE)[\r\n]/i';
+    protected $available = '/Status:(?>[\x20\t]*)AVAILABLE/i';
 
     /**
      * After parsing ..
      * 
-     * If dnssec was matched before it we switch dnssec to true otherwise to false
+     * If dnssec key was found we set attribute to true
      * 
 	 * @param  object &$WhoisParser
 	 * @return void

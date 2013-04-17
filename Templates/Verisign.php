@@ -41,7 +41,7 @@ class Template_Verisign extends AbstractTemplate
 	 * @var array
 	 * @access protected
 	 */
-    protected $blocks = array(1 => '/Domain Name:(?>[\x20\t]*)(.*?)(?=>>>)/is');
+    protected $blocks = array(1 => '/domain name:(?>[\x20\t]*)(.*?)(?=>>>)/is');
 
     /**
 	 * Items for each block
@@ -50,16 +50,16 @@ class Template_Verisign extends AbstractTemplate
 	 * @access protected
 	 */
     protected $blockItems = array(
-            1 => array('/(?>[\x20\t]*)whois server:(?>[\x20\t]*)(.+)$/im' => 'whoisserver', 
-                    '/(?>[\x20\t]*)registrar:(?>[\x20\t]*)(.+)$/im' => 'registrar:name', 
-                    '/(?>[\x20\t]*)registrar iana id:(?>[\x20\t]*)(.+)$/im' => 'registrar:id', 
-                    '/(?>[\x20\t]*)referral url:(?>[\x20\t]*)(.+)$/im' => 'registrar:url', 
-                    '/(?>[\x20\t]*)creation date:(?>[\x20\t]*)(.+)$/im' => 'created', 
-                    '/(?>[\x20\t]*)expiration date:(?>[\x20\t]*)(.+)$/im' => 'expires', 
-                    '/(?>[\x20\t]*)updated date:(?>[\x20\t]*)(.+)$/im' => 'changed', 
-                    '/(?>[\x20\t]*)name server:(?>[\x20\t]*)(.+)$/im' => 'nameserver', 
-                    '/(?>[\x20\t]*)dnssec:(?>[\x20\t]*)(.+)$/im' => 'dnssec', 
-                    '/(?>[\x20\t]*)status:(?>[\x20\t]*)(.+)$/im' => 'status'));
+            1 => array('/whois server:(?>[\x20\t]*)(.+)$/im' => 'whoisserver', 
+                    '/registrar:(?>[\x20\t]*)(.+)$/im' => 'registrar:name', 
+                    '/registrar iana id:(?>[\x20\t]*)(.+)$/im' => 'registrar:id', 
+                    '/referral url:(?>[\x20\t]*)(.+)$/im' => 'registrar:url', 
+                    '/creation date:(?>[\x20\t]*)(.+)$/im' => 'created', 
+                    '/expiration date:(?>[\x20\t]*)(.+)$/im' => 'expires', 
+                    '/updated date:(?>[\x20\t]*)(.+)$/im' => 'changed', 
+                    '/name server:(?>[\x20\t]*)(.+)$/im' => 'nameserver', 
+                    '/dnssec:(?>[\x20\t]*)(.+)$/im' => 'dnssec', 
+                    '/status:(?>[\x20\t]*)(.+)$/im' => 'status'));
 
     /**
      * RegEx to check availability of the domain name
@@ -67,7 +67,7 @@ class Template_Verisign extends AbstractTemplate
      * @var string
      * @access protected
      */
-    protected $available = '/No match for /i';
+    protected $available = '/No match for/i';
 
     /**
      * After parsing ...
@@ -84,8 +84,8 @@ class Template_Verisign extends AbstractTemplate
         $ResultSet = $WhoisParser->getResult();
         $Config = $WhoisParser->getConfig();
         
-        if ((isset($ResultSet->dnssec) || $ResultSet->dnssec == null) &&
-                 ($ResultSet->dnssec == 'Unsigned delegation' || $ResultSet->dnssec == '')) {
+        if ((isset($ResultSet->dnssec) || $ResultSet->dnssec === null) &&
+                 ($ResultSet->dnssec === 'Unsigned delegation' || $ResultSet->dnssec == '')) {
             $ResultSet->dnssec = false;
         } else {
             $ResultSet->dnssec = true;
@@ -98,7 +98,10 @@ class Template_Verisign extends AbstractTemplate
         }
         
         $newConfig = $Config->get($ResultSet->whoisserver);
-        $newConfig['server'] = $ResultSet->whoisserver;
+
+        if ($newConfig['server'] == '') {
+            $newConfig['server'] = $ResultSet->whoisserver;
+        }
         
         $Config->setCurrent($newConfig);
         $WhoisParser->call();

@@ -44,11 +44,11 @@ class Template_Gtld_networksolutions extends AbstractTemplate
     protected $blocks = array(
             1 => '/Registrant( \[[0-9]*\]:|:)(.*?)(?=Registrar Name|Domain Name:|Registrar:|Administrative Contact)/is', 
             2 => '/Administrative( Contact| Contact, Technical Contact|,[ ]{1,}Technical Contact)( \[[0-9]*\]:|:)(.*)(?=Technical[ ]{1,}Contact|Billing Contact|Record created|Record updated on|Record expires on|Registrar of Record|Registration Service Provider|Domain servers in listed order)/isU', 
-            3 => '/Technical[ ]{1,}Contact( \[[0-9]*\]:|:)(.*?)(?=Administrative contact|Record last updated|Record created|Record updated on|Record expires on|Registrar of Record|Registration Service Provider|Domain servers in listed order|DNS Servers|Name Servers)/is', 
+            3 => '/Technical[ ]{1,}Contact( \[[0-9]*\]:|:)(.*?)(?=Administrative contact|Record last updated|Record created|Record updated on|Record expires on|Registrar of Record|Registration Service Provider|Domain servers in listed order|Domain name servers in listed order|DNS Servers|Name Servers)/is', 
             4 => '/Database last updated on (.*?)$/im', 
             5 => '/(Domain servers in listed order|DNS Servers):[\n]{2}(?>[\x20\t]*)(.*?)\n\n/is', 
             6 => '/Record created on:(.*?)$/is', 
-            7 => '/Billing[ ]{1,}Contact( \[[0-9]*\]:|:)(.*?)(?=Technical Contact|Domain servers in listed order)/is');
+            7 => '/Billing[ ]{1,}Contact( \[[0-9]*\]:|:)(.*?)(?=Technical Contact|Domain servers in listed order|Record created on)/is');
 
     /**
 	 * Items for each block
@@ -93,7 +93,7 @@ class Template_Gtld_networksolutions extends AbstractTemplate
                 
                 // if there is no email address in the first line, then we
                 // assume it is the name
-                if (sizeof($matches) == 0) {
+                if (sizeof($matches) === 0) {
                     $contactObject->name = $filteredAddress[0];
                 } else {
                     if (isset($matches[1])) {
@@ -111,7 +111,7 @@ class Template_Gtld_networksolutions extends AbstractTemplate
                 
                 // if there is no email address in the first line, then we
                 // assume it is the organization
-                if (sizeof($matches) == 0) {
+                if (sizeof($matches) === 0) {
                     $contactObject->organization = $filteredAddress[1];
                 } else {
                     if (isset($matches[1])) {
@@ -131,7 +131,7 @@ class Template_Gtld_networksolutions extends AbstractTemplate
                     // if the regex doesn't match, just set the number to fax
                     // and
                     // use the entry before as phone number
-                    if (sizeof($matches) == 0) {
+                    if (sizeof($matches) === 0) {
                         $contactObject->fax = str_replace('Fax.', '', $lastEntry);
                         $contactObject->phone = str_replace('Tel.', '', $filteredAddress[$sizeOfAddress -
                                  2]);
@@ -152,8 +152,18 @@ class Template_Gtld_networksolutions extends AbstractTemplate
                     // check if last entry contains keyword 'email'
                 } elseif (stripos($lastEntry, 'email') !== false) {
                     // move backwards to get phone number
-                    $contactObject->phone = trim(str_replace(array('Phone:', 'Tel:'), '', $filteredAddress[$sizeOfAddress -
-                             2]));
+                    if (stripos($filteredAddress[$sizeOfAddress - 2], 'fax') !== false) {
+                        $contactObject->fax = trim(str_replace(array('Fax:', 'Fax..:'), '', $filteredAddress[$sizeOfAddress -
+                                 2]));
+                        if (stripos($filteredAddress[$sizeOfAddress - 3], 'phone') !== false) {
+                            $contactObject->phone = trim(str_replace(array('Phone:', 'Tel:'), '', $filteredAddress[$sizeOfAddress -
+                                     3]));
+                        }
+                    } else {
+                        $contactObject->phone = trim(str_replace(array('Phone:', 'Tel:'), '', $filteredAddress[$sizeOfAddress -
+                                 2]));
+                    }
+                    
                     $contactObject->email = trim(str_replace('Email:', '', $lastEntry));
                     // check if last entry contains keyword 'phone'
                 } elseif (stripos($lastEntry, 'Phone') !== false) {
@@ -166,7 +176,7 @@ class Template_Gtld_networksolutions extends AbstractTemplate
                     }
                     // in some cases the last entry is the phone number, but
                     // only if it is not the owner contact
-                } elseif ($contactType != 'owner') {
+                } elseif ($contactType !== 'owner') {
                     $contactObject->phone = $lastEntry;
                 }
                 
@@ -175,15 +185,15 @@ class Template_Gtld_networksolutions extends AbstractTemplate
                     $contactObject->address = $filteredAddress[1];
                     $contactObject->city = $filteredAddress[2];
                     $contactObject->country = $filteredAddress[3];
-                } elseif ($sizeOfAddress == 5 && strlen($filteredAddress[4]) == 2) {
+                } elseif ($sizeOfAddress === 5 && strlen($filteredAddress[4]) === 2) {
                     $contactObject->address = $filteredAddress[2];
                     $contactObject->city = $filteredAddress[3];
                     $contactObject->country = $filteredAddress[4];
-                } elseif ($sizeOfAddress == 5 && strlen($filteredAddress[3]) == 2) {
+                } elseif ($sizeOfAddress === 5 && strlen($filteredAddress[3]) === 2) {
                     $contactObject->address = $filteredAddress[1];
                     $contactObject->city = $filteredAddress[2];
                     $contactObject->country = $filteredAddress[3];
-                } elseif (isset($filteredAddress[5]) && strlen($filteredAddress[5]) == 2 &&
+                } elseif (isset($filteredAddress[5]) && strlen($filteredAddress[5]) === 2 &&
                          $sizeOfAddress < 9) {
                     $contactObject->address = array($filteredAddress[2], $filteredAddress[3]);
                     $contactObject->city = $filteredAddress[4];
@@ -192,12 +202,12 @@ class Template_Gtld_networksolutions extends AbstractTemplate
                     if ($contactObject->email == '' && isset($filteredAddress[6])) {
                         $contactObject->email = $filteredAddress[6];
                     }
-                } elseif (isset($filteredAddress[3]) && strlen($filteredAddress[3]) == 2 &&
-                         $sizeOfAddress == 6) {
+                } elseif (isset($filteredAddress[3]) && strlen($filteredAddress[3]) === 2 &&
+                         $sizeOfAddress === 6) {
                     $contactObject->address = $filteredAddress[1];
                     $contactObject->city = $filteredAddress[2];
                     $contactObject->country = $filteredAddress[3];
-                } elseif (isset($filteredAddress[7]) && strlen($filteredAddress[7]) == 2) {
+                } elseif (isset($filteredAddress[7]) && strlen($filteredAddress[7]) === 2) {
                     $contactObject->address = array($filteredAddress[2], $filteredAddress[3]);
                     $contactObject->city = $filteredAddress[4];
                     $contactObject->state = $filteredAddress[5];

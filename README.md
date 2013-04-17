@@ -50,8 +50,7 @@ print_r($Result->rawdata); // get raw output as array
 
 * You may choose 5 different return types. the types are array, object, json, serialize and
 xml. By default it is object. If you want to change that call the format method before calling
-the parse method or provide to the constructer. If you are not using object and an
-error occurs, then exceptions will not be trapped within the response and thrown directy.
+the parse method or provide to the constructer.
 ```
 $Parser->setFormat('json');
 $Parser = new Novutec\WhoisParser\Parser('json');
@@ -73,12 +72,13 @@ $Parser->setSepcialWhois('it' => array('server' => 'whois.nic.it', 'port' => 43,
 
 ToDos
 -----
-* Caching of data for better performance and to reduce requests 
+* Caching of data for better performance and to reduce requests
+* Change HTTP Adapter to use GET/POST
+* Change Socket Adapter to be able to use Socks to split requests.
 
 Known bugs to be fixed in further versions
 ------------------------------------------
 * [Template] gTLD cps-datensysteme - need caching for testing, because after 5 requests you get blocked
-* [Template] .CZ - found a strange behavior by matching the contact handles with google.cz
 * [Template] .BJ - recursive lookup for handles
 
 Tested with following RIRs and TLDs
@@ -280,6 +280,7 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [x] NG
 [ ] NI
 [x] NL
+[x] NL Registrar WHOIS
 [ ] NO - possible - need recursive lookup for nameserver
 [ ] NP
 [ ] NR
@@ -440,6 +441,7 @@ gTLDs and thin registries sort by IANA ID (http://www.iana.org/assignments/regis
 [x] 131 (Total Web Solutions Limited trading as TotalRegistrations)
 [x] 140 (Acens Technologies, S.L.U.)
 [x] 141 (Cronon AG)
+[x] 146 (GoDaddy.com, LLC)
 [x] 151 (PSI-USA, Inc. dba Domain Robot)
 [x] 226 (Deutsche Telekom AG)
 [x] 228 (Moniker Online Services LLC)
@@ -453,9 +455,13 @@ gTLDs and thin registries sort by IANA ID (http://www.iana.org/assignments/regis
 [x] 380 (Tuonome.it Srl d/b/a APIsrs.com)
 [x] 401 (Misk.com, Inc.)
 [x] 430 (Net Searchers International Ltd.)
+[x] 440 (Wild West Domains, LLC)
 [x] 455 (EnCirca, Inc.)
 [ ] 471 (Bizcn.com, Inc.)
+[x] 625 (Name.com LLC)
+[x] 634 (NetTuner Corp. dba Webmasters.com)
 [x] 648 (Webagentur.at Internet Services GmbH d/b/a domainname.at)
+[x] 670 ($$$ Private Label Internet Service Kiosk, Inc. dba "PLISK.com")
 [x] 828 (Hetzner Online AG)
 [x] 886 (Domain.com, LLC)
 [x] 913 (PocketDomain.com Inc.)

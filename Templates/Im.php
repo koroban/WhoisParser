@@ -42,13 +42,13 @@ class Template_Im extends AbstractTemplate
 	 * @access protected
 	 */
     protected $blocks = array(
-            1 => '/Domain Managers(?>[\x20\t]*)(.*?)(?=Domain Owners \/ Registrant)/is', 
-            2 => '/Domain Owners \/ Registrant(?>[\x20\t]*)(.*?)(?=Administrative Contact)/is', 
-            3 => '/Administrative Contact(?>[\x20\t]*)(.*?)(?=Billing Contact)/is', 
-            4 => '/Billing Contact(?>[\x20\t]*)(.*?)(?=Technical Contact)/is', 
-            5 => '/Technical Contact(?>[\x20\t]*)(.*?)(?=Domain Details)/is', 
-            6 => '/Domain Details(?>[\x20\t]*)(.*?)(?=Name Server)/is', 
-            7 => '/Name Server:(?>[\x20\t]*)(.*?)$/is');
+            1 => '/domain managers(?>[\x20\t]*)(.*?)(?=domain owners \/ registrant)/is', 
+            2 => '/domain owners \/ registrant(?>[\x20\t]*)(.*?)(?=administrative contact)/is', 
+            3 => '/administrative contact(?>[\x20\t]*)(.*?)(?=billing contact)/is', 
+            4 => '/billing contact(?>[\x20\t]*)(.*?)(?=technical contact)/is', 
+            5 => '/technical contact(?>[\x20\t]*)(.*?)(?=domain details)/is', 
+            6 => '/domain details(?>[\x20\t]*)(.*?)(?=name server)/is', 
+            7 => '/name server:(?>[\x20\t]*)(.*?)$/is');
 
     /**
 	 * Items for each block
@@ -56,17 +56,17 @@ class Template_Im extends AbstractTemplate
 	 * @var array
 	 * @access protected
 	 */
-    protected $blockItems = array(1 => array('/Name:(?>[\x20\t]*)(.+)$/im' => 'registrar:name'), 
-            2 => array('/Name:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:name', 
-                    '/Address[\n](?>[\x20\t]*)(.+)$/is' => 'contacts:owner:address'), 
-            3 => array('/Name:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:name', 
-                    '/Address[\n](?>[\x20\t]*)(.+)$/is' => 'contacts:admin:address'), 
-            4 => array('/Name:(?>[\x20\t]*)(.+)$/im' => 'contacts:billing:name', 
-                    '/Address[\n](?>[\x20\t]*)(.+)$/is' => 'contacts:billing:address'), 
-            5 => array('/Name:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:name', 
-                    '/Address[\n](?>[\x20\t]*)(.+)$/is' => 'contacts:tech:address'), 
-            6 => array('/Expiry Date:(?>[\x20\t]*)(.+)$/im' => 'expires'), 
-            7 => array('/Name Server:(?>[\x20\t]*)(.+)\./im' => 'nameserver'));
+    protected $blockItems = array(1 => array('/name:(?>[\x20\t]*)(.+)$/im' => 'registrar:name'), 
+            2 => array('/name:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:name', 
+                    '/address\n(?>[\x20\t]*)(.+)$/is' => 'contacts:owner:address'), 
+            3 => array('/name:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:name', 
+                    '/address\n(?>[\x20\t]*)(.+)$/is' => 'contacts:admin:address'), 
+            4 => array('/name:(?>[\x20\t]*)(.+)$/im' => 'contacts:billing:name', 
+                    '/address\n(?>[\x20\t]*)(.+)$/is' => 'contacts:billing:address'), 
+            5 => array('/name:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:name', 
+                    '/address\n(?>[\x20\t]*)(.+)$/is' => 'contacts:tech:address'), 
+            6 => array('/expiry date:(?>[\x20\t]*)(.+)$/im' => 'expires'), 
+            7 => array('/name server:(?>[\x20\t]*)(.+)\./im' => 'nameserver'));
 
     /**
      * RegEx to check availability of the domain name
@@ -79,7 +79,7 @@ class Template_Im extends AbstractTemplate
     /**
      * After parsing ...
      *
-     * Fix address in WHOIS output
+     * Fix contact addresses
      *
      * @param  object &$WhoisParser
      * @return void
@@ -90,41 +90,34 @@ class Template_Im extends AbstractTemplate
         
         foreach ($ResultSet->contacts as $contactType => $contactArray) {
             foreach ($contactArray as $contactObject) {
-                if (! is_array($contactObject->address)) {
-                    $explodedAddress = explode("\n", $contactObject->address);
-                    $contactObject->address = $explodedAddress;
-                    
-                    if (sizeof($explodedAddress) == 4) {
-                        $contactObject->address = trim($explodedAddress[0]);
-                        $contactObject->zipcode = trim($explodedAddress[1]);
-                        $contactObject->country = trim($explodedAddress[2]);
-                    }
-                    
-                    if (sizeof($explodedAddress) == 5) {
-                        $contactObject->address = trim($explodedAddress[0]);
-                        $contactObject->city = trim($explodedAddress[1]);
-                        $contactObject->zipcode = trim($explodedAddress[2]);
-                        $contactObject->country = trim($explodedAddress[3]);
-                    }
-                    
-                    if (sizeof($explodedAddress) == 6) {
-                        $contactObject->address = trim($explodedAddress[0]);
-                        $contactObject->city = trim($explodedAddress[1]);
-                        $contactObject->state = trim($explodedAddress[2]);
-                        $contactObject->zipcode = trim($explodedAddress[3]);
-                        $contactObject->country = trim($explodedAddress[4]);
-                    }
-                    
-                    if (sizeof($explodedAddress) == 7) {
-                        $contactObject->address = array(trim($explodedAddress[0]), 
-                                trim($explodedAddress[1]));
-                        $contactObject->city = trim($explodedAddress[2]);
-                        $contactObject->state = trim($explodedAddress[3]);
-                        $contactObject->zipcode = trim($explodedAddress[4]);
-                        $contactObject->country = trim($explodedAddress[5]);
-                    }
-                    
-                    $explodedAddress = array();
+                $filteredAddress = array_map('trim', explode("\n", trim($contactObject->address)));
+                
+                switch (sizeof($filteredAddress)) {
+                    case 4:
+                        $contactObject->address = $filteredAddress[0];
+                        $contactObject->zipcode = $filteredAddress[1];
+                        $contactObject->country = $filteredAddress[2];
+                        break;
+                    case 5:
+                        $contactObject->address = $filteredAddress[0];
+                        $contactObject->city = $filteredAddress[1];
+                        $contactObject->zipcode = $filteredAddress[2];
+                        $contactObject->country = $filteredAddress[3];
+                        break;
+                    case 6:
+                        $contactObject->address = $filteredAddress[0];
+                        $contactObject->city = $filteredAddress[1];
+                        $contactObject->state = $filteredAddress[2];
+                        $contactObject->zipcode = $filteredAddress[3];
+                        $contactObject->country = $filteredAddress[4];
+                        break;
+                    case 7:
+                        $contactObject->address = array($filteredAddress[0], $filteredAddress[1]);
+                        $contactObject->city = $filteredAddress[2];
+                        $contactObject->state = $filteredAddress[3];
+                        $contactObject->zipcode = $filteredAddress[4];
+                        $contactObject->country = $filteredAddress[5];
+                        break;
                 }
             }
         }

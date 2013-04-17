@@ -41,9 +41,9 @@ class Template_Switch extends AbstractTemplate
 	 * @var array
 	 * @access protected
 	 */
-    protected $blocks = array(1 => '/Holder of domain name:[\n](.*?)[\n]{2}/is', 
-            2 => '/Technical contact:[\n](.*?)[\n]{2}/is', 3 => '/DNSSEC:(.*?)[\n]{2}/is', 
-            4 => '/Name servers:[\n](.*?)$/is');
+    protected $blocks = array(1 => '/holder of domain name:\n(.*?)(?=contractual language)/is', 
+            2 => '/technical contact:\n(.*?)(?=dnssec)/is', 3 => '/dnssec:(.*?)(?=name servers)/is', 
+            4 => '/name servers:\n(.*?)$/is');
 
     /**
 	 * Items for each block
@@ -52,14 +52,12 @@ class Template_Switch extends AbstractTemplate
 	 * @access protected
 	 */
     protected $blockItems = array(
-            1 => array(
-                    '/Holder of domain name:[\n](?>[\x20\t]*)(.*)$/is' => 'contacts:owner:address'), 
-            
-            2 => array('/Technical contact:[\n](.*?)[\r\n]{2}/is' => 'contacts:tech:address'), 
-            
-            3 => array('/^DNSSEC:(?>[\x20\t]*)(.+)$/im' => 'dnssec'), 
-            
-            4 => array('/Name servers:[\n](?>[\x20\t]*)(.+)$/is' => 'nameserver'));
+            1 => array('/holder of domain name:\n(.*)$/is' => 'contacts:owner:address'), 
+            2 => array('/technical contact:\n(.*?)$/is' => 'contacts:tech:address'), 
+            3 => array('/dnssec:(?>[\x20\t]*)(.+)$/im' => 'dnssec'), 
+            4 => array('/\n(?>[\x20\t]*)(.+)$/im' => 'nameserver', 
+                    '/\n(?>[\x20\t]*)(.+)(?>[\x20\t]*)\[.+\]$/im' => 'nameserver', 
+                    '/\n(?>[\x20\t]*).+(?>[\x20\t]*)\[(.+)\]$/im' => 'ips'));
 
     /**
      * RegEx to check availability of the domain name
@@ -72,7 +70,7 @@ class Template_Switch extends AbstractTemplate
     /**
      * After parsing ...
      * 
-     * Fix address, nameserver and dnssec in whois output
+     * Fix contact addresses and set dnssec
      * 
      * @param  object &$WhoisParser
      * @return void
@@ -80,91 +78,33 @@ class Template_Switch extends AbstractTemplate
     public function postProcess(&$WhoisParser)
     {
         $ResultSet = $WhoisParser->getResult();
-        $filteredAddress = array();
-        $filteredNameserver = array();
+        
+        if ($ResultSet->dnssec === 'Y') {
+            $ResultSet->dnssec = true;
+        } else {
+            $ResultSet->dnssec = false;
+        }
         
         foreach ($ResultSet->contacts as $contactType => $contactArray) {
             foreach ($contactArray as $contactObject) {
-                if (! is_array($contactObject->address)) {
-                    $explodedAddress = explode("\n", $contactObject->address);
-                    
-                    foreach ($explodedAddress as $key => $line) {
-                        if (trim($line) != '') {
-                            $filteredAddress[] = trim($line);
-                        }
-                    }
-                    
-                    $contactObject->address = $filteredAddress;
-                    $filteredAddress = array();
+                $filteredAddress = array_map('trim', explode("\n", trim($contactObject->address)));
+                
+                switch (sizeof($filteredAddress)) {
+                    case 6:
+                        $contactObject->organization = $filteredAddress[0];
+                        $contactObject->name = $filteredAddress[1];
+                        $contactObject->country = $filteredAddress[5];
+                        $contactObject->city = $filteredAddress[4];
+                        $contactObject->address = $filteredAddress[3];
+                        break;
+                    default:
+                        $contactObject->organization = $filteredAddress[0];
+                        $contactObject->name = $filteredAddress[1];
+                        $contactObject->country = $filteredAddress[4];
+                        $contactObject->city = $filteredAddress[3];
+                        $contactObject->address = $filteredAddress[2];
+                        break;
                 }
-            }
-        }
-        
-        if (isset($ResultSet->nameserver) && $ResultSet->nameserver != '' &&
-                 ! is_array($ResultSet->nameserver)) {
-            $explodedNameserver = explode("\n", $ResultSet->nameserver);
-            foreach ($explodedNameserver as $key => $line) {
-                if (trim($line) != '') {
-                    $filteredNameserver[] = strtolower(trim($line));
-                }
-            }
-            $ResultSet->nameserver = $filteredNameserver;
-        }
-        
-        if ($ResultSet->dnssec == 'N') {
-            $ResultSet->dnssec = false;
-        } else {
-            $ResultSet->dnssec = true;
-        }
-        
-        if (isset($ResultSet->contacts->owner) && is_array($ResultSet->contacts->owner)) {
-            $size = sizeof($ResultSet->contacts->owner[0]->address);
-            
-            switch ($size) {
-                case 6:
-                    $ResultSet->contacts->owner[0]->organization = $ResultSet->contacts->owner[0]->address[0];
-                    $ResultSet->contacts->owner[0]->name = $ResultSet->contacts->owner[0]->address[1];
-                    $ResultSet->contacts->owner[0]->country = substr($ResultSet->contacts->owner[0]->address[3], 0, 2);
-                    $ResultSet->contacts->owner[0]->address = array(
-                            $ResultSet->contacts->owner[0]->address[2], 
-                            substr($ResultSet->contacts->owner[0]->address[3], 3, strlen($ResultSet->contacts->owner[0]->address[3])));
-                    break;
-                case 7:
-                    $ResultSet->contacts->owner[0]->organization = $ResultSet->contacts->owner[0]->address[0];
-                    $ResultSet->contacts->owner[0]->name = $ResultSet->contacts->owner[0]->address[1];
-                    $ResultSet->contacts->owner[0]->country = substr($ResultSet->contacts->owner[0]->address[4], 0, 2);
-                    $ResultSet->contacts->owner[0]->address = array(
-                            $ResultSet->contacts->owner[0]->address[3], 
-                            substr($ResultSet->contacts->owner[0]->address[4], 3, strlen($ResultSet->contacts->owner[0]->address[4])));
-                    break;
-                default:
-                    $ResultSet->contacts->owner[0]->name = $ResultSet->contacts->owner[0]->address[0];
-                    $ResultSet->contacts->owner[0]->country = substr($ResultSet->contacts->owner[0]->address[2], 0, 2);
-                    $ResultSet->contacts->owner[0]->address = array(
-                            $ResultSet->contacts->owner[0]->address[1], 
-                            substr($ResultSet->contacts->owner[0]->address[2], 3, strlen($ResultSet->contacts->owner[0]->address[2])));
-            }
-        }
-        
-        if (isset($ResultSet->contacts->tech) && is_array($ResultSet->contacts->tech)) {
-            $size = sizeof($ResultSet->contacts->tech[0]->address);
-            
-            switch ($size) {
-                case 6:
-                    $ResultSet->contacts->tech[0]->organization = $ResultSet->contacts->tech[0]->address[0];
-                    $ResultSet->contacts->tech[0]->name = $ResultSet->contacts->tech[0]->address[1];
-                    $ResultSet->contacts->tech[0]->country = substr($ResultSet->contacts->tech[0]->address[4], 0, 2);
-                    $ResultSet->contacts->tech[0]->address = array(
-                            $ResultSet->contacts->tech[0]->address[3], 
-                            substr($ResultSet->contacts->tech[0]->address[4], 3, strlen($ResultSet->contacts->tech[0]->address[4])));
-                    break;
-                default:
-                    $ResultSet->contacts->tech[0]->organization = $ResultSet->contacts->tech[0]->address[0];
-                    $ResultSet->contacts->tech[0]->name = $ResultSet->contacts->tech[0]->address[1];
-                    $ResultSet->contacts->tech[0]->country = substr($ResultSet->contacts->tech[0]->address[3], 0, 2);
-                    $ResultSet->contacts->tech[0]->address = array(
-                            $ResultSet->contacts->tech[0]->address[2], 
-                            substr($ResultSet->contacts->tech[0]->address[3], 3, strlen($ResultSet->contacts->tech[0]->address[3])));
             }
         }
     }

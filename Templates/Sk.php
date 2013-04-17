@@ -41,8 +41,8 @@ class Template_Sk extends AbstractTemplate
 	 * @var array
 	 * @access protected
 	 */
-    protected $blocks = array(1 => '/Admin-id(.*?)(?=Tech-id)/is', 
-            2 => '/Tech-id(.*?)(?=dns_name)/is', 3 => '/dns_name(.*?)$/is');
+    protected $blocks = array(1 => '/admin-id(.*?)(?=tech-id)/is', 
+            2 => '/tech-id(.*?)(?=dns_name)/is', 3 => '/dns_name(.*?)$/is');
 
     /**
 	 * Items for each block
@@ -51,25 +51,25 @@ class Template_Sk extends AbstractTemplate
 	 * @access protected
 	 */
     protected $blockItems = array(
-            1 => array('/^Admin-id(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:handle', 
-                    '/^Admin-name(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:name', 
-                    '/^Admin-address(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:address', 
-                    '/^Admin-telephone(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:phone', 
-                    '/^Admin-email(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:email', 
-                    '/^Admin-org.-ID(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:orgid'), 
+            1 => array('/admin-id(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:handle', 
+                    '/admin-name(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:name', 
+                    '/admin-address(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:address', 
+                    '/admin-telephone(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:phone', 
+                    '/admin-email(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:email', 
+                    '/admin-org.-ID(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:orgid'), 
             
-            2 => array('/^Tech-id(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:handle', 
-                    '/^Tech-name(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:name', 
-                    '/^Tech-address(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:address', 
-                    '/^Tech-telephone(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:phone', 
-                    '/^Tech-email(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:email', 
-                    '/^Tech-org.-ID(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:orgid'), 
+            2 => array('/tech-id(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:handle', 
+                    '/tech-name(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:name', 
+                    '/tech-address(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:address', 
+                    '/tech-telephone(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:phone', 
+                    '/tech-email(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:email', 
+                    '/tech-org.-ID(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:orgid'), 
             
-            3 => array('/^dns_name(?>[\x20\t]*)(.+)$/im' => 'nameserver', 
-                    '/^dns_IPv4(?>[\x20\t]*)(.+)$/im' => 'ips', 
-                    '/^Last-update(?>[\x20\t]*)(.+)$/im' => 'changed', 
-                    '/^Valid-date(?>[\x20\t]*)(.+)$/im' => 'expires', 
-                    '/^Domain-status(?>[\x20\t]*)(.+)$/im' => 'status'));
+            3 => array('/dns_name(?>[\x20\t]*)(.+)$/im' => 'nameserver', 
+                    '/dns_ipv4(?>[\x20\t]*)(.+)$/im' => 'ips', 
+                    '/last-update(?>[\x20\t]*)(.+)$/im' => 'changed', 
+                    '/valid-date(?>[\x20\t]*)(.+)$/im' => 'expires', 
+                    '/domain-status(?>[\x20\t]*)(.+)$/im' => 'status'));
 
     /**
      * RegEx to check availability of the domain name
@@ -78,25 +78,4 @@ class Template_Sk extends AbstractTemplate
      * @access protected
      */
     protected $available = '/Not found./i';
-
-    /**
-     * After parsing ...
-     *
-     * Fix telephone number if there are more than one
-     *
-     * @param  object &$WhoisParser
-     * @return void
-     */
-    public function postProcess(&$WhoisParser)
-    {
-        $ResultSet = $WhoisParser->getResult();
-        
-        foreach ($ResultSet->contacts as $contactType => $contactArray) {
-            foreach ($contactArray as $contactObject) {
-                if (strpos($contactObject->phone, ',')) {
-                    $contactObject->phone = array_map('trim', explode(',', $contactObject->phone));
-                }
-            }
-        }
-    }
 }

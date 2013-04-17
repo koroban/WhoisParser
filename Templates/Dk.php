@@ -25,7 +25,7 @@
 namespace Novutec\WhoisParser;
 
 /**
- * Template for Dk
+ * Template for .DK
  *
  * @category   Novutec
  * @package    WhoisParser
@@ -41,10 +41,9 @@ class Template_Dk extends AbstractTemplate
 	 * @var array
 	 * @access protected
 	 */
-    protected $blocks = array(1 => '/Domain:(?>[\x20\t]*)(.*?)(?=Registrant)/is', 
-            2 => '/Registrant(?>[\x20\t\r\n]*)(.*?)(?=Administrator)/is', 
-            3 => '/Administrator(?>[\x20\t\r\n]*)(.*?)(?=Nameservers)/is', 
-            4 => '/Nameservers(?>[\x20\t\r\n]*)(.*?)$/is');
+    protected $blocks = array(1 => '/domain:(?>[\x20\t]*)(.*?)(?=registrant)/is', 
+            2 => '/registrant\n(.*?)(?=administrator)/is', 
+            3 => '/administrator\n(.*?)(?=nameservers)/is', 4 => '/nameservers\n(.*?)$/is');
 
     /**
 	 * Items for each block
@@ -53,24 +52,24 @@ class Template_Dk extends AbstractTemplate
 	 * @access protected
 	 */
     protected $blockItems = array(
-            1 => array('/^Registered:(?>[\x20\t]*)(.+)$/im' => 'created', 
-                    '/^Expires:(?>[\x20\t]*)(.+)$/im' => 'expires', 
-                    '/^Status:(?>[\x20\t]*)(.+)$/im' => 'status'), 
-            2 => array('/^Handle:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:handle', 
-                    '/^Name:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:name', 
-                    '/^Address:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:address', 
-                    '/^Postalcode:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:zipcode', 
-                    '/^City:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:city', 
-                    '/^Country:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:country', 
-                    '/^Phone:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:phone'), 
-            3 => array('/^Handle:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:handle', 
-                    '/^Name:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:name', 
-                    '/^Address:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:address', 
-                    '/^Postalcode:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:zipcode', 
-                    '/^City:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:city', 
-                    '/^Country:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:country', 
-                    '/^Phone:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:phone'), 
-            4 => array('/^Hostname:(?>[\x20\t]*)(.+)$/im' => 'nameserver'));
+            1 => array('/registered:(?>[\x20\t]*)(.+)$/im' => 'created', 
+                    '/expires:(?>[\x20\t]*)(.+)$/im' => 'expires', 
+                    '/status:(?>[\x20\t]*)(.+)$/im' => 'status'), 
+            2 => array('/handle:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:handle', 
+                    '/name:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:name', 
+                    '/address:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:address', 
+                    '/postalcode:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:zipcode', 
+                    '/city:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:city', 
+                    '/country:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:country', 
+                    '/phone:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:phone'), 
+            3 => array('/handle:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:handle', 
+                    '/name:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:name', 
+                    '/address:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:address', 
+                    '/postalcode:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:zipcode', 
+                    '/city:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:city', 
+                    '/country:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:country', 
+                    '/phone:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:phone'), 
+            4 => array('/hostname:(?>[\x20\t]*)(.+)$/im' => 'nameserver'));
 
     /**
      * RegEx to check availability of the domain name

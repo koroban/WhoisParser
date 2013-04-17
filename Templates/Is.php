@@ -86,32 +86,19 @@ class Template_Is extends AbstractTemplate
     public function postProcess(&$WhoisParser)
     {
         $ResultSet = $WhoisParser->getResult();
-        $filteredAddress = array();
-        $filteredRawdata = array();
         
         foreach ($ResultSet->contacts as $contactType => $contactArray) {
             foreach ($contactArray as $contactObject) {
                 $contactObject->name = utf8_encode($contactObject->name);
                 
                 if (is_array($contactObject->address)) {
-                    foreach ($contactObject->address as $key => $value) {
-                        $filteredAddress[] = utf8_encode($value);
-                    }
-                    
-                    $contactObject->address = $filteredAddress;
-                    $filteredAddress = array();
+                    $contactObject->address = array_map('utf8_encode', $contactObject->address);
                 } else {
                     $contactObject->address = utf8_encode($contactObject->address);
                 }
             }
         }
         
-        if (is_array($ResultSet->rawdata)) {
-            foreach ($ResultSet->rawdata as $key => $line) {
-                $filteredRawdata[] = utf8_encode($line);
-            }
-            
-            $ResultSet->rawdata = $filteredRawdata;
-        }
+        $ResultSet->rawdata = array_map('utf8_encode', $ResultSet->rawdata);
     }
 }

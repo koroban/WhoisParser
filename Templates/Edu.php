@@ -102,14 +102,14 @@ class Template_Edu extends AbstractTemplate
                         }
                     }
                     
-                    if (sizeof($filteredAddress) == 3) {
+                    if (sizeof($filteredAddress) === 3) {
                         $contactObject->name = $filteredAddress[0];
                         $contactObject->city = $filteredAddress[1];
                         $contactObject->country = $filteredAddress[2];
                         $contactObject->address = '';
                     }
                     
-                    if (sizeof($filteredAddress) == 5) {
+                    if (sizeof($filteredAddress) === 5) {
                         $contactObject->org = $filteredAddress[0];
                         $contactObject->name = $filteredAddress[1];
                         $contactObject->address = $filteredAddress[2];
@@ -117,7 +117,7 @@ class Template_Edu extends AbstractTemplate
                         $contactObject->country = $filteredAddress[4];
                     }
                     
-                    if (sizeof($filteredAddress) == 7) {
+                    if (sizeof($filteredAddress) === 7) {
                         $contactObject->name = $filteredAddress[0];
                         $contactObject->org = $filteredAddress[1];
                         $contactObject->address = $filteredAddress[2];
@@ -127,7 +127,7 @@ class Template_Edu extends AbstractTemplate
                         $contactObject->email = $filteredAddress[6];
                     }
                     
-                    if (sizeof($filteredAddress) == 8) {
+                    if (sizeof($filteredAddress) === 8) {
                         $contactObject->name = $filteredAddress[0];
                         $contactObject->org = $filteredAddress[2];
                         $contactObject->address = $filteredAddress[3];

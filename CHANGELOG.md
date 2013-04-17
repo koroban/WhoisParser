@@ -1,3 +1,19 @@
+### 3.0.0 (Apr 17, 2013)
+* fixed known bug with google.cz
+* improved regex, fixed bugs and code cleanup for following WHOIS templates AFNIC, .AI, .AM, .AS, .AT, .AU, .AX, .BE, .BG, .BO, .BY, .CA, .CD, .CK, COCCA, .CZ, .DE, .DK, .DZ, .EE, .EU, .FI, .FJ, .FO, .HK, IANA, .IE, .IL, .IM, .IS, .IT, .JP, .KG, .LY, .NC, Neustar, .NL, .NU, .PL, .PT, .QA, .RO, .RS, .SG, .SK, .SM, .ST, SWITCH, .TK, .TR, .TW, .UA, .UK, .UY, Verisign and .WS
+* added support for IANA #146, #440, #625, #634, #670 and .NL Registrar WHOIS
+* set network property in Result to null if there are no entries left
+* changed some `==` to `===` in Parser.php, Result.php and many Templates
+* changed some `!=` to `!==` in Parser.php, Result.php, Config.php, Socket.php and many Templates
+* changed minor bugs in IANA Template
+* changed include path in Parser and Result
+* changed WHOIS rawdata handling - now rawdata will be stripped from HTML tags.
+* changed Parser.php to remove unneeded whitespaces in htmlBlock
+* changed WHOIS template Verisign to be able to switch WHOIS server and adapter
+* changed WHOIS template NetworkSolutions to fit for #634
+* refreshed supported TLD list in README.md
+* refreshed CHANGELOG.md
+
 ### 2.0.2 (Mar 18, 2013)
 * added support for IANA #113, #292, .COOP, .ID, .IE, .NC, .NU, .SG, .TK and .XN--WGBL6A
 * changed own version in composer.json

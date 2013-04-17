@@ -41,11 +41,11 @@ class Template_Pt extends AbstractTemplate
 	 * @var array
 	 * @access protected
 	 */
-    protected $blocks = array(1 => '/Nome de dom(?>[\x20\t]*)(.*?)(?=Titular)/is', 
-            2 => '/Registrant(?>[\x20\t]*)(.*?)(?=Entidade Gestora)/is', 
-            3 => '/Billing Contact(?>[\x20\t]*)(.*?)(?=Respons)/is', 
-            4 => '/Tech Contact(?>[\x20\t]*)(.*?)(?=Nameserver Information)/is', 
-            5 => '/Nameserver Information(?>[\x20\t]*)(.*?)$/is');
+    protected $blocks = array(1 => '/nome de dom(?>[\x20\t]*)(.*?)(?=titular)/is', 
+            2 => '/registrant(?>[\x20\t]*)(.*?)(?=entidade gestora)/is', 
+            3 => '/billing contact(?>[\x20\t]*)(.*?)(?=respons)/is', 
+            4 => '/tech contact(?>[\x20\t]*)(.*?)(?=nameserver information)/is', 
+            5 => '/nameserver information(?>[\x20\t]*)(.*?)$/is');
 
     /**
 	 * Items for each block
@@ -54,18 +54,17 @@ class Template_Pt extends AbstractTemplate
 	 * @access protected
 	 */
     protected $blockItems = array(
-            1 => array('/Status:(?>[\x20\t]*)(.*?)$/im' => 'status', 
-                    '/Creation Date \(dd\/mm\/yyyy\):(?>[\x20\t]*)(.*?)$/im' => 'created', 
-                    '/Expiration Date \(dd\/mm\/yyyy\):(?>[\x20\t]*)(.*?)$/im' => 'expires'), 
-            2 => array(
-                    '/Registrant(?>[\x20\t\n]*)(.*?)\n(?>[\x20\t]*)Email:/is' => 'contacts:owner:address', 
-                    '/Email:(?>[\x20\t]*)(.*?)$/im' => 'contacts:owner:email'), 
-            3 => array('/Billing Contact(?>[\x20\t\n]*)(.*?)\n/is' => 'contacts:billing:name', 
-                    '/Email:(?>[\x20\t]*)(.*?)$/im' => 'contacts:billing:email'), 
-            4 => array('/Tech Contact(?>[\x20\t\n]*)(.*?)\n/is' => 'contacts:tech:name', 
-                    '/Email:(?>[\x20\t]*)(.*?)$/im' => 'contacts:tech:email'), 
-            5 => array(
-                    '/Nameserver:(?>[\x20\t]*).*?(?>[\x20\t]*)NS(?>[\x20\t]*)(.*?).$/im' => 'nameserver'));
+            1 => array('/status:(?>[\x20\t]*)(.*?)$/im' => 'status', 
+                    '/creation date \(dd\/mm\/yyyy\):(?>[\x20\t]*)(.*?)$/im' => 'created', 
+                    '/expiration date \(dd\/mm\/yyyy\):(?>[\x20\t]*)(.*?)$/im' => 'expires'), 
+            2 => array('/registrant(?>[\x20\t\n]*)(.*?)(?=email:)/is' => 'contacts:owner:address', 
+                    '/email:(?>[\x20\t]*)(.*?)$/im' => 'contacts:owner:email'), 
+            3 => array('/billing contact\n(?>[\x20\t]*)(.*?)$/im' => 'contacts:billing:name', 
+                    '/email:(?>[\x20\t]*)(.*?)$/im' => 'contacts:billing:email'), 
+            4 => array('/tech contact\n(?>[\x20\t]*)(.*?)$/im' => 'contacts:tech:name', 
+                    '/email:(?>[\x20\t]*)(.*?)$/im' => 'contacts:tech:email'), 
+            5 => array('/nameserver: .+(?>[\x20\t]+)ns(?>[\x20\t]+)(.+).$/im' => 'nameserver', 
+                    '/nameserver: .+(?>[\x20\t]+)ds(?>[\x20\t]+)(.+)$/im' => 'dnssec'));
 
     /**
      * RegEx to check availability of the domain name
@@ -78,7 +77,7 @@ class Template_Pt extends AbstractTemplate
     /**
      * After parsing do something
      *
-     * Fix owner contact
+     * Fix contact addresses and set dnssec
      *
      * @param  object &$WhoisParser
      * @return void
@@ -87,16 +86,33 @@ class Template_Pt extends AbstractTemplate
     {
         $ResultSet = $WhoisParser->getResult();
         
-        if (! is_array($ResultSet->contacts->owner[0]->address)) {
-            $explodedAddress = explode("\n", trim($ResultSet->contacts->owner[0]->address));
-            $ResultSet->contacts->owner[0]->organization = trim($explodedAddress[0]);
-            $ResultSet->contacts->owner[0]->address = trim($explodedAddress[1]);
-            $ResultSet->contacts->owner[0]->city = trim($explodedAddress[2]);
-            $ResultSet->contacts->owner[0]->zipcode = trim($explodedAddress[3]);
+        if ($ResultSet->dnssec != '') {
+            $ResultSet->dnssec = true;
+        } else {
+            $ResultSet->dnssec = false;
         }
         
-        if (strpos($ResultSet->contacts->owner[0]->email, ';')) {
-            $ResultSet->contacts->owner[0]->email = explode(';', $ResultSet->contacts->owner[0]->email);
+        foreach ($ResultSet->contacts as $contactType => $contactArray) {
+            foreach ($contactArray as $contactObject) {
+                $contactObject->address = array_map('utf8_encode', explode("\n", trim($contactObject->address)));
+                $contactObject->address = array_map('trim', $contactObject->address);
+                
+                if (sizeof($contactObject->address) > 1) {
+                    $contactObject->organization = $contactObject->address[0];
+                    $contactObject->city = $contactObject->address[2];
+                    $contactObject->zipcode = $contactObject->address[3];
+                    $contactObject->address = $contactObject->address[1];
+                } else {
+                    $contactObject->address = null;
+                    $contactObject->organization = $contactObject->address[0];
+                }
+                
+                $contactObject->name = utf8_encode($contactObject->name);
+                
+                if (strpos($contactObject->email, ';')) {
+                    $contactObject->email = explode(';', $contactObject->email);
+                }
+            }
         }
     }
 }

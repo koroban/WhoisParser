@@ -42,11 +42,11 @@ class Template_Kg extends AbstractTemplate
 	 * @access protected
 	 */
     protected $blocks = array(
-            1 => '/Administrative Contact:(?>[\x20\t]*)(.*?)(?=Technical Contact)/is', 
-            2 => '/Technical Contact:(?>[\x20\t]*)(.*?)(?=Billing Contact)/is', 
-            3 => '/Billing Contact:(?>[\x20\t]*)(.*?)(?=Record created)/is', 
-            4 => '/Record created(?>[\x20\t]*)(.*?)(?=Name servers in the listed order)/is', 
-            5 => '/Name servers in the listed order(?>[\x20\t]*)(.*?)$/is');
+            1 => '/administrative contact:(?>[\x20\t]*)(.*?)(?=technical contact)/is', 
+            2 => '/technical contact:(?>[\x20\t]*)(.*?)(?=billing contact)/is', 
+            3 => '/billing contact:(?>[\x20\t]*)(.*?)(?=record created)/is', 
+            4 => '/record created(?>[\x20\t]*)(.*?)(?=name servers in the listed order)/is', 
+            5 => '/name servers in the listed order(.*?)$/is');
 
     /**
 	 * Items for each block
@@ -55,23 +55,31 @@ class Template_Kg extends AbstractTemplate
 	 * @access protected
 	 */
     protected $blockItems = array(
-            1 => array(
-                    '/(?>[\x20\t]*)Administrative Contact:[\r\n]{1,2}(.*?)(?=phone)/is' => 'contacts:admin:address', 
+            1 => array('/pid:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:handle', 
+                    '/name:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:name', 
+                    '/email:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:email', 
+                    '/address:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:address', 
                     '/phone:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:phone', 
                     '/fax:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:fax'), 
-            2 => array(
-                    '/(?>[\x20\t]*)Technical Contact:[\r\n]{1,2}(.*?)(?=phone)/is' => 'contacts:tech:address', 
+            2 => array('/pid:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:handle', 
+                    '/name:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:name', 
+                    '/email:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:email', 
+                    '/address:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:address', 
                     '/phone:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:phone', 
                     '/fax:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:fax'), 
-            3 => array(
-                    '/(?>[\x20\t]*)Billing Contact:[\r\n]{1,2}(.*?)(?=phone)/is' => 'contacts:billing:address', 
+            3 => array('/pid:(?>[\x20\t]*)(.+)$/im' => 'contacts:billing:handle', 
+                    '/name:(?>[\x20\t]*)(.+)$/im' => 'contacts:billing:name', 
+                    '/email:(?>[\x20\t]*)(.+)$/im' => 'contacts:billing:email', 
+                    '/address:(?>[\x20\t]*)(.+)$/im' => 'contacts:billing:address', 
                     '/phone:(?>[\x20\t]*)(.+)$/im' => 'contacts:billing:phone', 
-                    '/fax:(?>[\x20\t]*)(.+)$/im' => 'contacts:billing:fax'), 
-            4 => array('/Record created:(?>[\x20\t]*)(.*?)$/im' => 'created', 
-                    '/Record last updated on (?>[\x20\t]*)(.*?)$/im' => 'changed', 
-                    '/Record expires on (?>[\x20\t]*)(.*?)$/im' => 'expires'), 
-            5 => array(
-                    '/(?>[\x20\t]*)Name servers in the listed order:[\r\n]{1,2}(?>[\x20\t]*)(.*?)$/is' => 'nameserver'));
+                    '/fax:(?>[\x20\t]*)(.+)$/im' => 'contacts:billing:fax', 
+                    '/domain support:(?>[\x20\t]*)(.+) \(.+\)$/im' => 'registrar:name'), 
+            4 => array('/record created:(?>[\x20\t]*)(.*?)$/im' => 'created', 
+                    '/record last updated on (?>[\x20\t]*)(.*?)$/im' => 'changed', 
+                    '/record expires on (?>[\x20\t]*)(.*?)$/im' => 'expires'), 
+            5 => array('/\n(?>[\x20\t]*)(.+)$/im' => 'nameserver', 
+                    '/\n(?>[\x20\t]*)(.+) .+$/im' => 'nameserver', 
+                    '/\n(?>[\x20\t]*).+ (.+)$/im' => 'ips'));
 
     /**
      * RegEx to check availability of the domain name
@@ -84,7 +92,7 @@ class Template_Kg extends AbstractTemplate
     /**
      * After parsing do something
      *
-     * Fix address and nameservers
+     * Fix UTF-8 encoding in contact handles
      *
      * @param  object &$WhoisParser
      * @return void
@@ -92,58 +100,11 @@ class Template_Kg extends AbstractTemplate
     public function postProcess(&$WhoisParser)
     {
         $ResultSet = $WhoisParser->getResult();
-        $filteredAddress = array();
-        $filteredNameserver = array();
         
         foreach ($ResultSet->contacts as $contactType => $contactArray) {
             foreach ($contactArray as $contactObject) {
-                if (! is_array($contactObject->address)) {
-                    $explodedAddress = explode("\n", $contactObject->address);
-                    
-                    foreach ($explodedAddress as $key => $line) {
-                        $filteredAddress[] = trim($line);
-                    }
-                }
-                
-                preg_match('/.* \(([0-9a-z\-]*)\)/im', $filteredAddress[0], $matches);
-                $contactObject->handle = $matches[1];
-                
-                preg_match('/.* \([0-9a-z\-]*\),(?>[\x20\t]*)(.*)/im', $filteredAddress[0], $matches);
-                $contactObject->email = $matches[1];
-                
-                preg_match('/(.*) \([0-9a-z\-]*\)/im', $filteredAddress[0], $matches);
-                $contactObject->organization = $matches[1];
-                
-                $contactObject->address = $filteredAddress[1];
-                
-                $filteredAddress = array();
-            }
-        }
-        
-        if (isset($ResultSet->nameserver) && $ResultSet->nameserver != '' &&
-                 ! is_array($ResultSet->nameserver)) {
-            $explodedNameserver = explode("\n", $ResultSet->nameserver);
-            foreach ($explodedNameserver as $key => $line) {
-                $line = strtolower(trim($line));
-                
-                if ($line != '') {
-                    preg_match('/(.*) ([0-9\.]*)/im', $line, $matches);
-                    
-                    if (sizeof($matches) == 0) {
-                        $filteredNameserver[] = strtolower($line);
-                    } else {
-                        if (isset($matches[2])) {
-                            $ips[] = $matches[2];
-                        }
-                        
-                        $filteredNameserver[] = strtolower($matches[1]);
-                    }
-                }
-            }
-            $ResultSet->nameserver = $filteredNameserver;
-            
-            if (isset($ips)) {
-                $ResultSet->ips = $ips;
+                $contactObject->address = utf8_encode($contactObject->address);
+                $contactObject->name = utf8_encode($contactObject->name);
             }
         }
     }

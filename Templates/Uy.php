@@ -41,12 +41,12 @@ class Template_Uy extends AbstractTemplate
 	 * @var array
 	 * @access protected
 	 */
-    protected $blocks = array(1 => '/Titular:(?>[\x20\t]*)(.*?)(?=Nombre de Dominio\:)/is', 
-            2 => '/Contacto Administrativo:(?>[\x20\t]*)(.*?)(?=Contacto Tecnico)/is', 
-            3 => '/Contacto Tecnico:(?>[\x20\t]*)(.*?)(?=Contacto de Cobranza)/is', 
-            4 => '/Contacto de Cobranza:(?>[\x20\t]*)(.*?)(?=(Fecha de Vencimiento|Ultima Actualizacion))/is', 
-            5 => '/(Fecha de Vencimiento|Ultima Actualizacion):(?>[\x20\t]*)(.*?)(?=Servidor\(es\) de Nombres de Dominio)/is', 
-            6 => '/Servidor\(es\) de Nombres de Dominio:(?>[\x20\t]*)(.*?)(?=NIC-Uruguay)/is');
+    protected $blocks = array(1 => '/titular:(?>[\x20\t]*)(.*?)(?=nombre de dominio:)/is', 
+            2 => '/contacto administrativo:(?>[\x20\t]*)(.*?)(?=contacto tecnico)/is', 
+            3 => '/contacto tecnico:(?>[\x20\t]*)(.*?)(?=contacto de cobranza)/is', 
+            4 => '/contacto de cobranza:(?>[\x20\t]*)(.*?)(?=(fecha de vencimiento|ultima actualizacion))/is', 
+            5 => '/(fecha de vencimiento|ultima actualizacion):(?>[\x20\t]*)(.*?)(?=servidor\(es\) de nombres de dominio)/is', 
+            6 => '/servidor\(es\) de nombres de dominio:(?>[\x20\t]*)(.*?)(?=nic-uruguay)/is');
 
     /**
 	 * Items for each block
@@ -55,18 +55,17 @@ class Template_Uy extends AbstractTemplate
 	 * @access protected
 	 */
     protected $blockItems = array(
-            1 => array('/Titular:(?>[\x20\t\n]*)(.*?)$/is' => 'contacts:owner:address'), 
+            1 => array('/titular:(?>[\x20\t\n]*)(.*?)$/is' => 'contacts:owner:address'), 
             2 => array(
-                    '/Contacto Administrativo:(?>[\x20\t\n]*)(.*?)$/is' => 'contacts:admin:address'), 
-            3 => array('/Contacto Tecnico:(?>[\x20\t\n]*)(.*?)$/is' => 'contacts:tech:address'), 
+                    '/contacto administrativo:(?>[\x20\t\n]*)(.*?)$/is' => 'contacts:admin:address'), 
+            3 => array('/contacto tecnico:(?>[\x20\t\n]*)(.*?)$/is' => 'contacts:tech:address'), 
             4 => array(
-                    '/Contacto de Cobranza:(?>[\x20\t\n]*)(.*?)$/is' => 'contacts:billing:address'), 
-            5 => array('/Fecha de Vencimiento:(?>[\x20\t]*)(.*?)$/im' => 'expires', 
-                    '/Ultima Actualizacion:(?>[\x20\t]*)(.*?)$/im' => 'changed', 
-                    '/Fecha de Creacion:(?>[\x20\t]*)(.*?)$/im' => 'created', 
-                    '/Estatus del dominio:(?>[\x20\t]*)(.*?)$/im' => 'status'), 
-            6 => array(
-                    '/Servidor\(es\) de Nombres de Dominio:(?>[\x20\t\n]*)(.*?)\n\n/is' => 'nameserver'));
+                    '/contacto de cobranza:(?>[\x20\t\n]*)(.*?)$/is' => 'contacts:billing:address'), 
+            5 => array('/fecha de vencimiento:(?>[\x20\t]*)(.*?)$/im' => 'expires', 
+                    '/ultima actualizacion:(?>[\x20\t]*)(.*?)$/im' => 'changed', 
+                    '/fecha de creacion:(?>[\x20\t]*)(.*?)$/im' => 'created', 
+                    '/estatus del dominio:(?>[\x20\t]*)(.*?)$/im' => 'status'), 
+            6 => array('/\n(?>[\x20\t]+)- (.+)$/im' => 'nameserver'));
 
     /**
      * RegEx to check availability of the domain name
@@ -79,7 +78,7 @@ class Template_Uy extends AbstractTemplate
     /**
      * After parsing do something
      *
-     * Fix contacts and nameservers
+     * Fix contact addresses
      *
      * @param  object &$WhoisParser
      * @return void
@@ -88,52 +87,31 @@ class Template_Uy extends AbstractTemplate
     {
         $ResultSet = $WhoisParser->getResult();
         $filteredAddress = array();
-        $filteredNameserver = array();
         
         foreach ($ResultSet->contacts as $contactType => $contactArray) {
             foreach ($contactArray as $contactObject) {
-                if (! is_array($contactObject->address)) {
-                    $explodedAddress = explode("\n", trim($contactObject->address));
-                    
-                    foreach ($explodedAddress as $key => $line) {
-                        $filteredAddress[] = trim($line);
-                    }
-                    
-                    preg_match('/(.*?)(?>[\x20\t]*)\((.*?)\)(?>[\x20\t]*)(.*?)$/im', $filteredAddress[0], $matches);
-                    
-                    $contactObject->name = $matches[1];
-                    $contactObject->handle = $matches[2];
-                    $contactObject->email = $matches[3];
-                    
-                    if (sizeof($filteredAddress) == 5) {
-                        $contactObject->organization = $filteredAddress[1];
-                        $contactObject->address = array($filteredAddress[2], $filteredAddress[3]);
-                    } else {
-                        $contactObject->address = array($filteredAddress[1], $filteredAddress[2]);
-                    }
-                    
-                    if (stripos(end($filteredAddress), 'fax')) {
-                        $matches = explode(' (FAX) ', end($filteredAddress));
-                        $contactObject->phone = $matches[0];
-                        $contactObject->fax = $matches[1];
-                    } else {
-                        $contactObject->phone = end($filteredAddress);
-                    }
-                    
-                    $filteredAddress = array();
+                $filteredAddress = array_map('trim', explode("\n", trim($contactObject->address)));
+                
+                preg_match('/(.*?)(?>[\x20\t]*)\((.*?)\)(?>[\x20\t]*)(.*?)$/im', $filteredAddress[0], $matches);
+                $contactObject->name = $matches[1];
+                $contactObject->handle = $matches[2];
+                $contactObject->email = $matches[3];
+                
+                if (sizeof($filteredAddress) === 5) {
+                    $contactObject->organization = $filteredAddress[1];
+                    $contactObject->address = array($filteredAddress[2], $filteredAddress[3]);
+                } else {
+                    $contactObject->address = array($filteredAddress[1], $filteredAddress[2]);
+                }
+                
+                if (stripos(end($filteredAddress), 'fax')) {
+                    $matches = explode(' (FAX) ', end($filteredAddress));
+                    $contactObject->phone = $matches[0];
+                    $contactObject->fax = $matches[1];
+                } else {
+                    $contactObject->phone = end($filteredAddress);
                 }
             }
-        }
-        
-        if (isset($ResultSet->nameserver) && $ResultSet->nameserver != '' &&
-                 ! is_array($ResultSet->nameserver)) {
-            $explodedNameserver = explode("\n", $ResultSet->nameserver);
-            foreach ($explodedNameserver as $key => $line) {
-                if (trim($line) != '') {
-                    $filteredNameserver[] = str_replace('- ', '', trim($line));
-                }
-            }
-            $ResultSet->nameserver = $filteredNameserver;
         }
     }
 }

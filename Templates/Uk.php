@@ -41,12 +41,11 @@ class Template_Uk extends AbstractTemplate
 	 * @var array
 	 * @access protected
 	 */
-    protected $blocks = array(1 => '/(?>[\x20\t]*)Registrant:(.*?)(?=Registrant type:)/is', 
-            2 => '/(?>[\x20\t]*)address:(.*?)(?=Registrar:)/is', 
-            3 => '/(?>[\x20\t]*)Registrar:(.*?)(?=Relevant dates:)/is', 
-            4 => '/(?>[\x20\t]*)Relevant dates:(.*?)(?=Registration status:)/is', 
-            5 => '/(?>[\x20\t]*)Registration status:(.*?)(?=Name servers:)/is', 
-            6 => '/(?>[\x20\t]*)Name servers:(.*?)(?=WHOIS lookup made)/is');
+    protected $blocks = array(1 => '/registrant:(.*?)(?=registrant type:)/is', 
+            2 => '/address:(.*?)(?=registrar:)/is', 3 => '/registrar:(.*?)(?=relevant dates:)/is', 
+            4 => '/relevant dates:(.*?)(?=registration status:)/is', 
+            5 => '/registration status:(.*?)(?=name servers:)/is', 
+            6 => '/name servers:(.*?)(?=whois lookup made)/is');
 
     /**
 	 * Items for each block
@@ -55,16 +54,16 @@ class Template_Uk extends AbstractTemplate
 	 * @access protected
 	 */
     protected $blockItems = array(
-            1 => array('/^(?>[\x20\t]*)Registrant:(?>[\n\x20\t]*)(.+)/im' => 'contacts:owner:name'), 
-            2 => array('/^(?>[\x20\t]*)address:(?>[\n\x20\t]*)(.+)$/is' => 'contacts:owner:address'), 
-            3 => array('/^(?>[\x20\t]*)Registrar:(?>[\n\x20\t]*)(.+)$/im' => 'registrar:name', 
-                    '/^(?>[\x20\t]*)Url:(?>[\n\x20\t]*)(.+)$/im' => 'registrar:url', 
-                    '/\[Tag = (.+)\]$/im' => 'registrar:id'), 
-            4 => array('/^(?>[\x20\t]*)Registered on:(?>[\x20\t]*)(.+)$/im' => 'created', 
-                    '/^(?>[\x20\t]*)Expiry date:(?>[\x20\t]*)(.*)$/im' => 'expires', 
-                    '/^(?>[\x20\t]*)Last updated:(?>[\x20\t]*)(.+)$/im' => 'changed'), 
-            5 => array('/^(?>[\x20\t]*)Registration status:(?>[\n\x20\t]*)(.+)/im' => 'status'), 
-            6 => array('/(?>[\x20\t]*)Name servers:(?>[\n\x20\t]*)(.+)$/is' => 'nameserver'));
+            1 => array('/registrant:(?>[\n\x20\t]*)(.+)/im' => 'contacts:owner:name'), 
+            2 => array('/address:(?>[\n\x20\t]*)(.+)$/is' => 'contacts:owner:address'), 
+            3 => array('/registrar:(?>[\n\x20\t]*)(.+) \[.+\]$/im' => 'registrar:name', 
+                    '/url:(?>[\n\x20\t]*)(.+)$/im' => 'registrar:url', 
+                    '/\[tag = (.+)\]$/im' => 'registrar:id'), 
+            4 => array('/registered on:(?>[\x20\t]*)(.+)$/im' => 'created', 
+                    '/expiry date:(?>[\x20\t]*)(.*)$/im' => 'expires', 
+                    '/last updated:(?>[\x20\t]*)(.+)$/im' => 'changed'), 
+            5 => array('/registration status:(?>[\n\x20\t]*)(.+)/im' => 'status'), 
+            6 => array('/\n(?>[\x20\t]+)(.+)$/im' => 'nameserver'));
 
     /**
      * RegEx to check availability of the domain name
@@ -72,12 +71,12 @@ class Template_Uk extends AbstractTemplate
      * @var string
      * @access protected
      */
-    protected $available = '/This domain name has not been registered./i';
+    protected $available = '/This domain name has not been registered/i';
 
     /**
      * After parsing do something
      *
-     * Fix address and nameserver
+     * Fix owner address
      *
      * @param  object &$WhoisParser
      * @return void
@@ -85,28 +84,16 @@ class Template_Uk extends AbstractTemplate
     public function postProcess(&$WhoisParser)
     {
         $ResultSet = $WhoisParser->getResult();
-        $filteredNameserver = array();
-        
-        if (isset($ResultSet->nameserver) && $ResultSet->nameserver != '' &&
-                 ! is_array($ResultSet->nameserver)) {
-            $explodedNameserver = explode("\n", $ResultSet->nameserver);
-            foreach ($explodedNameserver as $key => $line) {
-                if (trim($line) != '') {
-                    $filteredNameserver[] = strtolower(trim($line));
-                }
-            }
-            $ResultSet->nameserver = $filteredNameserver;
-        }
         
         foreach ($ResultSet->contacts as $contactType => $contactArray) {
             foreach ($contactArray as $contactObject) {
-                $explodedAddress = explode("\n", $contactObject->address);
+                $filteredAddress = array_map('trim', explode("\n", trim($contactObject->address)));
                 
-                $contactObject->address = trim($explodedAddress[0]);
-                $contactObject->city = trim($explodedAddress[1]);
-                $contactObject->state = trim($explodedAddress[2]);
-                $contactObject->zipcode = trim($explodedAddress[3]);
-                $contactObject->country = trim($explodedAddress[4]);
+                $contactObject->address = $filteredAddress[0];
+                $contactObject->city = $filteredAddress[1];
+                $contactObject->state = $filteredAddress[2];
+                $contactObject->zipcode = $filteredAddress[3];
+                $contactObject->country = $filteredAddress[4];
             }
         }
     }

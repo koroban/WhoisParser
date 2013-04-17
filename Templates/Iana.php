@@ -43,9 +43,9 @@ class Template_Iana extends AbstractTemplate
 	 */
     protected $blocks = array(1 => '/whois:(?>[\x20\t]*)(.*?)[\n]{2}/is', 
             2 => '/domain:(?>[\x20\t]*)(.*?)[\n]{2}/is', 
-            3 => '/organisation:(?>[\x20\t]*)(.*?)(?=Contact:(?>[\x20\t]*)Administrative)/is', 
-            4 => '/Contact:(?>[\x20\t]*)Administrative(.*?)(?=Contact:(?>[\x20\t]*)Technical)/is', 
-            5 => '/Contact:(?>[\x20\t]*)Technical(.*?)(?=nserver)/is', 
+            3 => '/organisation:(?>[\x20\t]*)(.*?)(?=contact:(?>[\x20\t]*)administrative)/is', 
+            4 => '/contact:(?>[\x20\t]*)administrative(.*?)(?=contact:(?>[\x20\t]*)technical)/is', 
+            5 => '/contact:(?>[\x20\t]*)technical(.*?)(?=nserver)/is', 
             6 => '/nserver:(?>[\x20\t]*)(.*?)(?=created)/is', 7 => '/created:(?>[\x20\t]*)(.*?)$/is');
 
     /**
@@ -68,7 +68,8 @@ class Template_Iana extends AbstractTemplate
                     '/phone:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:phone', 
                     '/fax-no:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:fax', 
                     '/e-mail:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:email'), 
-            6 => array('/nserver:(?>[\x20\t]*)(.+)$/im' => 'nameserver', 
+            6 => array('/nserver:(?>[\x20\t]*)(.+) .+ .+$/im' => 'nameserver', 
+                    '/nserver:(?>[\x20\t]*).+ (.+) .+$/im' => 'ips', 
                     '/ds-rdata:(?>[\x20\t]*)(.+)$/im' => 'dnssec'), 
             7 => array('/created:(?>[\x20\t]*)(.+)$/im' => 'created', 
                     '/changed:(?>[\x20\t]*)(.+)$/im' => 'changed'));
@@ -93,13 +94,19 @@ class Template_Iana extends AbstractTemplate
         $Config = $WhoisParser->getConfig();
         $Query = $WhoisParser->getQuery();
         
+        if ($Result->dnssec != '') {
+            $Result->dnssec = true;
+        } else {
+            $Result->dnssec = false;
+        }
+        
         if (isset($Query->idnFqdn) || isset($Query->ip) || isset($Query->asn)) {
             if (isset($Result->name) && $Result->name != '') {
-                if ($Result->name != $Query->tld) {
+                if ($Result->name !== $Query->tld) {
                     $newConfig = $Config->get($Query->tld);
                 }
                 
-                if ($Result->name == $Query->tld || $newConfig['dummy'] === false) {
+                if ($Result->name === $Query->tld || $newConfig['dummy'] === false) {
                     $newConfig = $Config->get($Result->name);
                 }
                 
@@ -111,28 +118,10 @@ class Template_Iana extends AbstractTemplate
                 $newConfig = $Config->get($mapping['template']);
             }
             
-            $Result->reset();
-            $Config->setCurrent($newConfig);
-            $WhoisParser->call();
-        } else {
-            if ($Result->dnssec != '') {
-                $Result->dnssec = true;
-            } else {
-                $Result->dnssec = false;
-            }
-            
-            if (is_array($Result->nameserver)) {
-                $ips = array();
-                $ns = array();
-                
-                foreach ($Result->nameserver as $nameserver) {
-                    $filteredNameserver = explode(' ', $nameserver);
-                    $ns[] = strtolower($filteredNameserver[0]);
-                    $ips[] = end($filteredNameserver);
-                }
-                
-                $Result->nameserver = $ns;
-                $Result->ips = $ips;
+            if ($newConfig['server'] != '') {
+                $Result->reset();
+                $Config->setCurrent($newConfig);
+                $WhoisParser->call();
             }
         }
     }

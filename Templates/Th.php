@@ -84,7 +84,7 @@ class Template_Th extends AbstractTemplate
         if (isset($ResultSet->contacts->owner[0]->name)) {
             $filteredAddress = array_map('trim', explode("\n", trim($ResultSet->contacts->owner[0]->name)));
             
-            if (sizeof($filteredAddress) == 4) {
+            if (sizeof($filteredAddress) === 4) {
                 $ResultSet->contacts->owner[0]->name = $filteredAddress[0];
                 $ResultSet->contacts->owner[0]->address = $filteredAddress[1];
                 $ResultSet->contacts->owner[0]->zipcode = $filteredAddress[2];

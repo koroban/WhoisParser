@@ -100,7 +100,7 @@ class Template_Arin extends AbstractTemplate
         
         foreach ($Result->contacts as $contactType => $contactObject) {
             foreach ($contactObject as $contact) {
-                if (isset($contact->handle) && $contact->handle == 'AFRINIC') {
+                if (isset($contact->handle) && $contact->handle === 'AFRINIC') {
                     $Result->reset();
                     $Config->setCurrent($Config->get('afrinic'));
                     $WhoisParser->call();

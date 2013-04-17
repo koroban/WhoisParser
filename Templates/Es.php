@@ -41,9 +41,9 @@ class Template_Es extends AbstractTemplate
 	 * @var array
 	 * @access protected
 	 */
-    protected $blocks = array(1 => '/Domain Name:(?>[\x20\t]*)(.*?)(?=Registrant:)/is', 
-            2 => '/Registrant Name:(?>[\x20\t]*)(.*?)(?=Domain Servers)/is', 
-            3 => '/Domain Servers:(?>[\x20\t]*)(.*?)(?=\>\>\> LAST UPDATE)/is');
+    protected $blocks = array(1 => '/domain name:(?>[\x20\t]*)(.*?)(?=registrant:)/is', 
+            2 => '/registrant name:(?>[\x20\t]*)(.*?)(?=domain servers)/is', 
+            3 => '/domain servers:(?>[\x20\t]*)(.*?)(?=\>\>\> last update)/is');
 
     /**
 	 * Items for each block
@@ -52,11 +52,11 @@ class Template_Es extends AbstractTemplate
 	 * @access protected
 	 */
     protected $blockItems = array(
-            1 => array('/(?>[\x20\t]*)Creation Date:(?>[\x20\t]*)(.+)$/im' => 'created', 
-                    '/(?>[\x20\t]*)Expiration Date:(?>[\x20\t]*)(.+)$/im' => 'expires'), 
-            2 => array(
-                    '/(?>[\x20\t]*)Registrant Name:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:name'), 
-            3 => array('/(?>[\x20\t]*)Name Server [0-9]:(?>[\x20\t]*)(.+)$/im' => 'nameserver'));
+            1 => array('/creation date:(?>[\x20\t]*)(.+)$/im' => 'created', 
+                    '/expiration date:(?>[\x20\t]*)(.+)$/im' => 'expires'), 
+            2 => array('/registrant name:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:name'), 
+            3 => array('/name server [0-9]:(?>[\x20\t]*)(.+)$/im' => 'nameserver', 
+                    '/ipv4 server [0-9]:(?>[\x20\t]*)(.+)$/im' => 'ips'));
 
     /**
      * RegEx to check availability of the domain name
@@ -64,5 +64,5 @@ class Template_Es extends AbstractTemplate
      * @var string
      * @access protected
      */
-    protected $available = '/There is no information available on/i';
+    protected $available = '/there is no information available on/i';
 }

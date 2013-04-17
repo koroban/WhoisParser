@@ -43,7 +43,7 @@ class Template_Fj extends AbstractTemplate
 	 */
     protected $blocks = array(1 => '/Status:(?>[\x20\t]*)(.*?)(?=Registrant)/is', 
             2 => '/Registrant:\n(?>[\x20\t]*)(.*?)(?=Domain servers)/is', 
-            3 => '/Domain servers:(?>[\x20\t]*)(.*?)$/is');
+            3 => '/Domain servers:\n(?>[\x20\t]*)(.*?)$/is');
 
     /**
 	 * Items for each block
@@ -55,7 +55,8 @@ class Template_Fj extends AbstractTemplate
             1 => array('/Status:(?>[\x20\t]*)(.+)/im' => 'status', 
                     '/Expires:(?>[\x20\t]*)(.+)$/im' => 'expires'), 
             2 => array('/Registrant:\n(?>[\x20\t]*)(.+)$/is' => 'contacts:owner:address'), 
-            3 => array('/[^Domain servers\:](?>[\x20\t]*)(.*) .*$/im' => 'nameserver'));
+            3 => array('/\n(?>[\x20\t]+)(.+) .+$/im' => 'nameserver', 
+                    '/\n(?>[\x20\t]+).+ (.+)$/im' => 'ips'));
 
     /**
      * RegEx to check availability of the domain name

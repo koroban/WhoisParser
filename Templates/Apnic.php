@@ -86,7 +86,7 @@ class Template_Apnic extends AbstractTemplate
         $ResultSet = $WhoisParser->getResult();
         $Config = $WhoisParser->getConfig();
         
-        if (isset($ResultSet->network->name) && $ResultSet->network->name == 'KRNIC-KR') {
+        if (isset($ResultSet->network->name) && $ResultSet->network->name === 'KRNIC-KR') {
             $ResultSet->reset();
             $Config->setCurrent($Config->get('krnic'));
             $WhoisParser->call();

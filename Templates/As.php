@@ -42,7 +42,7 @@ class Template_As extends AbstractTemplate
 	 * @access protected
 	 */
     protected $blocks = array(1 => '/Registered by:(?>[\x20\t]*)(.*?)(?=Nameservers:)/is', 
-            2 => '/Nameservers:(?>[\x20\t]*)(.*?)[\r\n]{2}/is');
+            2 => '/Nameservers:(?>[\x20\t]*)(.*?)(?=Access to ASNIC)/is');
 
     /**
 	 * Items for each block
@@ -51,7 +51,7 @@ class Template_As extends AbstractTemplate
 	 * @access protected
 	 */
     protected $blockItems = array(
-            1 => array('/^Registered by:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:name'), 
+            1 => array('/Registered by:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:name'), 
             2 => array('/Nameservers:(?>[\x20\t]*)(.+)$/is' => 'nameserver'));
 
     /**
@@ -65,7 +65,7 @@ class Template_As extends AbstractTemplate
     /**
      * After parsing ...
      *
-     * Fix nameserver in whois output
+     * Fix nameserver and IP addresses in WHOIS output
      *
      * @param  object &$WhoisParser
      * @return void
@@ -76,18 +76,15 @@ class Template_As extends AbstractTemplate
         $filteredNameserver = array();
         $filteredIps = array();
         
-        if (isset($ResultSet->nameserver) && $ResultSet->nameserver != '' &&
-                 ! is_array($ResultSet->nameserver)) {
-            $explodedNameserver = explode("\n", $ResultSet->nameserver);
-            foreach ($explodedNameserver as $key => $line) {
-                $line = strtolower(trim($line));
-                
-                if ($line != '') {
-                    preg_match('/(.+) \((.+)\)$/im', $line, $matches);
-                    $filteredNameserver[] = $matches[1];
-                    $filteredIps[] = $matches[2];
-                }
+        if ($ResultSet->nameserver != '') {
+            $explodedNameserver = array_map('trim', explode("\n", trim($ResultSet->nameserver)));
+            
+            foreach ($explodedNameserver as $line) {
+                preg_match('/(.+) \((.+)\)$/im', $line, $matches);
+                $filteredNameserver[] = $matches[1];
+                $filteredIps[] = $matches[2];
             }
+            
             $ResultSet->nameserver = $filteredNameserver;
             $ResultSet->ips = $filteredIps;
         }

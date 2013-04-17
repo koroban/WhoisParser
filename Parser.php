@@ -25,34 +25,29 @@
 namespace Novutec\WhoisParser;
 
 /**
- * define WhoisParser Path
- */
-define('WHOISPARSERPATH', dirname(__FILE__));
-
-/**
  * @see Config/Config
  */
-require_once WHOISPARSERPATH . '/Config/Config.php';
+require_once 'Config/Config.php';
 
 /**
  * @see Adapter/Adapter
  */
-require_once WHOISPARSERPATH . '/Adapter/AbstractAdapter.php';
+require_once 'Adapter/AbstractAdapter.php';
 
 /**
  * @see Templates/Template
  */
-require_once WHOISPARSERPATH . '/Templates/AbstractTemplate.php';
+require_once 'Templates/AbstractTemplate.php';
 
 /**
  * @see Result/Result
  */
-require_once WHOISPARSERPATH . '/Result/Result.php';
+require_once 'Result/Result.php';
 
 /**
  * @see Exception
  */
-require_once WHOISPARSERPATH . '/Exception/AbstractException.php';
+require_once 'Exception/AbstractException.php';
 
 /**
  * WhoisParser
@@ -144,6 +139,14 @@ class Parser
     protected $dateformat = '%Y-%m-%d %H:%M:%S';
 
     /**
+     * Activate cache
+     * 
+     * @var boolean
+     * @access protected
+     */
+    protected $cache = true;
+
+    /**
      * Creates a WhoisParser object
      * 
      * @param  string $format
@@ -177,12 +180,12 @@ class Parser
 	 */
     public function lookup($query = '')
     {
-        $this->Result = new \Novutec\WhoisParser\Result();
-        $this->Config = new \Novutec\WhoisParser\Config($this->specialWhois);
+        $this->Result = new Result();
+        $this->Config = new Config($this->specialWhois);
         
         try {
             if ($query == '') {
-                throw \Novutec\WhoisParser\AbstractException::factory('NoQuery', 'No lookup query given.');
+                throw AbstractException::factory('NoQuery', 'No lookup query given.');
             }
             
             $this->prepare($query);
@@ -203,7 +206,7 @@ class Parser
             
             $this->Config->setCurrent($config);
             $this->call();
-        } catch (\Novutec\WhoisParser\AbstractException $e) {
+        } catch (AbstractException $e) {
             if ($this->throwExceptions) {
                 throw $e;
             }
@@ -212,7 +215,12 @@ class Parser
             $this->Result->addItem('rawdata', explode("\n", $this->rawdata));
             
             if (isset($this->Query)) {
-                $this->Result->addItem('name', $this->Query->fqdn);
+                
+                if (isset($this->Query->ip)) {
+                    $this->Result->addItem('name', $this->Query->ip);
+                } else {
+                    $this->Result->addItem('name', $this->Query->fqdn);
+                }
             } else {
                 $this->Result->addItem('name', $query);
             }
@@ -250,7 +258,7 @@ class Parser
     {
         // check if given query is an IP address and AS number or possible
         // domain name
-        if ($this->bin2ip($this->ip2bin($query)) == $query) {
+        if ($this->bin2ip($this->ip2bin($query)) === $query) {
             $this->Query = new \stdClass();
             $this->Query->ip = $query;
         } elseif (preg_match('/^AS[0-9]*$/im', $query)) {
@@ -276,15 +284,14 @@ class Parser
         }
         
         $Config = $this->Config->getCurrent();
-        
         $Adapter = AbstractAdapter::factory($Config['adapter']);
         
         if ($Adapter instanceof AbstractAdapter) {
-            $this->rawdata = $Adapter->call($this->Query, $Config);
+            $this->rawdata = strip_tags($Adapter->call($this->Query, $Config));
             $this->parse();
         } else {
-            throw \Novutec\WhoisParser\AbstractException::factory('NoAdapter', 'Adapter ' .
-                     $Config['adapter'] . ' could not be found.');
+            throw AbstractException::factory('NoAdapter', 'Adapter ' . $Config['adapter'] .
+                     ' could not be found.');
         }
     }
 
@@ -338,8 +345,8 @@ class Parser
                 $this->Result->addItem('idnName', $this->Query->idnFqdn);
             }
         } else {
-            throw \Novutec\WhoisParser\AbstractException::factory('NoTemplate', 'Template ' .
-                     $Config['template'] . ' could not be found.');
+            throw AbstractException::factory('NoTemplate', 'Template ' . $Config['template'] .
+                     ' could not be found.');
         }
     }
 
@@ -347,7 +354,7 @@ class Parser
      * Converts IP address to binary
      * 
      * @param  string $ip
-     * @return string
+     * @return mixed
      */
     private function ip2bin($ip)
     {
@@ -379,7 +386,7 @@ class Parser
      * Converts binary to IP address
      * 
      * @param  string $bin
-     * @return string
+     * @return mixed
      */
     private function bin2ip($bin)
     {
@@ -388,7 +395,7 @@ class Parser
             return long2ip(base_convert($bin, 2, 10));
         }
         
-        if (strlen($bin) != 128) {
+        if (strlen($bin) !== 128) {
             return false;
         }
         
@@ -422,7 +429,10 @@ class Parser
         // check if there is a block to be cutted from HTML response
         if (isset($Template->htmlBlock)) {
             preg_match($Template->htmlBlock, $this->rawdata, $htmlMatches);
-            $this->rawdata = strip_tags($htmlMatches[0]);
+            
+            if (isset($htmlMatches[0])) {
+                $this->rawdata = preg_replace('/\s\s+/', "\n", $htmlMatches[0]);
+            }
         }
         
         // lookup all blocks of template
@@ -454,7 +464,7 @@ class Parser
                         foreach ($contactArray as $contactObject) {
                             // if contact handle in network matches the one in
                             // Result, we have to clone it
-                            if (strtolower($contactObject->handle) == strtolower($handle)) {
+                            if (strtolower($contactObject->handle) === strtolower($handle)) {
                                 if (empty($this->Result->contacts->$type)) {
                                     $this->Result->contacts->$type = Array();
                                 }
@@ -524,6 +534,19 @@ class Parser
     public function setDateFormat($dateformat = '%Y-%m-%d %H:%M:%S')
     {
         $this->dateformat = $dateformat;
+    }
+
+    /**
+     * Set the cache flag
+     *
+     * If cache flag is set, the WHOIS parser will cache the query and rawdata.
+     *
+     * @param  boolean $cache
+     * @return void
+     */
+    public function useCache($cache = true)
+    {
+        $this->cache = filter_var($cache, FILTER_VALIDATE_BOOLEAN);
     }
 
     /**

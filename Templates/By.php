@@ -41,7 +41,7 @@ class Template_By extends AbstractTemplate
 	 * @var array
 	 * @access protected
 	 */
-    protected $blocks = array(1 => '/Domain Name:(?>[\x20\t]*)(.*?)$/is');
+    protected $blocks = array(1 => '/domain name:(?>[\x20\t]*)(.*?)$/is');
 
     /**
 	 * Items for each block
@@ -50,11 +50,11 @@ class Template_By extends AbstractTemplate
 	 * @access protected
 	 */
     protected $blockItems = array(
-            1 => array('/^Registrar:(?>[\x20\t]*)(.+)$/im' => 'registrar:name', 
-                    '/^Name Server:(?>[\x20\t]*)(.+)$/im' => 'nameserver', 
-                    '/^Updated Date:(?>[\x20\t]*)(.+)$/im' => 'changed', 
-                    '/^Creation Date:(?>[\x20\t]*)(.+)$/im' => 'created', 
-                    '/^Expiration Date:(?>[\x20\t]*)(.+)$/im' => 'expires'));
+            1 => array('/registrar:(?>[\x20\t]*)(.+)$/im' => 'registrar:name', 
+                    '/name server:(?>[\x20\t]*)(.+)$/im' => 'nameserver', 
+                    '/updated date:(?>[\x20\t]*)(.+)$/im' => 'changed', 
+                    '/creation date:(?>[\x20\t]*)(.+)$/im' => 'created', 
+                    '/expiration date:(?>[\x20\t]*)(.+)$/im' => 'expires'));
 
     /**
      * RegEx to check availability of the domain name

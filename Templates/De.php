@@ -41,8 +41,8 @@ class Template_De extends AbstractTemplate
 	 * @var array
 	 * @access protected
 	 */
-    protected $blocks = array(1 => '/domain:[\s]*(.*?)[\n]{2}/is', 
-            2 => '/\[(Holder|Zone|Tech|Admin)(\-C)?\][\n](.*?)([\n]{2}|$)/is');
+    protected $blocks = array(1 => '/domain:(?>[\x20\t]*)(.*?)[\n]{2}/is', 
+            2 => '/\[(holder|zone|tech|admin)(\-c)?\]\n(.*?)([\n]{2}|$)/is');
 
     /**
 	 * Items for each block
@@ -51,23 +51,25 @@ class Template_De extends AbstractTemplate
 	 * @access protected
 	 */
     protected $blockItems = array(
-            1 => array('/^Nserver: (.+)$/im' => 'nameserver', '/^Status: (.+)$/im' => 'status', 
-                    '/Dnskey: (.+)$/im' => 'dnssec', '/^Changed: (.+)$/im' => 'changed', 
-                    '/^RegAccName: (.+)$/im' => 'registrar:name', 
-                    '/^RegAccId: (.+)$/im' => 'registrar:id'), 
+            1 => array('/nserver:(?>[\x20\t]*)(.+)$/im' => 'nameserver', 
+                    '/status:(?>[\x20\t]*)(.+)$/im' => 'status', 
+                    '/dnskey:(?>[\x20\t]*)(.+)$/im' => 'dnssec', 
+                    '/changed:(?>[\x20\t]*)(.+)$/im' => 'changed', 
+                    '/regaccname:(?>[\x20\t]*)(.+)$/im' => 'registrar:name', 
+                    '/regcccid:(?>[\x20\t]*)(.+)$/im' => 'registrar:id'), 
             
-            2 => array('/^\[(Holder|Zone|Tech|Admin)/i' => 'contacts:reservedType', 
-                    '/^type:(?>[\x20\t]*)(.+)$/im' => 'contacts:type', 
-                    '/^name:(?>[\x20\t]*)(.+)$/im' => 'contacts:name', 
-                    '/^organisation:(?>[\x20\t]*)(.+)$/im' => 'contacts:organization', 
-                    '/^Address:(?>[\x20\t]*)(.+)$/im' => 'contacts:address', 
-                    '/^postalcode:(?>[\x20\t]*)(.+)$/im' => 'contacts:zipcode', 
-                    '/^city:(?>[\x20\t]*)(.+)$/im' => 'contacts:city', 
-                    '/^countrycode:(?>[\x20\t]*)(.+)$/im' => 'contacts:country', 
-                    '/^phone:(?>[\x20\t]*)(.+)$/im' => 'contacts:phone', 
-                    '/^fax:(?>[\x20\t]*)(.+)$/im' => 'contacts:fax', 
-                    '/^email:(?>[\x20\t]*)(.+)$/im' => 'contacts:email', 
-                    '/^changed:(?>[\x20\t]*)(.+)$/im' => 'contacts:changed'));
+            2 => array('/\[(holder|zone|tech|admin)/i' => 'contacts:reservedType', 
+                    '/type:(?>[\x20\t]*)(.+)$/im' => 'contacts:type', 
+                    '/name:(?>[\x20\t]*)(.+)$/im' => 'contacts:name', 
+                    '/organisation:(?>[\x20\t]*)(.+)$/im' => 'contacts:organization', 
+                    '/address:(?>[\x20\t]*)(.+)$/im' => 'contacts:address', 
+                    '/postalcode:(?>[\x20\t]*)(.+)$/im' => 'contacts:zipcode', 
+                    '/city:(?>[\x20\t]*)(.+)$/im' => 'contacts:city', 
+                    '/countrycode:(?>[\x20\t]*)(.+)$/im' => 'contacts:country', 
+                    '/phone:(?>[\x20\t]*)(.+)$/im' => 'contacts:phone', 
+                    '/fax:(?>[\x20\t]*)(.+)$/im' => 'contacts:fax', 
+                    '/email:(?>[\x20\t]*)(.+)$/im' => 'contacts:email', 
+                    '/changed:(?>[\x20\t]*)(.+)$/im' => 'contacts:changed'));
 
     /**
      * RegEx to check availability of the domain name
@@ -75,7 +77,7 @@ class Template_De extends AbstractTemplate
      * @var string
      * @access protected
      */
-    protected $available = '/Status: free/i';
+    protected $available = '/status:(?>[\x20\t]*)free/i';
 
     /**
      * After parsing ...

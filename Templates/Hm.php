@@ -94,7 +94,7 @@ class Template_Hm extends AbstractTemplate
                         $filteredAddress[] = trim($line);
                     }
                     
-                    if (sizeof($filteredAddress) == 4) {
+                    if (sizeof($filteredAddress) === 4) {
                         $contactObject->name = $filteredAddress[0];
                         $contactObject->address = $filteredAddress[1];
                         $contactObject->city = $filteredAddress[2];

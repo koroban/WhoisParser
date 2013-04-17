@@ -41,9 +41,9 @@ class Template_St extends AbstractTemplate
 	 * @var array
 	 * @access protected
 	 */
-    protected $blocks = array(1 => '/Domain Name:(?>[\x20\t]*)(.*?)(?=Administrative Contact)/is', 
-            2 => '/Administrative Contact:(?>[\x20\t]*)(.*?)(?=Name Servers)/is', 
-            3 => '/Name Servers:(?>[\x20\t]*)(.*?)$/is');
+    protected $blocks = array(1 => '/domain name:(?>[\x20\t]*)(.*?)(?=administrative contact)/is', 
+            2 => '/administrative contact:(?>[\x20\t]*)(.*?)(?=name servers)/is', 
+            3 => '/name servers:(?>[\x20\t]*)(.*?)$/is');
 
     /**
 	 * Items for each block
@@ -52,16 +52,16 @@ class Template_St extends AbstractTemplate
 	 * @access protected
 	 */
     protected $blockItems = array(
-            1 => array('/Registrar:(?>[\x20\t]*)(.*?)$/im' => 'registrar:name', 
-                    '/Creation Date:(?>[\x20\t]*)(.*?)$/im' => 'created', 
-                    '/Updated Date:(?>[\x20\t]*)(.*?)$/im' => 'changed', 
-                    '/Contact:(?>[\x20\t]*)(.*?)$/im' => 'registrar:email'), 
-            2 => array('/Owner:(?>[\x20\t]*)(.*?)$/im' => 'contacts:admin:organization', 
-                    '/^(?>[\x20\t]*)Contact:(?>[\x20\t]*)(.*?)$/im' => 'contacts:admin:name', 
-                    '/Address:(?>[\x20\t]*)(.*?)$/im' => 'contacts:admin:address', 
-                    '/City:(?>[\x20\t]*)(.*?)$/im' => 'contacts:admin:city', 
-                    '/Country:(?>[\x20\t]*)(.*?)$/im' => 'contacts:admin:country'), 
-            3 => array('/Name Servers:[\r\n]{1,2}(?>[\x20\t]*)(.*?)$/is' => 'nameserver'));
+            1 => array('/registrar:(?>[\x20\t]*)(.*?)$/im' => 'registrar:name', 
+                    '/creation Date:(?>[\x20\t]*)(.*?)$/im' => 'created', 
+                    '/updated Date:(?>[\x20\t]*)(.*?)$/im' => 'changed', 
+                    '/contact:(?>[\x20\t]*)(.*?)$/im' => 'registrar:email'), 
+            2 => array('/owner:(?>[\x20\t]*)(.*?)$/im' => 'contacts:admin:organization', 
+                    '/^(?>[\x20\t]*)contact:(?>[\x20\t]*)(.*?)$/im' => 'contacts:admin:name', 
+                    '/address:(?>[\x20\t]*)(.*?)$/im' => 'contacts:admin:address', 
+                    '/city:(?>[\x20\t]*)(.*?)$/im' => 'contacts:admin:city', 
+                    '/country:(?>[\x20\t]*)(.*?)$/im' => 'contacts:admin:country'), 
+            3 => array('/\n(?>[\x20\t]*)(.+)$/im' => 'nameserver'));
 
     /**
      * RegEx to check availability of the domain name
@@ -70,29 +70,4 @@ class Template_St extends AbstractTemplate
      * @access protected
      */
     protected $available = '/No entries found/i';
-
-    /**
-     * After parsing do something
-     *
-     * Fix nameservers
-     *
-     * @param  object &$WhoisParser
-     * @return void
-     */
-    public function postProcess(&$WhoisParser)
-    {
-        $ResultSet = $WhoisParser->getResult();
-        $filteredNameserver = array();
-        
-        if (isset($ResultSet->nameserver) && $ResultSet->nameserver != '' &&
-                 ! is_array($ResultSet->nameserver)) {
-            $explodedNameserver = explode("\n", $ResultSet->nameserver);
-            foreach ($explodedNameserver as $key => $line) {
-                if (trim($line) != '') {
-                    $filteredNameserver[] = strtolower(trim($line));
-                }
-            }
-            $ResultSet->nameserver = $filteredNameserver;
-        }
-    }
 }

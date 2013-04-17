@@ -41,9 +41,9 @@ class Template_Tk extends AbstractTemplate
 	 * @var array
 	 * @access protected
 	 */
-    protected $blocks = array(1 => '/Organisation:\n(.*?)(?=Domain Nameservers)/is', 
-            2 => '/Domain registered:(?>[\x20\t]*)(.*?)$/is', 
-            3 => '/Domain Nameservers:\n(?>[\x20\t]*)(.*?)(?=Domain registered)/is');
+    protected $blocks = array(1 => '/organisation:\n(.*?)(?=domain nameservers)/is', 
+            2 => '/domain registered:(?>[\x20\t]*)(.*?)$/is', 
+            3 => '/domain nameservers:\n(?>[\x20\t]*)(.*?)(?=domain registered)/is');
 
     /**
 	 * Items for each block
@@ -51,10 +51,12 @@ class Template_Tk extends AbstractTemplate
 	 * @var array
 	 * @access protected
 	 */
-    protected $blockItems = array(1 => array('/Organisation:(.*?)$/is' => 'contacts:owner:address'), 
-            2 => array('/Domain registered:(?>[\x20\t]*)(.+)$/im' => 'created', 
-                    '/Record will expire on:(?>[\x20\t]*)(.+)$/im' => 'expires'), 
-            3 => array('/[^Domain servers in listed order](?>[\x20\t]*)(.*)$/im' => 'nameserver'));
+    protected $blockItems = array(1 => array('/organisation:(.*?)$/is' => 'contacts:owner:address'), 
+            2 => array('/domain registered:(?>[\x20\t]*)(.+)$/im' => 'created', 
+                    '/record will expire on:(?>[\x20\t]*)(.+)$/im' => 'expires'), 
+            3 => array('/\n(?>[\x20\t]+)(.+)$/im' => 'nameserver', 
+                    '/\n(?>[\x20\t]+)(.+) \(.+\)$/im' => 'nameserver', 
+                    '/\n(?>[\x20\t]+).+ \((.+)\)$/im' => 'ips'));
 
     /**
      * RegEx to check availability of the domain name
@@ -67,7 +69,7 @@ class Template_Tk extends AbstractTemplate
     /**
      * After parsing do something
      *
-     * Fix address and namesever
+     * Fix contact address
      *
      * @param  object &$WhoisParser
      * @return void
@@ -75,32 +77,6 @@ class Template_Tk extends AbstractTemplate
     public function postProcess(&$WhoisParser)
     {
         $ResultSet = $WhoisParser->getResult();
-        $filteredAddress = array();
-        $filteredNameserver = array();
-        $filteredIps = array();
-        
-        if (is_array($ResultSet->nameserver)) {
-            foreach ($ResultSet->nameserver as $key => $line) {
-                $line = strtolower(trim($line));
-                if ($line != '') {
-                    preg_match('/([a-z0-9\.]+)(?>[\x20\t]*)([a-z0-9\.]+)?/i', $line, $matches);
-                    
-                    if (isset($matches[1])) {
-                        $filteredNameserver[] = $matches[1];
-                    }
-                    
-                    if (isset($matches[2])) {
-                        $filteredIps[] = $matches[2];
-                    }
-                }
-            }
-            
-            if (sizeof($filteredIps) > 0) {
-                $ResultSet->ips = $filteredIps;
-            }
-            
-            $ResultSet->nameserver = $filteredNameserver;
-        }
         
         if (isset($ResultSet->contacts->owner[0]->address)) {
             $filteredAddress = array_map('trim', explode("\n", trim($ResultSet->contacts->owner[0]->address)));

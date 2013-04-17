@@ -85,11 +85,11 @@ class Template_Gtld_vautron extends AbstractTemplate
                     if (isset($matches[1])) {
                         $contactObject->phone = trim($matches[1]);
                     }
-                } elseif ($contactType != 'owner') {
+                } elseif ($contactType !== 'owner') {
                     $contactObject->phone = trim(end($filteredAddress));
                 }
                 
-                if (sizeof($filteredAddress) == 4) {
+                if (sizeof($filteredAddress) === 4) {
                     $contactObject->organization = trim($filteredAddress[1]);
                     $contactObject->address = trim($filteredAddress[2]);
                     

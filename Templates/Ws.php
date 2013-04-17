@@ -41,8 +41,8 @@ class Template_Ws extends AbstractTemplate
 	 * @var array
 	 * @access protected
 	 */
-    protected $blocks = array(1 => '/Registrar Name:(?>[\x20\t]*)(.*?)(?=Domain Created)/is', 
-            2 => '/Domain Created:(?>[\x20\t]*)(.*?)(?=Current Nameservers)/is');
+    protected $blocks = array(1 => '/registrar name:(?>[\x20\t]*)(.*?)(?=domain created)/is', 
+            2 => '/domain created:(?>[\x20\t]*)(.*?)(?=current nameservers)/is');
 
     /**
 	 * Items for each block
@@ -51,13 +51,13 @@ class Template_Ws extends AbstractTemplate
 	 * @access protected
 	 */
     protected $blockItems = array(
-            1 => array('/(?>[\x20\t]*)Registrar Name:(?>[\x20\t]*)(.+)$/im' => 'registrar:name', 
-                    '/(?>[\x20\t]*)Registrar Email:(?>[\x20\t]*)(.+)$/im' => 'registrar:email', 
-                    '/(?>[\x20\t]*)Registrar Whois:(?>[\x20\t]*)(.+)$/im' => 'whoisserver'), 
+            1 => array('/registrar name:(?>[\x20\t]*)(.+)$/im' => 'registrar:name', 
+                    '/registrar email:(?>[\x20\t]*)(.+)$/im' => 'registrar:email', 
+                    '/registrar whois:(?>[\x20\t]*)(.+)$/im' => 'whoisserver'), 
             
-            2 => array('/(?>[\x20\t]*)Domain Created:(?>[\x20\t]*)(.+)$/im' => 'created', 
-                    '/(?>[\x20\t]*)Domain Last Updated:(?>[\x20\t]*)(.+)$/im' => 'changed', 
-                    '/(?>[\x20\t]*)Domain Currently Expires:(?>[\x20\t]*)(.+)$/im' => 'expires'));
+            2 => array('/domain created:(?>[\x20\t]*)(.+)$/im' => 'created', 
+                    '/domain last updated:(?>[\x20\t]*)(.+)$/im' => 'changed', 
+                    '/domain currently expires:(?>[\x20\t]*)(.+)$/im' => 'expires'));
 
     /**
      * RegEx to check availability of the domain name
@@ -65,12 +65,12 @@ class Template_Ws extends AbstractTemplate
      * @var string
      * @access protected
      */
-    protected $available = '/No match for /i';
+    protected $available = '/No match for/i';
 
     /**
      * After parsing ...
      * 
-     * Verisign is a thin registry, therefore they only provide us some details and the
+     * .WS is a thin registry, therefore they only provide us some details and the
      * real whois server of the registrar for the given domain name. Therefore we have
      * to restart the process with the real whois server.
      * 
@@ -89,7 +89,10 @@ class Template_Ws extends AbstractTemplate
         }
         
         $newConfig = $Config->get($ResultSet->whoisserver);
-        $newConfig['server'] = $ResultSet->whoisserver;
+        
+        if ($newConfig['server'] == '') {
+            $newConfig['server'] = $ResultSet->whoisserver;
+        }
         
         $Config->setCurrent($newConfig);
         $WhoisParser->call();

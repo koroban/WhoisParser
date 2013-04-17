@@ -27,17 +27,17 @@ namespace Novutec\WhoisParser;
 /**
  * @see Result/AbstractResult
  */
-require_once WHOISPARSERPATH . '/Result/AbstractResult.php';
+require_once 'AbstractResult.php';
 
 /**
  * @see Result/Conact
  */
-require_once WHOISPARSERPATH . '/Result/Contact.php';
+require_once 'Contact.php';
 
 /**
  * @see Result/Registrar
  */
-require_once WHOISPARSERPATH . '/Result/Registrar.php';
+require_once 'Registrar.php';
 
 /**
  * WhoisParser Result
@@ -212,13 +212,13 @@ class Result extends AbstractResult
      */
     public function addItem($target, $value)
     {
-        if (is_array($value) && sizeof($value) == 1) {
+        if (is_array($value) && sizeof($value) === 1) {
             $value = $value[0];
         }
         
         // reservedType is sometimes need by templates like .DE
-        if ($target == 'contacts:reservedType') {
-            if ($this->lastHandle != strtolower($value)) {
+        if ($target === 'contacts:reservedType') {
+            if ($this->lastHandle !== strtolower($value)) {
                 $this->lastId = - 1;
             }
             
@@ -234,9 +234,9 @@ class Result extends AbstractResult
             
             // lookup target to determine where we should add the item
             foreach ($targetArray as $key => $type) {
-                if ($targetArray[0] == 'contacts' && $key == 1 && sizeof($targetArray) == 2) {
+                if ($targetArray[0] === 'contacts' && $key === 1 && sizeof($targetArray) === 2) {
                     // estimate handle match by network contacts
-                    if (isset($this->network->contacts) && $targetArray[1] == 'handle') {
+                    if (isset($this->network->contacts) && $targetArray[1] === 'handle') {
                         // look through all network contacts
                         foreach ($this->network->contacts as $networkContactKey => $networkContactValue) {
                             // if it is an array, then there are more contacts
@@ -244,8 +244,8 @@ class Result extends AbstractResult
                             if (is_array($networkContactValue)) {
                                 // look through the array of one type
                                 foreach ($networkContactValue as $multiContactKey => $multiContactValue) {
-                                    if (strtolower($multiContactValue) == strtolower($value)) {
-                                        if ($this->lastHandle != $networkContactKey) {
+                                    if (strtolower($multiContactValue) === strtolower($value)) {
+                                        if ($this->lastHandle !== $networkContactKey) {
                                             $this->lastId = - 1;
                                         }
                                         
@@ -256,8 +256,8 @@ class Result extends AbstractResult
                                     }
                                 }
                             } else {
-                                if (strtolower($networkContactValue) == strtolower($value)) {
-                                    if ($this->lastHandle != $networkContactKey) {
+                                if (strtolower($networkContactValue) === strtolower($value)) {
+                                    if ($this->lastHandle !== $networkContactKey) {
                                         $this->lastId = - 1;
                                     }
                                     $this->lastHandle = $networkContactKey;
@@ -276,7 +276,7 @@ class Result extends AbstractResult
                     $this->contacts->{$this->lastHandle}[$this->lastId]->$type = $value;
                 } else {
                     // if last element of target is reached we need to add value
-                    if ($key == sizeof($targetArray) - 1) {
+                    if ($key === sizeof($targetArray) - 1) {
                         if (is_array($element)) {
                             $element[sizeof($element) - 1]->$type = $value;
                         } else {
@@ -485,7 +485,7 @@ class Result extends AbstractResult
     public function cleanUp($config, $dateformat)
     {
         // add WHOIS server to output
-        $this->addItem('whoisserver', ($config['adapter'] == 'http') ? $config['server'] .
+        $this->addItem('whoisserver', ($config['adapter'] === 'http') ? $config['server'] .
                  str_replace('%domain%', $this->name, $config['format']) : $config['server']);
         
         // remove helper vars from result
@@ -495,6 +495,10 @@ class Result extends AbstractResult
         
         if (isset($this->lastHandle)) {
             unset($this->lastHandle);
+        }
+        
+        if (isset($this->network->contacts) && sizeof($this->network->contacts) === 1) {
+            $this->network = null;
         }
         
         // format dates

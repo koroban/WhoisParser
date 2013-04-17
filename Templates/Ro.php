@@ -41,7 +41,7 @@ class Template_Ro extends AbstractTemplate
 	 * @var array
 	 * @access protected
 	 */
-    protected $blocks = array(1 => '/Domain Name:(?>[\x20\t]*)(.*?)$/is');
+    protected $blocks = array(1 => '/domain name:(?>[\x20\t]*)(.*?)$/is');
 
     /**
 	 * Items for each block
@@ -50,10 +50,10 @@ class Template_Ro extends AbstractTemplate
 	 * @access protected
 	 */
     protected $blockItems = array(
-            1 => array('/(?>[\x20\t]*)Registered On:(?>[\x20\t]*)(.+)$/im' => 'created', 
-                    '/(?>[\x20\t]*)Registrar:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:name', 
-                    '/(?>[\x20\t]*)Nameserver:(?>[\x20\t]*)(.+)$/im' => 'nameserver', 
-                    '/(?>[\x20\t]*)Domain Status:(?>[\x20\t]*)(.+)$/im' => 'status'));
+            1 => array('/registered on:(?>[\x20\t]*)(.+)$/im' => 'created', 
+                    '/registrar:(?>[\x20\t]*)(.+)$/im' => 'registrar:name', 
+                    '/nameserver:(?>[\x20\t]*)(.+)$/im' => 'nameserver', 
+                    '/domain status:(?>[\x20\t]*)(.+)$/im' => 'status'));
 
     /**
      * RegEx to check availability of the domain name

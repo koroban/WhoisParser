@@ -86,7 +86,7 @@ class Config
     {
         $template = strtolower($template);
         
-        if ($tld != '' && isset($this->config[$tld])) {
+        if ($tld !== '' && isset($this->config[$tld])) {
             $template = strtolower($tld);
         }
         

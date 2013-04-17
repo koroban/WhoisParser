@@ -51,14 +51,14 @@ class Template_Ax extends AbstractTemplate
 	 * @access protected
 	 */
     protected $blockItems = array(
-            1 => array('/^Name:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:name', 
-                    '/^Administrative Contact:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:name', 
-                    '/^Email address:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:email', 
-                    '/^Address:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:address', 
-                    '/^Country:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:country', 
-                    '/^Telephone:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:phone', 
-                    '/^Created:(?>[\x20\t]*)(.+)$/im' => 'created'), 
-            2 => array('/^Name Server [0-9]:(?>[\x20\t]*)(.+)$/im' => 'nameserver'));
+            1 => array('/Name:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:name', 
+                    '/Administrative Contact:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:name', 
+                    '/Email address:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:email', 
+                    '/Address:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:address', 
+                    '/Country:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:country', 
+                    '/Telephone:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:phone', 
+                    '/Created:(?>[\x20\t]*)(.+)$/im' => 'created'), 
+            2 => array('/Name Server [0-9]:(?>[\x20\t]*)(.+)$/im' => 'nameserver'));
 
     /**
      * RegEx to check availability of the domain name

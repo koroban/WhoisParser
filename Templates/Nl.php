@@ -25,7 +25,7 @@
 namespace Novutec\WhoisParser;
 
 /**
- * Template for .FR
+ * Template for .NL
  *
  * @category   Novutec
  * @package    WhoisParser
@@ -41,14 +41,14 @@ class Template_Nl extends AbstractTemplate
 	 * @var array
 	 * @access protected
 	 */
-    protected $blocks = array(1 => '/Domain name:(?>[\x20\t]*)(.*?)(?=Registrant|Registrar)/is', 
-            2 => '/Registrant:(?>[\x20\t]*)(.*?)(?=Administrative contact)/is', 
-            3 => '/Administrative contact:(?>[\x20\t]*)(.*?)(?=Registrar)/is', 
-            4 => '/Registrar:(?>[\x20\t]*)(.*?)(?=(Technical contact\(s\)|DNSSEC))/is', 
-            5 => '/Technical contact\(s\):(?>[\x20\t]*)(.*?)(?=DNSSEC)/is', 
-            6 => '/DNSSEC:(?>[\x20\t]*)(.*?)(?=Domain nameservers)/is', 
-            7 => '/Domain nameservers:(?>[\x20\t]*)(.*?)(?=(Date registered|Record maintained))/is', 
-            8 => '/Date registered:(?>[\x20\t]*)(.*?)(?=Record maintained)/is');
+    protected $blocks = array(1 => '/domain name:(?>[\x20\t]*)(.*?)(?=registrant|registrar)/is', 
+            2 => '/registrant:(?>[\x20\t]*)(.*?)(?=administrative contact)/is', 
+            3 => '/administrative contact:(?>[\x20\t]*)(.*?)(?=registrar)/is', 
+            4 => '/registrar:(?>[\x20\t]*)(.*?)(?=(technical contact\(s\)|dnssec))/is', 
+            5 => '/technical contact\(s\):(?>[\x20\t]*)(.*?)(?=dnssec)/is', 
+            6 => '/dnssec:(?>[\x20\t]*)(.*?)(?=domain nameservers)/is', 
+            7 => '/domain nameservers:(?>[\x20\t]*)(.*?)(?=(date registered|record maintained))/is', 
+            8 => '/date registered:(?>[\x20\t]*)(.*?)(?=record maintained)/is');
 
     /**
 	 * Items for each block
@@ -57,17 +57,18 @@ class Template_Nl extends AbstractTemplate
 	 * @access protected
 	 */
     protected $blockItems = array(1 => array('/status:(?>[\x20\t]*)(.+)$/im' => 'status'), 
-            
-            2 => array('/Registrant:[\n](?>[\x20\t]*)(.+)$/is' => 'contacts:owner:address'), 
+            2 => array('/registrant:\n(?>[\x20\t]*)(.+)$/is' => 'contacts:owner:address'), 
             3 => array(
-                    '/Administrative contact:[\n](?>[\x20\t]*)(.+)$/is' => 'contacts:admin:address'), 
-            4 => array('/Registrar:[\n](?>[\x20\t]*)(.+)$/is' => 'registrar:name'), 
+                    '/administrative contact:\n(?>[\x20\t]*)(.+)$/is' => 'contacts:admin:address'), 
+            4 => array('/registrar:\n(?>[\x20\t]*)(.+)\n/im' => 'registrar:name'), 
             5 => array(
-                    '/Technical contact\(s\):[\n](?>[\x20\t]*)(.*?)$/is' => 'contacts:tech:address'), 
-            6 => array('/DNSSEC:(?>[\x20\t]*)(.+)$/im' => 'dnssec'), 
-            7 => array('/Domain nameservers:[\n](?>[\x20\t]*)(.+)$/is' => 'nameserver'), 
-            8 => array('/Date registered:(?>[\x20\t]*)(.+)$/im' => 'created', 
-                    '/Date of last change:(?>[\x20\t]*)(.+)$/im' => 'changed'));
+                    '/technical contact\(s\):\n(?>[\x20\t]*)(.*?)$/is' => 'contacts:tech:address'), 
+            6 => array('/dnssec:(?>[\x20\t]*)(.+)$/im' => 'dnssec'), 
+            7 => array('/\n(?>[\x20\t]+)(.+)$/im' => 'nameserver', 
+                    '/\n(?>[\x20\t]+)(.+)(?>[\x20\t]+).+$/im' => 'nameserver', 
+                    '/\n(?>[\x20\t]+).+(?>[\x20\t]+)(.+)$/im' => 'ips'), 
+            8 => array('/date registered:(?>[\x20\t]*)(.+)$/im' => 'created', 
+                    '/date of last change:(?>[\x20\t]*)(.+)$/im' => 'changed'));
 
     /**
      * RegEx to check availability of the domain name
@@ -80,7 +81,8 @@ class Template_Nl extends AbstractTemplate
     /**
      * After parsing ...
      * 
-     * Fix address, registrar, dnssec and nameservers
+     * If dnssec key was found we set attribute to true. Furthermore
+     * we are fixing the contact handle if the WHOIS contains one.
      * 
 	 * @param  object &$WhoisParser
 	 * @return void
@@ -88,80 +90,30 @@ class Template_Nl extends AbstractTemplate
     public function postProcess(&$WhoisParser)
     {
         $ResultSet = $WhoisParser->getResult();
-        $filteredNameserver = array();
-        $filteredAddress = array();
         
-        if ($ResultSet->dnssec != 'no') {
+        if ($ResultSet->dnssec === 'yes') {
             $ResultSet->dnssec = true;
         } else {
             $ResultSet->dnssec = false;
         }
         
-        if (isset($ResultSet->registrar->name)) {
-            $explodedRegistrar = explode("\n", $ResultSet->registrar->name);
-            $ResultSet->registrar->name = trim($explodedRegistrar[0]);
-        }
-        
         foreach ($ResultSet->contacts as $contactType => $contactArray) {
             foreach ($contactArray as $contactObject) {
-                if (! is_array($contactObject->address)) {
-                    $explodedAddress = explode("\n", $contactObject->address);
-                    
-                    foreach ($explodedAddress as $key => $value) {
-                        $value = trim($value);
-                        
-                        if ($value != '') {
-                            $filteredAddress[] = $value;
-                        }
-                    }
-                    
-                    if (sizeof($filteredAddress) == 4) {
-                        $contactObject->handle = $filteredAddress[0];
-                        $contactObject->name = $filteredAddress[1];
-                        $contactObject->phone = $filteredAddress[2];
-                        $contactObject->email = $filteredAddress[3];
-                        $contactObject->address = '';
-                    }
-                    
-                    if (sizeof($filteredAddress) == 5) {
-                        $contactObject->handle = $filteredAddress[0];
-                        $contactObject->name = $filteredAddress[1];
-                        $contactObject->address = $filteredAddress[2];
-                        $contactObject->phone = $filteredAddress[3];
-                        $contactObject->email = $filteredAddress[4];
-                    }
-                    
-                    $filteredAddress = array();
-                }
-            }
-        }
-        
-        if (isset($ResultSet->nameserver) && $ResultSet->nameserver != '' &&
-                 ! is_array($ResultSet->nameserver)) {
-            
-            $explodedNameserver = explode("\n", $ResultSet->nameserver);
-            foreach ($explodedNameserver as $key => $line) {
-                $line = trim($line);
+                $filteredAddress = array_map('trim', explode("\n", trim($contactObject->address)));
                 
-                if ($line != '') {
-                    preg_match('/(.*) ([0-9a-z\.\:]*)/im', $line, $matches);
-                    
-                    if (sizeof($matches) == 0) {
-                        $filteredNameserver[] = strtolower($line);
-                    } else {
-                        if (isset($matches[2])) {
-                            $ips[] = $matches[2];
-                        }
-                        
-                        $filteredNameserver[] = strtolower($matches[1]);
-                    }
+                if (sizeof($filteredAddress) === 4) {
+                    $contactObject->handle = $filteredAddress[0];
+                    $contactObject->name = $filteredAddress[1];
+                    $contactObject->phone = $filteredAddress[2];
+                    $contactObject->email = $filteredAddress[3];
+                    $contactObject->address = null;
+                } else {
+                    $contactObject->handle = $filteredAddress[0];
+                    $contactObject->name = $filteredAddress[1];
+                    $contactObject->address = $filteredAddress[2];
+                    $contactObject->phone = $filteredAddress[3];
+                    $contactObject->email = $filteredAddress[4];
                 }
-            }
-            
-            $ResultSet->nameserver = $filteredNameserver;
-            
-            if (isset($ips)) {
-                $ResultSet->ips = $ips;
             }
         }
     }

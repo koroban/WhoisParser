@@ -41,10 +41,10 @@ class Template_Sm extends AbstractTemplate
 	 * @var array
 	 * @access protected
 	 */
-    protected $blocks = array(1 => '/Domain Name(?>[\x20\t]*):(?>[\x20\t]*)(.*?)(?=Owner)/is', 
-            2 => '/Owner(?>[\x20\t]*):\n(?>[\x20\t]*)(.*?)(?=Technical Contact)/is', 
-            3 => '/Technical Contact(?>[\x20\t]*):\n(?>[\x20\t]*)(.*?)(?=DNS Servers)/is', 
-            4 => '/DNS Servers(?>[\x20\t]*):\n(?>[\x20\t]*)(.*?)$/is');
+    protected $blocks = array(1 => '/domain name:(?>[\x20\t]*)(.*?)(?=owner)/is', 
+            2 => '/owner:\n(?>[\x20\t]*)(.*?)(?=technical contact)/is', 
+            3 => '/technical contact:\n(?>[\x20\t]*)(.*?)(?=dns servers)/is', 
+            4 => '/dns servers:\n(?>[\x20\t]*)(.*?)$/is');
 
     /**
 	 * Items for each block
@@ -53,20 +53,19 @@ class Template_Sm extends AbstractTemplate
 	 * @access protected
 	 */
     protected $blockItems = array(
-            1 => array('/Registration date(?>[\x20\t]*):(?>[\x20\t]*)(.+)$/im' => 'created', 
-                    '/Last Update(?>[\x20\t]*):(?>[\x20\t]*)(.+)$/im' => 'changed', 
-                    '/Status(?>[\x20\t]*):(?>[\x20\t]*)(.+)$/im' => 'status'), 
-            2 => array(
-                    '/Owner(?>[\x20\t]*):\n(?>[\x20\t]*)(.+)(?=Phone)/is' => 'contacts:owner:address', 
-                    '/Phone(?>[\x20\t]*):(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:phone', 
-                    '/Fax(?>[\x20\t]*):(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:fax', 
-                    '/Email(?>[\x20\t]*):(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:email'), 
+            1 => array('/registration date:(?>[\x20\t]*)(.+)$/im' => 'created', 
+                    '/last update:(?>[\x20\t]*)(.+)$/im' => 'changed', 
+                    '/status:(?>[\x20\t]*)(.+)$/im' => 'status'), 
+            2 => array('/owner:\n(?>[\x20\t]*)(.+)(?=phone)/is' => 'contacts:owner:address', 
+                    '/phone:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:phone', 
+                    '/fax:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:fax', 
+                    '/email:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:email'), 
             3 => array(
-                    '/Technical Contact(?>[\x20\t]*):\n(?>[\x20\t]*)(.+)(?=Phone)/is' => 'contacts:tech:address', 
-                    '/Phone(?>[\x20\t]*):(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:phone', 
-                    '/Fax(?>[\x20\t]*):(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:fax', 
-                    '/Email(?>[\x20\t]*):(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:email'), 
-            4 => array('/DNS Servers(?>[\x20\t]*):\n(?>[\x20\t]*)(.+)$/is' => 'nameserver'));
+                    '/technical contact:\n(?>[\x20\t]*)(.+)(?=phone)/is' => 'contacts:tech:address', 
+                    '/phone:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:phone', 
+                    '/fax:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:fax', 
+                    '/email:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:email'), 
+            4 => array('/\n(?>[\x20\t]*)(.+)$/im' => 'nameserver'));
 
     /**
      * RegEx to check availability of the domain name
@@ -79,7 +78,7 @@ class Template_Sm extends AbstractTemplate
     /**
      * After parsing do something
      *
-     * Fix address
+     * Fix addresses
      *
      * @param  object &$WhoisParser
      * @return void
@@ -87,19 +86,6 @@ class Template_Sm extends AbstractTemplate
     public function postProcess(&$WhoisParser)
     {
         $ResultSet = $WhoisParser->getResult();
-        $filteredNameserver = array();
-        $filteredAddress = array();
-        
-        if (isset($ResultSet->nameserver) && $ResultSet->nameserver != '' &&
-                 ! is_array($ResultSet->nameserver)) {
-            $explodedNameserver = explode("\n", $ResultSet->nameserver);
-            foreach ($explodedNameserver as $key => $line) {
-                if (trim($line) != '') {
-                    $filteredNameserver[] = strtolower(trim($line));
-                }
-            }
-            $ResultSet->nameserver = $filteredNameserver;
-        }
         
         foreach ($ResultSet->contacts as $contactType => $contactArray) {
             foreach ($contactArray as $contactObject) {

@@ -114,7 +114,7 @@ class Template_Nz extends AbstractTemplate
     {
         $ResultSet = $WhoisParser->getResult();
         
-        if ($ResultSet->dnssec != 'no') {
+        if ($ResultSet->dnssec !== 'no') {
             $ResultSet->dnssec = true;
         } else {
             $ResultSet->dnssec = false;

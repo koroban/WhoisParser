@@ -41,10 +41,10 @@ class Template_Qa extends AbstractTemplate
 	 * @var array
 	 * @access protected
 	 */
-    protected $blocks = array(1 => '/Domain Name:(?>[\x20\t]*)(.*?)(?=Registrant Contact ID)/is', 
-            2 => '/Registrant Contact ID:(?>[\x20\t]*)(.*?)(?=Tech Contact ID)/is', 
-            3 => '/Tech Contact ID:(?>[\x20\t]*)(.*?)(?=Name Server)/is', 
-            4 => '/Name Server:(?>[\x20\t]*)(.*?)$/is');
+    protected $blocks = array(1 => '/domain name:(?>[\x20\t]*)(.*?)(?=registrant contact id)/is', 
+            2 => '/registrant contact id:(?>[\x20\t]*)(.*?)(?=tech contact id)/is', 
+            3 => '/tech contact id:(?>[\x20\t]*)(.*?)(?=name server)/is', 
+            4 => '/name server:(?>[\x20\t]*)(.*?)$/is');
 
     /**
 	 * Items for each block
@@ -53,19 +53,19 @@ class Template_Qa extends AbstractTemplate
 	 * @access protected
 	 */
     protected $blockItems = array(
-            1 => array('/^Last Modified:(?>[\x20\t]*)(.+)$/im' => 'changed', 
-                    '/^Registrar Name:(?>[\x20\t]*)(.+)$/im' => 'registrar:name', 
-                    '/^Status:(?>[\x20\t]*)(.+)$/im' => 'status'), 
-            2 => array('/^Registrant Contact ID:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:handle', 
-                    '/^Registrant Contact Name:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:name', 
-                    '/^Registrant Contact City:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:city', 
-                    '/^Registrant Contact Country:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:country'), 
-            3 => array('/^Tech Contact ID:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:handle', 
-                    '/^Tech Contact Name:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:name', 
-                    '/^Tech Contact City:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:city', 
-                    '/^Tech Contact Country:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:country'), 
-            4 => array('/^Name Server:(?>[\x20\t]*)(.+)$/im' => 'nameserver', 
-                    '/^Name Server IP:(?>[\x20\t]*)(.+)$/im' => 'ips'));
+            1 => array('/last modified:(?>[\x20\t]*)(.+)$/im' => 'changed', 
+                    '/registrar name:(?>[\x20\t]*)(.+)$/im' => 'registrar:name', 
+                    '/status:(?>[\x20\t]*)(.+)$/im' => 'status'), 
+            2 => array('/registrant contact id:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:handle', 
+                    '/registrant contact name:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:name', 
+                    '/registrant contact city:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:city', 
+                    '/registrant contact country:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:country'), 
+            3 => array('/tech contact id:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:handle', 
+                    '/tech contact name:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:name', 
+                    '/tech contact city:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:city', 
+                    '/tech contact country:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:country'), 
+            4 => array('/name server:(?>[\x20\t]*)(.+)$/im' => 'nameserver', 
+                    '/name server ip:(?>[\x20\t]*)(.+)$/im' => 'ips'));
 
     /**
      * RegEx to check availability of the domain name

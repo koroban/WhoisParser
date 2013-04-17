@@ -79,7 +79,7 @@ class Template_Gtld_enom extends AbstractTemplate
                 if (! is_array($contactObject->address)) {
                     $explodedAddress = explode("\n", trim($contactObject->address));
                     
-                    if (sizeof($explodedAddress) == 6) {
+                    if (sizeof($explodedAddress) === 6) {
                         $explodedAddress = array_merge(array(0 => ''), $explodedAddress);
                     }
                     
@@ -100,16 +100,16 @@ class Template_Gtld_enom extends AbstractTemplate
                     if (isset($explodedAddress[4])) {
                         $contactObject->address = trim($explodedAddress[4]);
                     }
-                    if (isset($explodedAddress[5]) && sizeof($explodedAddress) == 7) {
+                    if (isset($explodedAddress[5]) && sizeof($explodedAddress) === 7) {
                         preg_match('/(.*),(.*) ([0-9]*)/', $explodedAddress[5], $matchesCity);
                         $contactObject->city = trim($matchesCity[1]);
                         $contactObject->state = trim($matchesCity[2]);
                         $contactObject->zipcode = trim($matchesCity[3]);
                     }
-                    if (isset($explodedAddress[6]) && sizeof($explodedAddress) == 7) {
+                    if (isset($explodedAddress[6]) && sizeof($explodedAddress) === 7) {
                         $contactObject->country = trim($explodedAddress[6]);
                     }
-                    if (isset($explodedAddress[6]) && sizeof($explodedAddress) == 8) {
+                    if (isset($explodedAddress[6]) && sizeof($explodedAddress) === 8) {
                         preg_match('/(.*),(.*) ([0-9]*)/', $explodedAddress[6], $matchesCity);
                         $contactObject->city = trim($matchesCity[1]);
                         $contactObject->state = trim($matchesCity[2]);

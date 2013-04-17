@@ -56,33 +56,33 @@ class Template_Hk extends AbstractTemplate
 	 */
     protected $blockItems = array(
             1 => array(
-                    '/^Company|Holder English Name(.*):(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:name', 
+                    '/(Company|Holder) English Name(.*):(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:name', 
                     '/Address:(?>[\x20\t]*)(.+)(?=Country)/is' => 'contacts:owner:address', 
-                    '/^Country:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:country', 
-                    '/^Email:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:email', 
-                    '/^Domain Name Commencement Date:(?>[\x20\t]*)(.+)$/im' => 'created', 
-                    '/^Expiry Date:(?>[\x20\t]*)(.+)$/im' => 'expires'), 
-            2 => array('/^Given name:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:name', 
-                    '/^Family name:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:name', 
-                    '/^Company name:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:organization', 
+                    '/Country:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:country', 
+                    '/Email:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:email', 
+                    '/Domain Name Commencement Date:(?>[\x20\t]*)(.+)$/im' => 'created', 
+                    '/Expiry Date:(?>[\x20\t]*)(.+)$/im' => 'expires'), 
+            2 => array('/Given name:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:name', 
+                    '/Family name:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:name', 
+                    '/Company name:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:organization', 
                     '/Address:(?>[\x20\t]*)(.+)(?=Country)/is' => 'contacts:admin:address', 
-                    '/^Country:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:country', 
-                    '/^Phone:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:phone', 
-                    '/^Fax:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:fax', 
-                    '/^Email:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:email', 
-                    '/^Account Name:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:handle'), 
-            3 => array('/^Given name:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:name', 
-                    '/^Family name:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:name', 
-                    '/^Company name:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:organization', 
+                    '/Country:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:country', 
+                    '/Phone:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:phone', 
+                    '/Fax:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:fax', 
+                    '/Email:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:email', 
+                    '/Account Name:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:handle'), 
+            3 => array('/Given name:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:name', 
+                    '/Family name:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:name', 
+                    '/Company name:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:organization', 
                     '/Address:(?>[\x20\t]*)(.+)(?=Country)/is' => 'contacts:tech:address', 
-                    '/^Country:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:country', 
-                    '/^Phone:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:phone', 
-                    '/^Fax:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:fax', 
-                    '/^Email:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:email', 
-                    '/^Account Name:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:handle'), 
-            4 => array('/Name Servers Information:(?>[\n\x20\t]*)(.*?)[\r\n]{2}/is' => 'nameserver'), 
-            5 => array('/^Registrar Name:(?>[\x20\t]*)(.+)$/im' => 'registrar:name', 
-                    '/^Registrar Contact Information: Email:(?>[\x20\t]*)(.+)(?>[\x20\t]*)Hotline:/im' => 'registrar:email'));
+                    '/Country:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:country', 
+                    '/Phone:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:phone', 
+                    '/Fax:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:fax', 
+                    '/Email:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:email', 
+                    '/Account Name:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:handle'), 
+            4 => array('/Name Servers Information:\n(?>[\x20\t]*)(.*?)$/is' => 'nameserver'), 
+            5 => array('/Registrar Name:(?>[\x20\t]*)(.+)$/im' => 'registrar:name', 
+                    '/Registrar Contact Information: Email:(?>[\x20\t]*)(.+)(?>[\x20\t]*)Hotline:/im' => 'registrar:email'));
 
     /**
      * RegEx to check availability of the domain name
@@ -95,7 +95,7 @@ class Template_Hk extends AbstractTemplate
     /**
      * After parsing ...
      *
-     * Fix address and nameserver in whois output
+     * Fix contact addresses and nameserver in WHOIS output
      *
      * @param  object &$WhoisParser
      * @return void
@@ -103,35 +103,15 @@ class Template_Hk extends AbstractTemplate
     public function postProcess(&$WhoisParser)
     {
         $ResultSet = $WhoisParser->getResult();
-        $filteredAddress = array();
-        $filteredNameserver = array();
         
         foreach ($ResultSet->contacts as $contactType => $contactArray) {
             foreach ($contactArray as $contactObject) {
-                if (! is_array($contactObject->address)) {
-                    $explodedAddress = explode("\n", $contactObject->address);
-                    
-                    foreach ($explodedAddress as $key => $line) {
-                        if (trim($line) != '') {
-                            $filteredAddress[] = trim($line);
-                        }
-                    }
-                    
-                    $contactObject->address = $filteredAddress;
-                    $filteredAddress = array();
-                }
+                $contactObject->address = array_map('trim', explode("\n", trim($contactObject->address)));
             }
         }
         
-        if (isset($ResultSet->nameserver) && $ResultSet->nameserver != '' &&
-                 ! is_array($ResultSet->nameserver)) {
-            $explodedNameserver = explode("\n", $ResultSet->nameserver);
-            foreach ($explodedNameserver as $key => $line) {
-                if (trim($line) != '') {
-                    $filteredNameserver[] = strtolower(trim($line));
-                }
-            }
-            $ResultSet->nameserver = $filteredNameserver;
+        if ($ResultSet->nameserver != '') {
+            $ResultSet->nameserver = array_map('trim', explode("\n", trim($ResultSet->nameserver)));
         }
     }
 }

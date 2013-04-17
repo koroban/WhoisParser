@@ -63,7 +63,7 @@ class Socket extends AbstractAdapter
         
         $send = fwrite($this->sock, $lookupString . "\r\n");
         
-        if ($send != strlen($lookupString . "\r\n")) {
+        if ($send !== strlen($lookupString . "\r\n")) {
             throw \Novutec\WhoisParser\AbstractException::factory('WriteError', 'Error while sending data (' .
                      $send . '/' . strlen($lookupString . "\r\n") . ')');
         }

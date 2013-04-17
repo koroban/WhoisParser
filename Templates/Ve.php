@@ -106,7 +106,7 @@ class Template_Ve extends AbstractTemplate
                     $contactObject->email = $matches[3];
                     $contactObject->organization = $filteredAddress[1];
                     
-                    if (sizeof($filteredAddress) == 5) {
+                    if (sizeof($filteredAddress) === 5) {
                         $contactObject->address = array($filteredAddress[2], $filteredAddress[3]);
                     } else {
                         $contactObject->address = $filteredAddress[3];

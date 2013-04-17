@@ -41,11 +41,11 @@ class Template_Sg extends AbstractTemplate
 	 * @var array
 	 * @access protected
 	 */
-    protected $blocks = array(1 => '/(?>[\x20\t]*)Registrar:(?>[\x20\t]*)(.*?)(?=Registrant)/is', 
-            2 => '/(?>[\x20\t]*)Registrant:(?>[\x20\t]*)(.*?)(?=Administrative Contact)/is', 
-            3 => '/(?>[\x20\t]*)Administrative Contact:(?>[\x20\t]*)(.*?)(?=Technical Contact)/is', 
-            4 => '/(?>[\x20\t]*)Technical Contact:(?>[\x20\t]*)(.*?)(?=Name Servers)/is', 
-            5 => '/(?>[\x20\t]*)Name Servers:(?>[\x20\t]*)(.*?)$/is');
+    protected $blocks = array(1 => '/registrar:(?>[\x20\t]*)(.*?)(?=registrant)/is', 
+            2 => '/registrant:(?>[\x20\t]*)(.*?)(?=administrative contact)/is', 
+            3 => '/administrative contact:(?>[\x20\t]*)(.*?)(?=technical contact)/is', 
+            4 => '/technical contact:(?>[\x20\t]*)(.*?)(?=name servers)/is', 
+            5 => '/name servers:(?>[\x20\t]*)(.*?)$/is');
 
     /**
 	 * Items for each block
@@ -54,23 +54,19 @@ class Template_Sg extends AbstractTemplate
 	 * @access protected
 	 */
     protected $blockItems = array(
-            1 => array('/^(?>[\x20\t]*)Registrar:(?>[\x20\t]*)(.+)$/im' => 'registrar:name', 
-                    '/^(?>[\x20\t]*)Creation Date:(?>[\x20\t]*)(.+)$/im' => 'created', 
-                    '/^(?>[\x20\t]*)Modified Date:(?>[\x20\t]*)(.+)$/im' => 'changed', 
-                    '/^(?>[\x20\t]*)Expiration Date:(?>[\x20\t]*)(.+)$/im' => 'expires', 
-                    '/^(?>[\x20\t]*)Domain Status:(?>[\x20\t]*)(.+)$/im' => 'status'), 
-            
-            2 => array('/(?>[\x20\t]*)Name:(?>[\x20\t]*)(.+) \(.+\)/im' => 'contacts:owner:name', 
-                    '/(?>[\x20\t]*)Name:(?>[\x20\t]*).+ \((.+)\)/im' => 'contacts:owner:handle'), 
-            
-            3 => array('/(?>[\x20\t]*)Name:(?>[\x20\t]*)(.+) \(.+\)/im' => 'contacts:admin:name', 
-                    '/(?>[\x20\t]*)Name:(?>[\x20\t]*).+ \((.+)\)/im' => 'contacts:admin:handle'), 
-            
-            4 => array('/(?>[\x20\t]*)Name:(?>[\x20\t]*)(.+) \(.+\)/im' => 'contacts:tech:name', 
-                    '/(?>[\x20\t]*)Name:(?>[\x20\t]*).+ \((.+)\)/im' => 'contacts:tech:handle', 
-                    '/(?>[\x20\t]*)Email:(?>[\x20\t]*)(.+)/im' => 'contacts:tech:email'), 
-            
-            5 => array('/Name Servers:[\r\n](?>[\x20\t]*)(.*)$/is' => 'nameserver'));
+            1 => array('/registrar:(?>[\x20\t]*)(.+)$/im' => 'registrar:name', 
+                    '/creation date:(?>[\x20\t]*)(.+)$/im' => 'created', 
+                    '/modified date:(?>[\x20\t]*)(.+)$/im' => 'changed', 
+                    '/expiration date:(?>[\x20\t]*)(.+)$/im' => 'expires', 
+                    '/domain status:(?>[\x20\t]*)(.+)$/im' => 'status'), 
+            2 => array('/name:(?>[\x20\t]*)(.+) \(.+\)/im' => 'contacts:owner:name', 
+                    '/name:(?>[\x20\t]*).+ \((.+)\)/im' => 'contacts:owner:handle'), 
+            3 => array('/name:(?>[\x20\t]*)(.+) \(.+\)/im' => 'contacts:admin:name', 
+                    '/name:(?>[\x20\t]*).+ \((.+)\)/im' => 'contacts:admin:handle'), 
+            4 => array('/name:(?>[\x20\t]*)(.+) \(.+\)/im' => 'contacts:tech:name', 
+                    '/name:(?>[\x20\t]*).+ \((.+)\)/im' => 'contacts:tech:handle', 
+                    '/email:(?>[\x20\t]*)(.+)/im' => 'contacts:tech:email'), 
+            5 => array('/\n(?>[\x20\t]+)(.+)$/im' => 'nameserver'));
 
     /**
      * RegEx to check availability of the domain name
@@ -79,29 +75,4 @@ class Template_Sg extends AbstractTemplate
      * @access protected
      */
     protected $available = '/Domain Not Found/i';
-
-    /**
-     * After parsing ...
-     *
-     * Fix nameserver in whois output
-     *
-     * @param  object &$WhoisParser
-     * @return void
-     */
-    public function postProcess(&$WhoisParser)
-    {
-        $ResultSet = $WhoisParser->getResult();
-        $filteredNameserver = array();
-        
-        if (isset($ResultSet->nameserver) && $ResultSet->nameserver != '' &&
-                 ! is_array($ResultSet->nameserver)) {
-            $explodedNameserver = explode("\n", $ResultSet->nameserver);
-            foreach ($explodedNameserver as $key => $line) {
-                if (trim($line) != '') {
-                    $filteredNameserver[] = strtolower(trim($line));
-                }
-            }
-            $ResultSet->nameserver = $filteredNameserver;
-        }
-    }
 }

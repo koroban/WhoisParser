@@ -41,9 +41,9 @@ class Template_Nc extends AbstractTemplate
 	 * @var array
 	 * @access protected
 	 */
-    protected $blocks = array(1 => '/domain(?>[\x20\t]*):(.*?)(?=Domain server)/is', 
-            2 => '/Domain server (.*?)(?=Registrant name)/is', 
-            3 => '/Registrant name(?>[\x20\t]*):(.*?)$/is');
+    protected $blocks = array(1 => '/domain(?>[\x20\t]*):(.*?)(?=domain server)/is', 
+            2 => '/domain server (.*?)(?=registrant name)/is', 
+            3 => '/registrant name(?>[\x20\t]*):(.*?)$/is');
 
     /**
 	 * Items for each block
@@ -52,17 +52,14 @@ class Template_Nc extends AbstractTemplate
 	 * @access protected
 	 */
     protected $blockItems = array(
-            1 => array('/^Created on(?>[\x20\t]*):(?>[\x20\t]*)(.+)$/im' => 'created', 
-                    '/^Last updated on(?>[\x20\t]*):(?>[\x20\t]*)(.+)$/im' => 'changed', 
-                    '/^Expires on(?>[\x20\t]*):(?>[\x20\t]*)(.+)$/im' => 'expires'), 
-            
-            2 => array(
-                    '/^Domain server [0-9]{1}(?>[\x20\t]*):(?>[\x20\t]*)(.+)$/im' => 'nameserver'), 
-            
+            1 => array('/created on(?>[\x20\t]*):(?>[\x20\t]*)(.+)$/im' => 'created', 
+                    '/last updated on(?>[\x20\t]*):(?>[\x20\t]*)(.+)$/im' => 'changed', 
+                    '/expires on(?>[\x20\t]*):(?>[\x20\t]*)(.+)$/im' => 'expires'), 
+            2 => array('/domain server [0-9]{1}(?>[\x20\t]*):(?>[\x20\t]*)(.+)$/im' => 'nameserver'), 
             3 => array(
-                    '/^Registrant name(?>[\x20\t]*):(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:organization', 
-                    '/^Registrant address [0-9]{1}(?>[\x20\t]*):(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:address', 
-                    '/^Contact (first|last)name(?>[\x20\t]*):(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:name'));
+                    '/registrant name(?>[\x20\t]*):(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:organization', 
+                    '/registrant address [0-9]{1}(?>[\x20\t]*):(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:address', 
+                    '/contact (first|last)name(?>[\x20\t]*):(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:name'));
 
     /**
      * RegEx to check availability of the domain name
@@ -75,7 +72,7 @@ class Template_Nc extends AbstractTemplate
     /**
      * After parsing ...
      *
-     * Fix address
+     * Fix owner contact address
      *
      * @param  object &$WhoisParser
      * @return void
@@ -85,7 +82,7 @@ class Template_Nc extends AbstractTemplate
         $ResultSet = $WhoisParser->getResult();
         
         if (isset($ResultSet->contacts->owner[0]->address)) {
-            if (sizeof($ResultSet->contacts->owner[0]->address) == 5) {
+            if (sizeof($ResultSet->contacts->owner[0]->address) === 5) {
                 $ResultSet->contacts->owner[0]->city = $ResultSet->contacts->owner[0]->address[3];
                 $ResultSet->contacts->owner[0]->country = $ResultSet->contacts->owner[0]->address[4];
                 $ResultSet->contacts->owner[0]->address = array(

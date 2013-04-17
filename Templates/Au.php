@@ -53,19 +53,19 @@ class Template_Au extends AbstractTemplate
 	 * @access protected
 	 */
     protected $blockItems = array(
-            1 => array('/^Registrar ID:(?>[\x20\t]*)(.+)$/im' => 'registrar:id', 
-                    '/^Registrar Name:(?>[\x20\t]*)(.+)$/im' => 'registrar:name', 
-                    '/^Status:(?>[\x20\t]*)(.+)$/im' => 'status', 
-                    '/^Last Modified:(?>[\x20\t]*)(.+)$/im' => 'changed'), 
-            2 => array('/^Registrant Contact ID:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:handle', 
-                    '/^Registrant Contact Name:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:name', 
-                    '/^Registrant:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:organization', 
-                    '/^Eligibility Type:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:eligibility_type', 
-                    '/^Eligibility Name:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:eligibility_name', 
-                    '/^Eligibility ID:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:eligibility_id'), 
-            3 => array('/^Tech Contact ID:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:handle', 
-                    '/^Tech Contact Name:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:name'), 
-            4 => array('/^Name Server:(?>[\x20\t]*)(.+)$/im' => 'nameserver'));
+            1 => array('/Registrar ID:(?>[\x20\t]*)(.+)$/im' => 'registrar:id', 
+                    '/Registrar Name:(?>[\x20\t]*)(.+)$/im' => 'registrar:name', 
+                    '/Status:(?>[\x20\t]*)(.+)$/im' => 'status', 
+                    '/Last Modified:(?>[\x20\t]*)(.+)$/im' => 'changed'), 
+            2 => array('/Registrant Contact ID:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:handle', 
+                    '/Registrant Contact Name:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:name', 
+                    '/Registrant:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:organization', 
+                    '/Eligibility Type:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:eligibility_type', 
+                    '/Eligibility Name:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:eligibility_name', 
+                    '/Eligibility ID:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:eligibility_id'), 
+            3 => array('/Tech Contact ID:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:handle', 
+                    '/Tech Contact Name:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:name'), 
+            4 => array('/Name Server:(?>[\x20\t]*)(.+)$/im' => 'nameserver'));
 
     /**
      * RegEx to check availability of the domain name
