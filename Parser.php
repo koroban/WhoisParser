@@ -165,7 +165,7 @@ class Parser
      * @param  array $specialWhois
 	 * @return void
 	 */
-    public function setSepcialWhois($specialWhois)
+    public function setSpecialWhois($specialWhois)
     {
         $this->specialWhois = $specialWhois;
     }
