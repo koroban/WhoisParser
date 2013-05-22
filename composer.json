@@ -9,5 +9,8 @@
   , "require": {
   		"novutec/DomainParser": ">=2.0.0"
   	}
+  , "autoload": {
+      	"classmap": ["Parser.php"]
+  	} 
   , "version": "3.0.0"
 }
