@@ -63,10 +63,10 @@ $Parser->setDateFormat('%d.%m.%Y %H:%M:%S');
 ```
 
 * If you have special WHOIS server or login credentials for a registrar WHOIS you may use
-the method setSepcialWhois(). Please note that if you have a special WHOIS and the WHOIS output
+the method setSpecialWhois(). Please note that if you have a special WHOIS and the WHOIS output
 looks different you need your own template.
 ```
-$Parser->setSepcialWhois('it' => array('server' => 'whois.nic.it', 'port' => 43,
+$Parser->setSpecialWhois('it' => array('server' => 'whois.nic.it', 'port' => 43,
 'format' => '-u username -w passsword %domain%', 'template' => 'it-your-own-template'));
 ```
 
@@ -330,8 +330,8 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [x] SX
 [x] SY
 [ ] SZ
-[x] TC 
-[ ] TD 
+[x] TC
+[ ] TD
 [x] TEL
 [x] TF
 [ ] TG
@@ -345,7 +345,7 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [ ] TP
 [x] TR
 [x] TRAVEL
-[ ] TT - webbased 
+[ ] TT - webbased
 [x] TV
 [x] TW
 [x] TZ
