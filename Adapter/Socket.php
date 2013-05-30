@@ -105,7 +105,14 @@ class Socket extends AbstractAdapter
         }
         
         $errno = $errstr = null;
-        $this->sock = @stream_socket_client('tcp://' . $config['server'] . ':' . $config['port'], $errno, $errstr, 30);
+        $proxyConfig = $this->getProxyConfig();
+        
+        if(is_array($proxyConfig)) {
+            $this->sock = $this->connectToProxy($proxyConfig, $config);
+        }
+        else {
+            $this->sock = @stream_socket_client('tcp://' . $config['server'] . ':' . $config['port'], $errno, $errstr, 30);
+        }
         
         if (! is_resource($this->sock)) {
             throw \Novutec\WhoisParser\AbstractException::factory('ConnectError', 'Unable to connect to ' .
@@ -128,5 +135,105 @@ class Socket extends AbstractAdapter
         }
         
         return true;
+    }
+    
+        /**
+     * Connects to proxy
+     *
+     * @throws WriteErrorException
+     * @throws ConnectErrorException
+     * @param  array $proxyConfig
+     * @param  array $config
+     * @return resource
+     */
+    private function connectToProxy(array $proxyConfig, array $config)
+    {   
+        $proxyURL = $proxyConfig['scheme'] . $proxyConfig['host'];
+        if (isset($proxyConfig['port'])) {
+            $proxyURL .= ':' . $proxyConfig['port'];
+        } elseif ('http://' == substr($proxyURL, 0, 7)) {
+            $proxyURL .= ':80';
+        } elseif ('https://' == substr($proxyURL, 0, 8)) {
+            $proxyURL .= ':443';
+        }
+        // http:// and https:// is not supported in proxy, replace it with tcp:// and ssl://
+        $proxyURL = str_replace(array('http://', 'https://'), array('tcp://', 'ssl://'), $proxyURL);
+            
+        if (strpos($proxyURL, 'ssl://') !== false && ! extension_loaded('openssl')) {
+            throw \Novutec\WhoisParser\AbstractException::factory('ConnectError', 'Openssl extension must be enabled to use a proxy over https');
+        }
+                       
+        $socket = @stream_socket_client($proxyURL, $errno, $errstr, 30);
+            
+        if (! is_resource($socket)) {
+            throw \Novutec\WhoisParser\AbstractException::factory('ConnectError', 'Unable to connect to proxy ' .
+                    $proxyConfig['scheme'] . $proxyConfig['host'] . ':' . $proxyConfig['port']);
+        }
+            
+        $parsed_socket = parse_url('tcp://' . $config['server']);
+        
+        if (isset($parsed_socket['port'])) {
+            $config['port'] = $parsed_socket['port'];
+        }
+            
+        $request = array();
+        $request[] = 'CONNECT ' . $config['server'] . ':' . $config['port'] . ' HTTP/1.1';  
+        $request[] = 'Host: ' . $proxyConfig['host'];
+        $request[] = 'Proxy-Connection: keep-alive';
+            
+        if (! empty($proxyConfig['username']) && ! empty($proxyConfig['password'])) {
+            $auth = $proxyConfig['username'] . ':' . $proxyConfig['password'];
+            $auth = base64_encode($auth);
+            $request[] = 'Proxy-Authorization: Basic ' . $auth;
+        }
+        
+        $send = fwrite($socket, implode("\r\n", $request) . "\r\n\r\n");
+            
+        if ($send !== strlen(implode("\r\n", $request) . "\r\n\r\n")) {
+            throw \Novutec\WhoisParser\AbstractException::factory('WriteError', 'Error while sending data via proxy(' .
+                $send . '/' . strlen($lookupString . "\r\n") . ')');
+        }
+
+        return $socket;
+    }    
+    
+    /**
+     * Returns configuration for proxy if it's set, and false if it isn't set
+     *
+     * @return array|false Returns an associative array on success, and FALSE on failure.
+     */
+    private function getProxyConfig()
+    {
+        $proxyIni = dirname(dirname(__FILE__)) . '/Config/proxy.ini';
+        // suppress a warning if proxy file doesn't exist
+        if (@is_file($proxyIni)) {
+            $proxyList = parse_ini_file($proxyIni, true);
+            if(is_array($proxyList))
+                return $this->getRandomProxy($proxyList);
+        }
+        // there is no proxy file or parsing ini file failed
+        return false;
+    }
+    
+    /**
+     * Returns random configuration for proxy, and false if there is no valid configuration
+     *
+     * @param  array $proxyList
+     * @return array|false Returns an associative array on success, and FALSE on failure.
+     */
+    private function getRandomProxy(array $proxyList) {
+        $i = count($proxyList);
+        // check if random configuration is valid, and repeat if it's not
+        while($i--) {
+            $randKey = array_rand($proxyList);
+            $proxyConfig = $proxyList[$randKey];
+            // return configuration only if basic options are set
+            if (! empty($proxyConfig['enabled']) && $proxyConfig['enabled'] == 1 && ! empty($proxyConfig['port'])
+                && ! empty($proxyConfig['host']) && ! empty($proxyConfig['scheme'])) {
+                    return $proxyConfig;
+            }
+            unset($proxyList[$randKey]);
+        }
+        return false;
     }
 }
