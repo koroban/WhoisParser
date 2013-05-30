@@ -1,3 +1,8 @@
+### 3.1.0 (May 31, 2013)
+* merged and adapted support for http(s) proxies by config file (thanks to chivitli <chivitli@gmail.com>)
+* added autoload directives to composer.json (thanks to John Long <a@88k.us>)
+* fixed typo in method name `setSpecialWhois` (thanks to chivitli <chivitli@gmail.com>)
+
 ### 3.0.0 (Apr 17, 2013)
 * fixed known bug with google.cz
 * improved regex, fixed bugs and code cleanup for following WHOIS templates AFNIC, .AI, .AM, .AS, .AT, .AU, .AX, .BE, .BG, .BO, .BY, .CA, .CD, .CK, COCCA, .CZ, .DE, .DK, .DZ, .EE, .EU, .FI, .FJ, .FO, .HK, IANA, .IE, .IL, .IM, .IS, .IT, .JP, .KG, .LY, .NC, Neustar, .NL, .NU, .PL, .PT, .QA, .RO, .RS, .SG, .SK, .SM, .ST, SWITCH, .TK, .TR, .TW, .UA, .UK, .UY, Verisign and .WS
@@ -35,7 +40,7 @@
 * added support for IANA #455, .ARPA, .DZ, .FJ, .SM, .SY, .TH, .TZ, .XN--80AO21A, .XN--3E0B707E, .XN--90A3AC, .XN--LGBBAT1AD8J, .XN--MGBAAM7A8H, .XN--O3CW4H, .XN--OGBPF8FL and .XN--YGBI2AMMX
 * added type to composer.json
 * added DNSSEC and TYPE to .DE template
-* fixed AS number look up 
+* fixed AS number look up
 * changed Config lookup to tldGroup based on new DomainParser
 * changed WHOIS Config to TLD instead of each SLD
 * changed WHOIS template for .EE to fit for .TZ
@@ -86,7 +91,7 @@
 
 ### 1.2.1 (Jan 03, 2013)
 ###### Note: You will need the [DomainParser](https://github.com/novutec/DomainParser) version 1.1.5 and above!
-* fixed phpDoc `postProcess` in several WHOIS template 
+* fixed phpDoc `postProcess` in several WHOIS template
 * fixed WHOIS template for .AS to filter nameserver and ip addresses
 * fixed WHOIS template for Verisign to parse DNSSEC for .TV, .CC and .JOBS
 * added WHOIS template for .BR, .ES, .INT, .KR and Novutec
@@ -135,7 +140,7 @@
 ### 1.1.3 (Sep 04, 2012)
 * added WHOIS templates for .EE, .IL, .IR, .KZ and .LV
 * added WHOIS servers to whois.ini for .EE, .IL, .IR, .KZ and .LV
-* fixed availability regex at .NZ template 
+* fixed availability regex at .NZ template
 * refreshed supported TLD list in README.md
 
 ### 1.1.2 (Sep 04, 2012)
