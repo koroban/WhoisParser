@@ -497,10 +497,6 @@ class Result extends AbstractResult
             unset($this->lastHandle);
         }
         
-        if (isset($this->network->contacts) && sizeof($this->network->contacts) === 1) {
-            $this->network = null;
-        }
-        
         // format dates
         $this->template = $config['template'];
         $this->changed = $this->formatDate($dateformat, $this->changed);
