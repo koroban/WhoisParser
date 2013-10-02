@@ -66,8 +66,8 @@ $Parser->setDateFormat('%d.%m.%Y %H:%M:%S');
 the method setSpecialWhois(). Please note that if you have a special WHOIS and the WHOIS output
 looks different you need your own template.
 ```
-$Parser->setSpecialWhois('it' => array('server' => 'whois.nic.it', 'port' => 43,
-'format' => '-u username -w passsword %domain%', 'template' => 'it-your-own-template'));
+$Parser->setSpecialWhois(array('it' => array('server' => 'whois.nic.it', 'port' => 43,
+'format' => '-u username -w passsword %domain%', 'template' => 'it-your-own-template')));
 ```
 
 ToDos
