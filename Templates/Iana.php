@@ -41,7 +41,7 @@ class Template_Iana extends AbstractTemplate
 	 * @var array
 	 * @access protected
 	 */
-    protected $blocks = array(1 => '/whois:(?>[\x20\t]*)(.*?)[\n]{2}/is', 
+    protected $blocks = array(1 => '/(inetnum|whois):(?>[\x20\t]*)(.*?)[\n]{2}/is',
             2 => '/domain:(?>[\x20\t]*)(.*?)[\n]{2}/is', 
             3 => '/organisation:(?>[\x20\t]*)(.*?)(?=contact:(?>[\x20\t]*)administrative)/is', 
             4 => '/contact:(?>[\x20\t]*)administrative(.*?)(?=contact:(?>[\x20\t]*)technical)/is', 
@@ -54,7 +54,11 @@ class Template_Iana extends AbstractTemplate
 	 * @var array
 	 * @access protected
 	 */
-    protected $blockItems = array(1 => array('/^whois:(?>[\x20\t]*)(.+)$/im' => 'whoisserver'), 
+    protected $blockItems = array(1 => array(
+                    '/^whois:(?>[\x20\t]*)(.+)$/im' => 'whoisserver',
+                    '/^inetnum:(?>[\x20\t]*)(.+)$/im' => 'network:inetnum',
+                    '/organisation:(?>[\x20\t]*)(.+)$/im' => 'network:name'
+            ),
             2 => array('/^domain:(?>[\x20\t]*)(.+)$/im' => 'name'), 
             3 => array('/organisation:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:organization', 
                     '/address:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:address'), 
