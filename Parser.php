@@ -148,13 +148,12 @@ class Parser
 
     /**
      * Creates a WhoisParser object
-     * 
+     *
      * @param  string $format
-	 * @return void
-	 */
+     * @return \Novutec\WhoisParser\Parser
+     */
     public function __construct($format = 'object')
     {
-        date_default_timezone_set('UTC');
         $this->setFormat($format);
     }
 
@@ -171,13 +170,15 @@ class Parser
     }
 
     /**
-	 * Lookup an IP address (ipv4 and ipv6) and domain names
-	 * 
-	 * @throws NoQueryException
-	 * @throws instance of AbstractException if throwExceptions = true
-	 * @param  string $query
-	 * @return object
-	 */
+     * Lookup an IP address (ipv4 and ipv6) and domain names
+     *
+     *
+     * @param  string $query
+     * @throws mixed
+     * @throws \Exception
+     * @throws AbstractException
+     * @return object
+     */
     public function lookup($query = '')
     {
         $this->Result = new Result();
@@ -272,11 +273,11 @@ class Parser
 
     /**
      * Send data to whois server and call parse() to process rawdata
-     * 
-     * @throws NoAdapterException
-     * @param  object $query
-	 * @return void
-	 */
+     *
+     * @param object|string $query
+     * @throws mixed
+     * @return void
+     */
     public function call($query = '')
     {
         if ($query != '') {
@@ -419,9 +420,9 @@ class Parser
 
     /**
      * Parses rawdata by Template
-     * 
+     *
      * @param  object $Template
-     * @param  string $rawdata
+     * @internal param string $rawdata
      * @return void
      */
     private function parseTemplate($Template)
@@ -460,7 +461,7 @@ class Parser
             foreach ($this->Result->network->contacts as $type => $handle) {
                 if (is_string($handle)) {
                     // lookup all contacts in Result
-                    foreach ($this->Result->contacts as $contactType => $contactArray) {
+                    foreach ($this->Result->contacts as $contactArray) {
                         foreach ($contactArray as $contactObject) {
                             // if contact handle in network matches the one in
                             // Result, we have to clone it

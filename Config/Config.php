@@ -54,13 +54,13 @@ class Config
     protected $current;
 
     /**
-	 * Creates a WhoisParserConfig object and parses ini files for configuration.
-	 * If $special_whois is set it will overload the respective handler with
-	 * another configuration.
-	 * 
-	 * @param  array $specialWhois
-	 * @return	void
-	 */
+     * Creates a WhoisParserConfig object and parses ini files for configuration.
+     * If $special_whois is set it will overload the respective handler with
+     * another configuration.
+     *
+     * @param  array $specialWhois
+     * @return \Novutec\WhoisParser\Config
+     */
     public function __construct($specialWhois = array())
     {
         if (empty($this->config)) {
