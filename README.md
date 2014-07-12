@@ -44,8 +44,8 @@ $result = $Parser->lookup($asn);
 
 * Access WHOIS record, the object oriented way.
 ```
-echo $Result->created; // get create date of domain name
-print_r($Result->rawdata); // get raw output as array
+echo $result->created; // get create date of domain name
+print_r($result->rawdata); // get raw output as array
 ```
 
 * You may choose 5 different return types. the types are array, object, json, serialize and
