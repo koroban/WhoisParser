@@ -154,7 +154,6 @@ class Parser
 	 */
     public function __construct($format = 'object')
     {
-        date_default_timezone_set('UTC');
         $this->setFormat($format);
     }
 
