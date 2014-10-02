@@ -108,9 +108,9 @@ class Template_Arin extends AbstractTemplate
             }
         }
         
-        if (isset($Result->referral_server) && $ResultSet->referral_server != '') {
+        if (isset($Result->referral_server) && $Result->referral_server != '') {
             $Result->reset();
-            $mapping = $Config->get($ResultSet->referral_server);
+            $mapping = $Config->get($Result->referral_server);
             $template = str_replace('whois://', '', $mapping['template']);
             $Config->setCurrent($Config->get($template));
             $WhoisParser->call();
