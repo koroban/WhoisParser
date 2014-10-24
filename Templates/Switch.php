@@ -89,6 +89,7 @@ class Template_Switch extends AbstractTemplate
             foreach ($contactArray as $contactObject) {
                 $filteredAddress = array_map('trim', explode("\n", trim($contactObject->address)));
                 
+                
                 switch (sizeof($filteredAddress)) {
                     case 6:
                         $contactObject->organization = $filteredAddress[0];
@@ -97,13 +98,15 @@ class Template_Switch extends AbstractTemplate
                         $contactObject->city = $filteredAddress[4];
                         $contactObject->address = $filteredAddress[3];
                         break;
-                    default:
+                    case 5:
                         $contactObject->organization = $filteredAddress[0];
                         $contactObject->name = $filteredAddress[1];
                         $contactObject->country = $filteredAddress[4];
                         $contactObject->city = $filteredAddress[3];
                         $contactObject->address = $filteredAddress[2];
                         break;
+                    default:
+                        //do nothing.
                 }
             }
         }
