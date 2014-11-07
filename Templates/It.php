@@ -104,7 +104,7 @@ class Template_It extends AbstractTemplate
         foreach ($ResultSet->contacts as $contactType => $contactArray) {
             foreach ($contactArray as $contactObject) {
                 $filteredAddress = array_map('trim', explode("\n", trim($contactObject->address)));
-                
+                $filteredAddress = array_pad($filteredAddress, 5, '');
                 $contactObject->address = $filteredAddress[0];
                 $contactObject->city = $filteredAddress[1];
                 $contactObject->zipcode = $filteredAddress[2];

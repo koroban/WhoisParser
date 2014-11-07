@@ -80,7 +80,7 @@ class Template_Tk extends AbstractTemplate
         
         if (isset($ResultSet->contacts->owner[0]->address)) {
             $filteredAddress = array_map('trim', explode("\n", trim($ResultSet->contacts->owner[0]->address)));
-            
+            $filteredAddress = array_pad($filteredAddress, 9, '');            
             $ResultSet->contacts->owner[0]->organization = $filteredAddress[0];
             $ResultSet->contacts->owner[0]->name = $filteredAddress[1];
             $ResultSet->contacts->owner[0]->city = $filteredAddress[3];
