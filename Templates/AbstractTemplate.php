@@ -99,6 +99,7 @@ abstract class AbstractTemplate
      */
     public static function factory($template)
     {
+        $template = str_replace('.', '_', $template);
         if (file_exists(__DIR__ . '/' . ucfirst($template) . '.php')) {
             include_once __DIR__ . '/' . ucfirst($template) . '.php';
             $classname = 'Novutec\WhoisParser\Template_' . ucfirst($template);

@@ -1,9 +1,9 @@
 {
-    "name": "novutec/WhoisParser"
+    "name": "salemgolemugoo/WhoisParser"
   , "type": "library"
   , "description": "Lookup domain names, IP addresses and AS numbers by WHOIS."
   , "keywords": ["whoisparser", "whois", "php"]
-  , "homepage": "https://github.com/novutec/WhoisParser/"
+  , "homepage": "https://github.com/salemgolemugoo/WhoisParser/"
   , "author": "Novutec Inc."
   , "license": "Apache-2.0"
   , "require": {
