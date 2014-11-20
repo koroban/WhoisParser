@@ -59,6 +59,7 @@ class Template_Se extends AbstractTemplate
             '/^modified:(?>[\x20\t]*)(.+)$/im'  => 'changed',
             '/^expires:(?>[\x20\t]*)(.+)$/im'   => 'expires',
             '/^registrar:(?>[\x20\t]*)(.+)$/im' => 'registrar:name',
+            '/^status:(?>[\x20\t]*)(.+)$/im' => 'status',
         ),
     );
 
