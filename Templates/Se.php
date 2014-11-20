@@ -60,6 +60,7 @@ class Template_Se extends AbstractTemplate
             '/^expires:(?>[\x20\t]*)(.+)$/im'   => 'expires',
             '/^registrar:(?>[\x20\t]*)(.+)$/im' => 'registrar:name',
             '/^status:(?>[\x20\t]*)(.+)$/im' => 'status',
+            '/^dnssec:(?>[\x20\t]*)(.+)$/im' => 'dnssec',
         ),
     );
 
@@ -82,8 +83,7 @@ class Template_Se extends AbstractTemplate
     public function postProcess(&$WhoisParser)
     {
         $ResultSet = $WhoisParser->getResult();
-
-        if ($ResultSet->dnssec === 'Unsigned') {
+        if (preg_match("/unsigned/i", $ResultSet->dnssec)) {
             $ResultSet->dnssec = false;
         } else {
             $ResultSet->dnssec = true;
