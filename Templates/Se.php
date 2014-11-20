@@ -61,6 +61,11 @@ class Template_Se extends AbstractTemplate
             '/^registrar:(?>[\x20\t]*)(.+)$/im' => 'registrar:name',
             '/^status:(?>[\x20\t]*)(.+)$/im' => 'status',
             '/^dnssec:(?>[\x20\t]*)(.+)$/im' => 'dnssec',
+
+            '/^holder:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:handle',
+            '/^admin-c:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:handle',
+            '/^tech-c:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:handle',
+            '/^billing-c:(?>[\x20\t]*)(.+)$/im' => 'contacts:billing:handle',
         ),
     );
 
