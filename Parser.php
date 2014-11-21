@@ -106,14 +106,6 @@ class Parser
     protected $throwExceptions = false;
 
     /**
-     * Use cache for whois output?
-     * 
-     * @var boolean
-     * @access protected
-     */
-    protected $useCache = false;
-
-    /**
      * Contains special whois server like member whois configuration. It will be
      * used to overload the respective template in WhoisParserConfig.
      * 
@@ -141,10 +133,10 @@ class Parser
     /**
      * Activate cache
      * 
-     * @var boolean
+     * @var string Cache location
      * @access protected
      */
-    protected $cache = true;
+    protected $cachePath = null;
 
     /**
      * Creates a WhoisParser object
@@ -265,6 +257,9 @@ class Parser
             $this->Query->asn = $query;
         } else {
             $Parser = new \Novutec\DomainParser\Parser();
+            if ($this->cachePath !== null) {
+                $Parser->setCachePath($this->cachePath);
+            }
             $this->Query = $Parser->parse(filter_var($query, FILTER_SANITIZE_STRING));
         }
     }
@@ -536,18 +531,6 @@ class Parser
         $this->dateformat = $dateformat;
     }
 
-    /**
-     * Set the cache flag
-     *
-     * If cache flag is set, the WHOIS parser will cache the query and rawdata.
-     *
-     * @param  boolean $cache
-     * @return void
-     */
-    public function useCache($cache = true)
-    {
-        $this->cache = filter_var($cache, FILTER_VALIDATE_BOOLEAN);
-    }
 
     /**
      * Set the throwExceptions flag
@@ -564,5 +547,11 @@ class Parser
     public function throwExceptions($throwExceptions = false)
     {
         $this->throwExceptions = filter_var($throwExceptions, FILTER_VALIDATE_BOOLEAN);
+    }
+
+
+    public function setCachePath($path)
+    {
+        $this->cachePath = $path;
     }
 }
