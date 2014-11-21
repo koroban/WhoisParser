@@ -160,7 +160,7 @@ class Result extends AbstractResult
      * @var array
      * @access protected
      */
-    protected $rawdata;
+    public $rawdata = array();
 
     /**
      * Network information of domain name or IP address
@@ -192,7 +192,7 @@ class Result extends AbstractResult
      * @var string
      * @access protected
      */
-    protected $template;
+    public $template;
 
     /**
 	 * Creates a WhoisParserResult object
@@ -226,7 +226,12 @@ class Result extends AbstractResult
             $this->lastId++;
             return;
         }
-        
+
+        if ($target == 'rawdata') {
+            $this->{$target}[] = $value;
+            return;
+        }
+
         if (strpos($target, ':')) {
             // split target by :
             $targetArray = explode(':', $target);
@@ -502,7 +507,7 @@ class Result extends AbstractResult
         }
         
         // format dates
-        $this->template = $config['template'];
+        $this->template[$this->whoisserver] = $config['template'];
         $this->changed = $this->formatDate($dateformat, $this->changed);
         $this->created = $this->formatDate($dateformat, $this->created);
         $this->expires = $this->formatDate($dateformat, $this->expires);

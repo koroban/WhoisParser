@@ -203,7 +203,7 @@ class Parser
             }
             
             $this->Result->addItem('exception', $e->getMessage());
-            $this->Result->addItem('rawdata', explode("\n", $this->rawdata));
+            $this->Result->addItem('rawdata', $this->rawdata);
             
             if (isset($this->Query)) {
                 
@@ -279,7 +279,7 @@ class Parser
         
         $Config = $this->Config->getCurrent();
         $Adapter = AbstractAdapter::factory($Config['adapter']);
-        
+
         if ($Adapter instanceof AbstractAdapter) {
             $this->rawdata = strip_tags($Adapter->call($this->Query, $Config));
             $this->parse();
@@ -304,11 +304,12 @@ class Parser
         // If Template is null then we do not have a template for that, but we
         // can still proceed to the end with just the rawdata
         if ($Template instanceof AbstractTemplate) {
+            $this->Result->template[$Config['server']] = $Config['template'];
             $this->parseTemplate($Template);
             
             // set rawdata to Result - this happens here because sometimes we
             // have to fix the rawdata as well in postProcess
-            $this->Result->addItem('rawdata', explode("\n", $this->rawdata));
+            $this->Result->addItem('rawdata', $this->rawdata);
             
             // check availability upon type - IP addresses are always registered
             if (isset($Template->available) && $Template->available != '') {

@@ -98,7 +98,7 @@ class Template_Is extends AbstractTemplate
                 }
             }
         }
-        
-        $ResultSet->rawdata = array_map('utf8_encode', $ResultSet->rawdata);
+
+        $ResultSet->rawdata[] = utf8_encode(array_pop($ResultSet->rawdata));
     }
 }
