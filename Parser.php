@@ -48,6 +48,7 @@ require_once 'Result/Result.php';
  * @see Exception
  */
 require_once 'Exception/AbstractException.php';
+require_once 'Exception/RateLimitException.php';
 
 /**
  * WhoisParser
@@ -293,6 +294,7 @@ class Parser
      * Parses rawdata from whois server and call postProcess if exists afterwards
      * 
      * @throws NoTemplateException
+     * @throws RateLimitException
      * @return void
      */
     private function parse()
@@ -316,6 +318,13 @@ class Parser
                 preg_match_all($Template->available, $this->rawdata, $matches);
                 
                 $this->Result->addItem('registered', empty($matches[0]));
+            }
+
+            if (isset ($Template->rateLimit) && strlen($Template->rateLimit)) {
+                $count = preg_match_all($Template->rateLimit, $this->rawdata, $matches);
+                if ($count > 0) {
+                    throw new RateLimitException("Rate limit exceeded for server: ". $Config['server']);
+                }
             }
             
             // set registered to Result

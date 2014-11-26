@@ -120,6 +120,8 @@ class Template_Ws extends AbstractTemplate
      */
     protected $available = '/No match for/i';
 
+    protected $rateLimit = '/You exceeded the maximum allowable number of whois lookups/i';
+
     /**
      * After parsing ...
      * 
