@@ -51,8 +51,7 @@ use Novutec\WhoisParser\Exception\AbstractException;
 use Novutec\WhoisParser\Exception\NoAdapterException;
 use Novutec\WhoisParser\Exception\NoQueryException;
 use Novutec\WhoisParser\Exception\NoTemplateException;
-
-require_once 'Exception/RateLimitException.php';
+use Novutec\WhoisParser\Exception\RateLimitException;
 
 /**
  * WhoisParser
