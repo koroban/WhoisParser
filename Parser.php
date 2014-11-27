@@ -140,6 +140,15 @@ class Parser
     protected $cachePath = null;
 
     /**
+     * Rate limited servers list.
+     * Allows us to prevent additional queries. Must be cleared manually.
+     *
+     * @var array List of servers which are currently rate limited
+     */
+    protected $rateLimitedServers = array();
+
+
+    /**
      * Creates a WhoisParser object
      * 
      * @param  string $format
@@ -269,6 +278,7 @@ class Parser
      * Send data to whois server and call parse() to process rawdata
      * 
      * @throws NoAdapterException
+     * @throws RateLimitException
      * @param  object $query
 	 * @return void
 	 */
@@ -280,6 +290,11 @@ class Parser
         
         $Config = $this->Config->getCurrent();
         $Adapter = AbstractAdapter::factory($Config['adapter']);
+        $server = $Config['server'];
+
+        if (in_array($server, $this->rateLimitedServers)) {
+            throw new RateLimitException("Rate limit exceeded for server: ". $server);
+        }
 
         if ($Adapter instanceof AbstractAdapter) {
             $this->rawdata = strip_tags($Adapter->call($this->Query, $Config));
@@ -323,7 +338,11 @@ class Parser
             if (isset ($Template->rateLimit) && strlen($Template->rateLimit)) {
                 $count = preg_match_all($Template->rateLimit, $this->rawdata, $matches);
                 if ($count > 0) {
-                    throw new RateLimitException("Rate limit exceeded for server: ". $Config['server']);
+                    $server = $Config['server'];
+                    if (!in_array($server, $this->rateLimitedServers)) {
+                        $this->rateLimitedServers[] = $server;
+                    }
+                    throw new RateLimitException("Rate limit exceeded for server: ". $server);
                 }
             }
             
@@ -560,8 +579,53 @@ class Parser
     }
 
 
+    /**
+     * Set the path to use for on-disk cache. If NULL, cache is disabled.
+     *
+     * @param string|null $path Cache path
+     */
     public function setCachePath($path)
     {
         $this->cachePath = $path;
+    }
+
+
+    /**
+     * Return the list of rate limited servers
+     *
+     * @return array
+     */
+    public function getRateLimitedServers()
+    {
+        return $this->rateLimitedServers;
+    }
+
+
+    /**
+     * Remove a specific server from the list of rate limited servers.
+     *
+     * @param string $server
+     * @return bool Server was present in list?
+     */
+    public function removeRateLimitedServer($server)
+    {
+        $key = array_search($server, $this->rateLimitedServers);
+        if ($key !== false) {
+            unset($this->rateLimitedServers[$key]);
+        }
+        return ($key !== false);
+    }
+
+
+    /**
+     * Clear the list of rate limited servers
+     *
+     * @return int Number of entries removed from list
+     */
+    public function clearRateLimitedServers()
+    {
+        $count = count($this->rateLimitedServers);
+        $this->rateLimitedServers = array();
+        return $count;
     }
 }
