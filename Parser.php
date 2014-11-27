@@ -48,6 +48,10 @@ require_once 'Result/Result.php';
  * @see Exception
  */
 use Novutec\WhoisParser\Exception\AbstractException;
+use Novutec\WhoisParser\Exception\NoAdapterException;
+use Novutec\WhoisParser\Exception\NoQueryException;
+use Novutec\WhoisParser\Exception\NoTemplateException;
+
 require_once 'Exception/RateLimitException.php';
 
 /**
@@ -186,7 +190,7 @@ class Parser
         
         try {
             if ($query == '') {
-                throw AbstractException::factory('NoQuery', 'No lookup query given.');
+                throw new NoQueryException('No lookup query given');
             }
             
             $this->prepare($query);
@@ -300,8 +304,7 @@ class Parser
             $this->rawdata = strip_tags($Adapter->call($this->Query, $Config));
             $this->parse();
         } else {
-            throw AbstractException::factory('NoAdapter', 'Adapter ' . $Config['adapter'] .
-                     ' could not be found.');
+            throw new NoAdapterException('Adapter '. $Config['adapter'] .' could not be found');
         }
     }
 
@@ -368,8 +371,7 @@ class Parser
                 $this->Result->addItem('idnName', $this->Query->idnFqdn);
             }
         } else {
-            throw AbstractException::factory('NoTemplate', 'Template ' . $Config['template'] .
-                     ' could not be found.');
+            throw new NoTemplateException('Template '. $Config['template'] .' could not be found');
         }
     }
 
