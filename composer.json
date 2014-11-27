@@ -10,7 +10,9 @@
   		"novutec/DomainParser": ">=2.0.0"
   	}
   , "autoload": {
-      	"classmap": ["Parser.php"]
+        "psr-4": {
+            "WhoisParser": ""
+        }
   	}
   , "version": "3.1.0"
 }
