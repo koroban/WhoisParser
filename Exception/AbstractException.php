@@ -20,9 +20,9 @@
  */
 
 /**
- * @namespace Novutec\WhoisParser
+ * @namespace Novutec\WhoisParser\Exception
  */
-namespace Novutec\WhoisParser;
+namespace Novutec\WhoisParser\Exception;
 
 /**
  * AbstractException
@@ -61,11 +61,11 @@ abstract class AbstractException extends \Exception
     {
         if (file_exists(__DIR__ . '/' . ucfirst($type) . 'Exception.php')) {
             include_once __DIR__ . '/' . ucfirst($type) . 'Exception.php';
-            $classname = 'Novutec\WhoisParser\\' . ucfirst($type) . 'Exception';
+            $classname = 'Novutec\WhoisParser\Exception\\' . ucfirst($type) . 'Exception';
             return new $classname($message, $code, $previous);
         } else {
             include_once __DIR__ . '/Exception.php';
-            $classname = 'Novutec\WhoisParser\Exception';
+            $classname = 'Novutec\WhoisParser\Exception\Exception';
             return new $classname($message, $code, $previous);
         }
     }

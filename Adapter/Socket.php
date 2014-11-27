@@ -75,7 +75,7 @@ class Socket extends AbstractAdapter
         $send = fwrite($this->sock, $lookupString . "\r\n");
 
         if ($send !== strlen($lookupString . "\r\n")) {
-            throw \Novutec\WhoisParser\AbstractException::factory('WriteError', 'Error while sending data (' .
+            throw \Novutec\WhoisParser\Exception\AbstractException::factory('WriteError', 'Error while sending data (' .
                      $send . '/' . strlen($lookupString . "\r\n") . ')');
         }
 
@@ -91,7 +91,7 @@ class Socket extends AbstractAdapter
             $recv = stream_get_contents($this->sock);
 
             if ($recv === false) {
-                throw \Novutec\WhoisParser\AbstractException::factory('ReadError', 'Could not read from socket.');
+                throw \Novutec\WhoisParser\Exception\AbstractException::factory('ReadError', 'Could not read from socket.');
             }
 
             $rawdata .= $recv;
@@ -134,7 +134,7 @@ class Socket extends AbstractAdapter
         }
 
         if (! is_resource($this->sock)) {
-            throw \Novutec\WhoisParser\AbstractException::factory('ConnectError', 'Unable to connect to ' .
+            throw \Novutec\WhoisParser\Exception\AbstractException::factory('ConnectError', 'Unable to connect to ' .
                      $config['server'] . ':' . $config['port'] .
                      ' or missing configuration for this template.');
         }
@@ -173,17 +173,17 @@ class Socket extends AbstractAdapter
             $proxyScheme = 'tcp://';
         } elseif ($proxyConfig['type'] == 'https') {
             if (! extension_loaded('openssl')) {
-                throw \Novutec\WhoisParser\AbstractException::factory('ConnectError', 'OpenSSL extension must be enabled to use a proxy over https');
+                throw \Novutec\WhoisParser\Exception\AbstractException::factory('ConnectError', 'OpenSSL extension must be enabled to use a proxy over https');
             }
             $proxyScheme = 'ssl://';
         } else {
-            throw \Novutec\WhoisParser\AbstractException::factory('ConnectError', 'Unknown proxy type:' . $proxyConfig['type']);
+            throw \Novutec\WhoisParser\Exception\AbstractException::factory('ConnectError', 'Unknown proxy type:' . $proxyConfig['type']);
         }
 
         $socket = @stream_socket_client($proxyScheme . $proxyHost, $errno, $errstr, 30);
 
         if (! is_resource($socket)) {
-            throw \Novutec\WhoisParser\AbstractException::factory('ConnectError', 'Unable to connect to proxy ' .
+            throw \Novutec\WhoisParser\Exception\AbstractException::factory('ConnectError', 'Unable to connect to proxy ' .
                     $proxyScheme . $proxyHost);
         }
 
@@ -208,7 +208,7 @@ class Socket extends AbstractAdapter
         $send = fwrite($socket, $request_str);
 
         if ($send !== strlen($request_str)) {
-            throw \Novutec\WhoisParser\AbstractException::factory('WriteError', 'Error while sending data via proxy - send ' .
+            throw \Novutec\WhoisParser\Exception\AbstractException::factory('WriteError', 'Error while sending data via proxy - send ' .
                 $send . ' of ' . strlen($request_str) . ')');
         }
 
@@ -260,6 +260,6 @@ class Socket extends AbstractAdapter
             unset($this->proxyList[$randKey]);
         }
 
-        throw \Novutec\WhoisParser\AbstractException::factory('ConnectError', 'No valid proxy found.');
+        throw \Novutec\WhoisParser\Exception\AbstractException::factory('ConnectError', 'No valid proxy found.');
     }
 }

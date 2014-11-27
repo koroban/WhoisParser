@@ -47,7 +47,7 @@ require_once 'Result/Result.php';
 /**
  * @see Exception
  */
-require_once 'Exception/AbstractException.php';
+use Novutec\WhoisParser\Exception\AbstractException;
 require_once 'Exception/RateLimitException.php';
 
 /**

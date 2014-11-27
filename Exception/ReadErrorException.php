@@ -22,7 +22,7 @@
 /**
  * @namespace Novutec\WhoisParser
  */
-namespace Novutec\WhoisParser;
+namespace Novutec\WhoisParser\Exception;
 
 /**
  * ReadErrorException
