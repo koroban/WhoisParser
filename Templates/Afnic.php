@@ -118,7 +118,13 @@ class Afnic extends Regex
         foreach ($ResultSet->contacts as $contactType => $contactArray) {
             foreach ($contactArray as $contactObject) {
                 $filteredAddress = $contactObject->address;
-                
+                if (!is_array($filteredAddress)) {
+                    if (strlen($filteredAddress) < 1) {
+                        continue;
+                    }
+                    $filteredAddress = array($filteredAddress);
+                }
+
                 if ($contactType !== 'owner') {
                     $contactObject->organization = $filteredAddress[0];
                     $contactObject->city = end($filteredAddress);
