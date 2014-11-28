@@ -20,11 +20,11 @@
  */
 
 /**
- * @namespace Novutec\WhoisParser\Template
+ * @namespace Novutec\WhoisParser\Templates
  */
-namespace Novutec\WhoisParser\Template;
+namespace Novutec\WhoisParser\Templates;
 
-use Novutec\WhoisParser\Template\Type\Regex;
+use Novutec\WhoisParser\Templates\Type\Regex;
 
 /**
  * Template for CoCCA based TLDs like .BI, .CM, .EC, .FM, .GG, .JE, .PS

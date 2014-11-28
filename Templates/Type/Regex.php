@@ -1,6 +1,6 @@
 <?php
 
-namespace Novutec\WhoisParser\Template\Type;
+namespace Novutec\WhoisParser\Templates\Type;
 
 abstract class Regex extends AbstractTemplate {
 

@@ -20,9 +20,9 @@
  */
 
 /**
- * @namespace Novutec\WhoisParser\Template
+ * @namespace Novutec\WhoisParser\Templates\Type
  */
-namespace Novutec\WhoisParser\Template\Type;
+namespace Novutec\WhoisParser\Templates\Type;
 
 use Novutec\WhoisParser\Exception\RateLimitException;
 
@@ -113,8 +113,8 @@ abstract class AbstractTemplate
         } elseif ((strlen($customNamespace) > 1) && class_exists($customNamespace . $template)) {
             $class = $customNamespace . $template;
             $obj = new $class();
-        } elseif (class_exists('Novutec\WhoisParser\Template\\'. $template)) {
-            $class = 'Novutec\WhoisParser\Template\\'. $template;
+        } elseif (class_exists('Novutec\WhoisParser\Templates\\'. $template)) {
+            $class = 'Novutec\WhoisParser\Templates\\'. $template;
             $obj = new $class();
         }
         return $obj;

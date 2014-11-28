@@ -37,7 +37,7 @@ use Novutec\WhoisParser\Exception\NoQueryException;
 use Novutec\WhoisParser\Exception\NoTemplateException;
 use Novutec\WhoisParser\Exception\RateLimitException;
 use Novutec\WhoisParser\Result\Result;
-use Novutec\WhoisParser\Template\Type\AbstractTemplate;
+use Novutec\WhoisParser\Templates\Type\AbstractTemplate;
 
 /**
  * WhoisParser

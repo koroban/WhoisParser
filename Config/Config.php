@@ -117,7 +117,7 @@ class Config
             $config = array_merge($defaults, $this->customConfig[$tld]);
             $config['dummy'] = true;
         } else if (isset($this->config[$tld])) {
-            $config = array_merge($defaults, $this->customConfig[$tld]);
+            $config = array_merge($defaults, $this->config[$tld]);
             $config['dummy'] = true;
         }
         return $config;
