@@ -178,7 +178,7 @@ class Parser
     public function lookup($query = '')
     {
         $this->Result = new Result();
-        $this->Config = new Config($this->specialWhois);
+        $this->Config = new Config($this->specialWhois, $this->customConfigFile);
         
         try {
             if ($query == '') {
@@ -310,13 +310,14 @@ class Parser
     private function parse()
     {
         $Config = $this->Config->getCurrent();
-        
+
         $Template = AbstractTemplate::factory($Config['template'], $this->customTemplateNamespace);
 
         // If Template is null then we do not have a template for that, but we
         // can still proceed to the end with just the rawdata
         if ($Template instanceof AbstractTemplate) {
             $this->Result->template[$Config['server']] = $Config['template'];
+            $this->rawdata = $Template->translateRawData($this->rawdata);
             try {
                 $Template->parse($this->Result, $this->rawdata);
             } catch (RateLimitException $e) {
