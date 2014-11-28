@@ -37,7 +37,7 @@ use Novutec\WhoisParser\Exception\NoQueryException;
 use Novutec\WhoisParser\Exception\NoTemplateException;
 use Novutec\WhoisParser\Exception\RateLimitException;
 use Novutec\WhoisParser\Result\Result;
-use Novutec\WhoisParser\Template\AbstractTemplate;
+use Novutec\WhoisParser\Template\Type\AbstractTemplate;
 
 /**
  * WhoisParser
@@ -82,7 +82,7 @@ class Parser
     /**
      * WhoisParserResult object
      * 
-     * @var object
+     * @var \Novutec\WhoisParser\Result\Result
      * @access protected
      */
     protected $Result;
@@ -317,30 +317,20 @@ class Parser
         // can still proceed to the end with just the rawdata
         if ($Template instanceof AbstractTemplate) {
             $this->Result->template[$Config['server']] = $Config['template'];
-            $this->parseTemplate($Template);
+            try {
+                $Template->parse($this->Result, $this->rawdata);
+            } catch (RateLimitException $e) {
+                $server = $Config['server'];
+                if (!in_array($server, $this->rateLimitedServers)) {
+                    $this->rateLimitedServers[] = $server;
+                }
+                throw new RateLimitException("Rate limit exceeded for server: ". $server);
+            }
             
             // set rawdata to Result - this happens here because sometimes we
             // have to fix the rawdata as well in postProcess
             $this->Result->addItem('rawdata', $this->rawdata);
-            
-            // check availability upon type - IP addresses are always registered
-            if (isset($Template->available) && $Template->available != '') {
-                preg_match_all($Template->available, $this->rawdata, $matches);
-                
-                $this->Result->addItem('registered', empty($matches[0]));
-            }
 
-            if (isset ($Template->rateLimit) && strlen($Template->rateLimit)) {
-                $count = preg_match_all($Template->rateLimit, $this->rawdata, $matches);
-                if ($count > 0) {
-                    $server = $Config['server'];
-                    if (!in_array($server, $this->rateLimitedServers)) {
-                        $this->rateLimitedServers[] = $server;
-                    }
-                    throw new RateLimitException("Rate limit exceeded for server: ". $server);
-                }
-            }
-            
             // set registered to Result
             $this->Result->addItem('registered', isset($this->Result->registered) ? $this->Result->registered : false);
             
@@ -432,68 +422,6 @@ class Parser
         }
         
         return inet_ntop(inet_pton(substr($ipv6, 0, - 1)));
-    }
-
-    /**
-     * Parses rawdata by Template
-     * 
-     * @param  object $Template
-     * @return void
-     */
-    private function parseTemplate($Template)
-    {
-        //print_r($this->rawdata);
-        // check if there is a block to be cutted from HTML response
-        if (isset($Template->htmlBlock)) {
-            preg_match($Template->htmlBlock, $this->rawdata, $htmlMatches);
-            
-            if (isset($htmlMatches[0])) {
-                $this->rawdata = preg_replace('/\s\s+/', "\n", $htmlMatches[0]);
-            }
-        }
-        
-        // lookup all blocks of template
-        foreach ($Template->blocks as $blockKey => $blockRegEx) {
-            // try to match block regex against WHOIS rawdata
-            if (preg_match_all($blockRegEx, $this->rawdata, $blockMatches)) {
-                // use matched block to lookup for blockItems
-                foreach ($blockMatches[0] as $item) {
-                    foreach ($Template->blockItems[$blockKey] as $itemRegEx => $target) {
-                        // try to match blockItem regex against block
-                        if (preg_match_all($itemRegEx, $item, $itemMatches)) {
-                            // set matched items to Result
-                            $this->Result->addItem($target, end($itemMatches));
-                        }
-                    }
-                }
-            }
-        }
-        
-        // if there are still contact handles after parsing then
-        // these contacts are used for more types e.g. one handle for admin and
-        // tech so we are going to clone this matching handles
-        if (isset($this->Result->network->contacts)) {
-            // lookup all left over handles in network
-            foreach ($this->Result->network->contacts as $type => $handle) {
-                if (is_string($handle)) {
-                    // lookup all contacts in Result
-                    foreach ($this->Result->contacts as $contactType => $contactArray) {
-                        foreach ($contactArray as $contactObject) {
-                            // if contact handle in network matches the one in
-                            // Result, we have to clone it
-                            if (strtolower($contactObject->handle) === strtolower($handle)) {
-                                if (empty($this->Result->contacts->$type)) {
-                                    $this->Result->contacts->$type = Array();
-                                }
-                                array_push($this->Result->contacts->$type, $contactObject);
-                                unset($this->Result->network->contacts->$type);
-                                break 2;
-                            }
-                        }
-                    }
-                }
-            }
-        }
     }
 
     /**

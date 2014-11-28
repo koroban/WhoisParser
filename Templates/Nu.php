@@ -24,6 +24,8 @@
  */
 namespace Novutec\WhoisParser\Template;
 
+use Novutec\WhoisParser\Template\Type\Regex;
+
 /**
  * Template for .NU
  *
@@ -32,7 +34,7 @@ namespace Novutec\WhoisParser\Template;
  * @copyright  Copyright (c) 2007 - 2013 Novutec Inc. (http://www.novutec.com)
  * @license    http://www.apache.org/licenses/LICENSE-2.0
  */
-class Nu extends AbstractTemplate
+class Nu extends Regex
 {
 
     /**
