@@ -20,9 +20,9 @@
  */
 
 /**
- * @namespace Novutec\WhoisParser
+ * @namespace NovutecWhoisParserTemplate
  */
-namespace Novutec\WhoisParser;
+namespace Novutec\WhoisParser\Template;
 
 /**
  * Template for .IT Registrar WHOIS
@@ -32,7 +32,7 @@ namespace Novutec\WhoisParser;
  * @copyright  Copyright (c) 2007 - 2013 Novutec Inc. (http://www.novutec.com)
  * @license    http://www.apache.org/licenses/LICENSE-2.0
  */
-class Template_It_registrar extends AbstractTemplate
+class It_registrar extends AbstractTemplate
 {
 
     /**

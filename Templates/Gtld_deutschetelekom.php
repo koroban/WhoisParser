@@ -20,9 +20,9 @@
  */
 
 /**
- * @namespace Novutec\WhoisParser
+ * @namespace Novutec\WhoisParser\Template
  */
-namespace Novutec\WhoisParser;
+namespace Novutec\WhoisParser\Template;
 
 /**
  * Template for IANA #226
@@ -32,7 +32,7 @@ namespace Novutec\WhoisParser;
  * @copyright  Copyright (c) 2007 - 2013 Novutec Inc. (http://www.novutec.com)
  * @license    http://www.apache.org/licenses/LICENSE-2.0
  */
-class Template_Gtld_deutschetelekom extends AbstractTemplate
+class Gtld_deutschetelekom extends AbstractTemplate
 {
 
     /**

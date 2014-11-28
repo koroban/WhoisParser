@@ -20,9 +20,9 @@
  */
 
 /**
- * @namespace Novutec\WhoisParser
+ * @namespace NovutecWhoisParserTemplate
  */
-namespace Novutec\WhoisParser;
+namespace Novutec\WhoisParser\Template;
 
 /**
  * Template for .SE
@@ -33,7 +33,7 @@ namespace Novutec\WhoisParser;
  * @license    http://www.apache.org/licenses/LICENSE-2.0
  * @author     estshy <estshy.pl>
  */
-class Template_Se extends AbstractTemplate
+class Se extends AbstractTemplate
 {
 
     /**

@@ -20,9 +20,9 @@
  */
 
 /**
- * @namespace Novutec\WhoisParser
+ * @namespace Novutec\WhoisParser\Template
  */
-namespace Novutec\WhoisParser;
+namespace Novutec\WhoisParser\Template;
 
 /**
  * WhoisParser AbstractTemplate
@@ -97,16 +97,25 @@ abstract class AbstractTemplate
      * @param  string $template
      * @return mixed
      */
-    public static function factory($template)
+    public static function factory($template, $customNamespace = null)
     {
-        $template = str_replace('.', '_', $template);
-        if (file_exists(__DIR__ . '/' . ucfirst($template) . '.php')) {
-            include_once __DIR__ . '/' . ucfirst($template) . '.php';
-            $classname = 'Novutec\WhoisParser\Template_' . ucfirst($template);
-            return new $classname();
-        } else {
-            return null;
+        $template = ucfirst(str_replace('.', '_', $template));
+
+        $obj = null;
+
+        // Ensure the custom namespace ends with a \
+        $customNamespace = rtrim($customNamespace, '\\') .'\\';
+        if ((strpos($template, '\\') !== false) && class_exists($template, $customNamespace)) {
+            $class = $template;
+            $obj = new $class();
+        } elseif ((strlen($customNamespace) > 1) && class_exists($customNamespace . $template)) {
+            $class = $customNamespace . $template;
+            $obj = new $class();
+        } elseif (class_exists('Novutec\WhoisParser\Template\\'. $template)) {
+            $class = 'Novutec\WhoisParser\Template\\'. $template;
+            $obj = new $class();
         }
+        return $obj;
     }
 
     /**

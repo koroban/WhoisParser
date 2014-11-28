@@ -20,9 +20,9 @@
  */
 
 /**
- * @namespace Novutec\WhoisParser
+ * @namespace Novutec\WhoisParser\Adapter
  */
-namespace Novutec\WhoisParser;
+namespace Novutec\WhoisParser\Adapter;
 
 /**
  * WhoisParser Http Adapter
@@ -34,6 +34,11 @@ namespace Novutec\WhoisParser;
  */
 class Http extends AbstractAdapter
 {
+
+    public function __construct($proxyConfig)
+    {
+        parent::__construct($proxyConfig);
+    }
 
     /**
      * Send data to whois server

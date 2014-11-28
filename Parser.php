@@ -25,33 +25,19 @@
 namespace Novutec\WhoisParser;
 
 /**
- * @see Config/Config
- */
-require_once 'Config/Config.php';
-
-/**
- * @see Adapter/Adapter
- */
-require_once 'Adapter/AbstractAdapter.php';
-
-/**
- * @see Templates/Template
- */
-require_once 'Templates/AbstractTemplate.php';
-
-/**
  * @see Result/Result
  */
 require_once 'Result/Result.php';
 
-/**
- * @see Exception
- */
+use Novutec\WhoisParser\Adapter\AbstractAdapter;
+use Novutec\WhoisParser\Config\Config;
 use Novutec\WhoisParser\Exception\AbstractException;
 use Novutec\WhoisParser\Exception\NoAdapterException;
 use Novutec\WhoisParser\Exception\NoQueryException;
 use Novutec\WhoisParser\Exception\NoTemplateException;
 use Novutec\WhoisParser\Exception\RateLimitException;
+use Novutec\WhoisParser\Result\Result;
+use Novutec\WhoisParser\Template\AbstractTemplate;
 
 /**
  * WhoisParser
@@ -150,12 +136,19 @@ class Parser
      */
     protected $rateLimitedServers = array();
 
+    protected $customConfigFile = null;
+
+    protected $proxyConfigFile = null;
+
+    protected $customTemplateNamespace = null;
+
+    protected $customAdapterNamespace = null;
+
 
     /**
      * Creates a WhoisParser object
      * 
      * @param  string $format
-	 * @return void
 	 */
     public function __construct($format = 'object')
     {
@@ -282,7 +275,7 @@ class Parser
      * 
      * @throws NoAdapterException
      * @throws RateLimitException
-     * @param  object $query
+     * @param  string $query
 	 * @return void
 	 */
     public function call($query = '')
@@ -292,7 +285,7 @@ class Parser
         }
         
         $Config = $this->Config->getCurrent();
-        $Adapter = AbstractAdapter::factory($Config['adapter']);
+        $Adapter = AbstractAdapter::factory($Config['adapter'], $this->proxyConfigFile, $this->customAdapterNamespace);
         $server = $Config['server'];
 
         if (in_array($server, $this->rateLimitedServers)) {
@@ -318,7 +311,7 @@ class Parser
     {
         $Config = $this->Config->getCurrent();
         
-        $Template = AbstractTemplate::factory($Config['template']);
+        $Template = AbstractTemplate::factory($Config['template'], $this->customTemplateNamespace);
 
         // If Template is null then we do not have a template for that, but we
         // can still proceed to the end with just the rawdata
@@ -445,7 +438,6 @@ class Parser
      * Parses rawdata by Template
      * 
      * @param  object $Template
-     * @param  string $rawdata
      * @return void
      */
     private function parseTemplate($Template)
@@ -628,5 +620,56 @@ class Parser
         $count = count($this->rateLimitedServers);
         $this->rateLimitedServers = array();
         return $count;
+    }
+
+
+    /**
+     * Set a custom config file.
+     * Settings in this file will override the default config.
+     * Set to NULL to clear.
+     *
+     * @param null|string $iniFile INI file
+     */
+    public function setCustomConfigFile($iniFile)
+    {
+        $this->customConfigFile = $iniFile;
+    }
+
+
+    /**
+     * Set a proxy config file.
+     * Set to NULL to clear.
+     *
+     * @param null|string $iniFile
+     */
+    public function setProxyConfigFile($iniFile)
+    {
+        $this->proxyConfigFile = $iniFile;
+    }
+
+
+    /**
+     * Set a custom template namespace
+     * Templates in this namespace will override the default templates.
+     * Set to NULL to clear.
+     *
+     * @param null|string $namespace
+     */
+    public function setCustomTemplateNamespace($namespace)
+    {
+        $this->customTemplateNamespace = $namespace;
+    }
+
+
+    /**
+     * Set a custom adapter namespace.
+     * Adapters in this namespace will override the default adapters.
+     * Set to NULL to clear.
+     *
+     * @param null|string $namespace
+     */
+    public function setCustomAdapterNamespace($namespace)
+    {
+        $this->customAdapterNamespace = $namespace;
     }
 }

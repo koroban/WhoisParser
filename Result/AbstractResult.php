@@ -20,9 +20,9 @@
  */
 
 /**
- * @namespace Novutec\WhoisParser
+ * @namespace Novutec\WhoisParser\Result
 */
-namespace Novutec\WhoisParser;
+namespace Novutec\WhoisParser\Result;
 
 /**
  * WhoisParser AbstractResult
