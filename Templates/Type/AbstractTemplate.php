@@ -145,4 +145,16 @@ abstract class AbstractTemplate
             }
         }
     }
+
+
+    /**
+     * Perform any necessary translation on the raw data before processing (for example, re-encoding to UTF-8)
+     *
+     * @param string $rawdata
+     * @return string
+     */
+    public function translateRawData($rawdata)
+    {
+        return $rawdata;
+    }
 }
