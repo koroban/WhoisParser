@@ -144,6 +144,11 @@ class Parser
 
     protected $customAdapterNamespace = null;
 
+    /**
+     * @var array Custom domain groups for DomainParser
+     */
+    protected $customDomainGroups = array();
+
 
     /**
      * Creates a WhoisParser object
@@ -263,6 +268,7 @@ class Parser
             $this->Query->asn = $query;
         } else {
             $Parser = new \Novutec\DomainParser\Parser();
+            $Parser->setCustomDomainGroups($this->customDomainGroups);
             if ($this->cachePath !== null) {
                 $Parser->setCachePath($this->cachePath);
             }
@@ -601,4 +607,29 @@ class Parser
     {
         $this->customAdapterNamespace = $namespace;
     }
+
+
+    /**
+     * Add a custom domain group for DomainParser. This will override the built-in domain groups.
+     *
+     * @param string $groupName
+     * @param array $tldList
+     */
+    public function addCustomDomainGroup($groupName, array $tldList)
+    {
+        $this->customDomainGroups[$groupName] = $tldList;
+    }
+
+
+    /**
+     * Set the custom domain groups for DomainParser. The array should be in the same format as in Additional.php.
+     * These will override the built-in domain groups
+     *
+     * @param array $domainGroups Array of domain groups and their tld lists
+     */
+    public function setCustomDomainGroups(array $domainGroups)
+    {
+        $this->customDomainGroups = $domainGroups;
+    }
+
 }
