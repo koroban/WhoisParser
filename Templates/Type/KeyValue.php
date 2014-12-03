@@ -29,8 +29,10 @@ abstract class KeyValue extends AbstractTemplate
         $this->parseRateLimit($rawdata);
 
         // check availability upon type - IP addresses are always registered
+        $parsedAvailable = false;
         if (isset($this->available) && strlen($this->available)) {
             preg_match_all($this->available, $rawdata, $matches);
+            $parsedAvailable = count($matches);
 
             $result->addItem('registered', empty($matches[0]));
         }
@@ -76,7 +78,7 @@ abstract class KeyValue extends AbstractTemplate
             }
         }
 
-        if ($matches < 1) {
+        if (($matches < 1) && (!$parsedAvailable)) {
             throw new ReadErrorException("Template did not correctly parse the response");
         }
     }
