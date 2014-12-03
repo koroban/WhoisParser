@@ -293,7 +293,7 @@ class Parser
         }
 
         if ($Adapter instanceof AbstractAdapter) {
-            $this->rawdata = strip_tags($Adapter->call($this->Query, $Config));
+            $this->rawdata = $Adapter->call($this->Query, $Config);
             $this->parse();
         } else {
             throw new NoAdapterException('Adapter '. $Config['adapter'] .' could not be found');
