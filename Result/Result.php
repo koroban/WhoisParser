@@ -204,7 +204,7 @@ class Result extends AbstractResult
         if (is_array($value) && (sizeof($value) === 0)) {
             return;
         }
-        if (!is_array($value) && (strlen($value) < 1) && ($value !== NULL)) {
+        if (is_string($value) && (strlen($value) < 1) && ($value !== NULL)) {
             return;
         }
 
