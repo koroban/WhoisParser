@@ -53,6 +53,7 @@ class Http extends AbstractAdapter
         $replacements = array(
             '%domain%' => $query->idnFqdn,
             '%subdomain%' => $query->domain,
+            '%tld%' => $query->tld,
         );
         $url = $config['server'] . str_replace(array_keys($replacements), array_values($replacements), $config['format']);
         
