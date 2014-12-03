@@ -317,7 +317,7 @@ class Parser
         // can still proceed to the end with just the rawdata
         if ($Template instanceof AbstractTemplate) {
             $this->Result->template[$Config['server']] = $Config['template'];
-            $this->rawdata = $Template->translateRawData($this->rawdata);
+            $this->rawdata = $Template->translateRawData($this->rawdata, $Config);
             try {
                 $Template->parse($this->Result, $this->rawdata);
             } catch (RateLimitException $e) {
