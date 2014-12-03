@@ -36,6 +36,7 @@ use Novutec\WhoisParser\Templates\Type\Regex;
  */
 class Icb extends Regex
 {
+    protected $convertFromHtml = true;
 
     /**
      * Cut block from HTML output for $blocks
