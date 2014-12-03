@@ -38,7 +38,13 @@ abstract class Regex extends AbstractTemplate {
                         // set matched items to Result
                         $value = end($itemMatches);
                         if ($this->convertFromHtml) {
-                            $value = html_entity_decode(strip_tags($value));
+                            if (is_array($value)) {
+                                foreach($value as $k => $v) {
+                                    $value[$k] = html_entity_decode(strip_tags($v));
+                                }
+                            } else {
+                                $value = html_entity_decode(strip_tags($value));
+                            }
                         }
                         $result->addItem($target, $value);
                     }
