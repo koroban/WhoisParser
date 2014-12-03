@@ -4,6 +4,7 @@ namespace Novutec\WhoisParser\Templates\Type;
 
 abstract class Regex extends AbstractTemplate {
 
+    protected $convertFromHtml = false;
 
     /**
      * @param \Novutec\WhoisParser\Result\Result $result
@@ -35,7 +36,11 @@ abstract class Regex extends AbstractTemplate {
                     // try to match blockItem regex against block
                     if (preg_match_all($itemRegEx, $item, $itemMatches)) {
                         // set matched items to Result
-                        $result->addItem($target, end($itemMatches));
+                        $value = end($itemMatches);
+                        if ($this->convertFromHtml) {
+                            $value = html_entity_decode(strip_tags($value));
+                        }
+                        $result->addItem($target, $value);
                     }
                 }
             }
@@ -75,7 +80,11 @@ abstract class Regex extends AbstractTemplate {
         if (isset($this->available) && strlen($this->available)) {
             preg_match_all($this->available, $rawdata, $matches);
 
-            $result->addItem('registered', empty($matches[0]));
+            $value = $matches[0];
+            if ($this->convertFromHtml) {
+                $value = html_entity_decode(strip_tags($value));
+            }
+            $result->addItem('registered', empty($value));
         }
     }
 }
