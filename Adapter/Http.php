@@ -50,7 +50,11 @@ class Http extends AbstractAdapter
     public function call($query, $config)
     {
         $this->sock = curl_init();
-        $url = $config['server'] . str_replace('%domain%', $query->idnFqdn, $config['format']);
+        $replacements = array(
+            '%domain%' => $query->idnFqdn,
+            '%subdomain%' => $query->domain,
+        );
+        $url = $config['server'] . str_replace(array_keys($replacements), array_values($replacements), $config['format']);
         
         curl_setopt($this->sock, CURLOPT_USERAGENT, 'PHP');
         curl_setopt($this->sock, CURLOPT_TIMEOUT, 30);
