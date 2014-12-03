@@ -151,10 +151,19 @@ abstract class AbstractTemplate
      * Perform any necessary translation on the raw data before processing (for example, re-encoding to UTF-8)
      *
      * @param string $rawdata
+     * @param array $config
      * @return string
      */
-    public function translateRawData($rawdata)
+    public function translateRawData($rawdata, $config)
     {
+        if (array_key_exists('encoding', $config)) {
+            switch (strtolower($config['encoding'])) {
+                case 'iso-8859-1':
+                    $rawdata = utf8_encode($rawdata);
+                    break;
+            }
+        }
+
         return $rawdata;
     }
 }

@@ -23,7 +23,7 @@ class Hu extends Standard
     }
 
 
-    public function translateRawData($rawdata)
+    public function translateRawData($rawdata, $config)
     {
         return utf8_encode($rawdata);
     }
