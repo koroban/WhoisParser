@@ -81,7 +81,7 @@ abstract class Regex extends AbstractTemplate {
             preg_match_all($this->available, $rawdata, $matches);
 
             $value = $matches[0];
-            if ($this->convertFromHtml) {
+            if ($this->convertFromHtml && (!is_array($value))) {
                 $value = html_entity_decode(strip_tags($value));
             }
             $result->addItem('registered', empty($value));
