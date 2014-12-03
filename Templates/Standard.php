@@ -30,7 +30,7 @@ class Standard extends KeyValue
         'registrar:url' => '/^(Sponsoring )?(Referral|Registrar) URL$/i',
 
         // Contacts: Owner
-        'contacts:owner:handle' => '/^(Registry Registrant|Registrant|Owner)(\-| )ID$/i',
+        'contacts:owner:handle' => '/^(Registry )?(Registrant|Owner)(\-| )ID$/i',
         'contacts:owner:name' => '/^(Registrant|Owner)(\-| )(Contact Name|Name)$/i',
         'contacts:owner:organization' => '/^(Registrant|Owner)( Organization)?$/i',
         'contacts:owner:address' => '/^(Registrant|Owner)(\-| )(Street|Address)[0-9]*$/i',
@@ -46,7 +46,7 @@ class Standard extends KeyValue
         'contacts:owner:email' => '/^(Registrant|Owner)(\-| )(Contact )?(Email|E-Mail)$/i',
 
         // Contacts: Admin
-        'contacts:admin:handle' => '/^Admin(istrative)?(\-| )(Contact )?ID$/i',
+        'contacts:admin:handle' => '/^(Registry )?Admin(istrative)?(\-| )(Contact )?ID$/i',
         'contacts:admin:name' => '/^Admin(istrative)?(\-| )(Contact )?Name$/i',
         'contacts:admin:organization' => '/^Admin(istrative)?(\-| )(Contact )?Organization$/i',
         'contacts:admin:address' => '/^Admin(istrative)?(\-| )(Contact )?(Street|Address)[0-9]*$/i',
@@ -62,7 +62,7 @@ class Standard extends KeyValue
         'contacts:admin:email' => '/^Admin(istrative)?(\-| )(Contact )?(Email|E-Mail)$/i',
 
         // Contacts: Tech
-        'contacts:tech:handle' => '/^Tech(nical)?(\-| )(Contact )?ID$/i',
+        'contacts:tech:handle' => '/^(Registry )?Tech(nical)?(\-| )(Contact )?ID$/i',
         'contacts:tech:name' => '/^Tech(nical)?(\-| )(Contact )?Name$/i',
         'contacts:tech:organization' => '/^Tech(nical)?(\-| )(Contact )?Organization$/i',
         'contacts:tech:address' => '/^Tech(nical)?(\-| )(Contact )?(Street|Address)[0-9]*$/i',
@@ -78,7 +78,7 @@ class Standard extends KeyValue
         'contacts:tech:email' => '/^Tech(nical)?(\-| )(Contact )?(Email|E-Mail)$/i',
 
         // Contacts: Billing
-        'contacts:billing:handle' => '/^Billing(\-| )(Contact )?ID$/i',
+        'contacts:billing:handle' => '/^(Registry )?Billing(\-| )(Contact )?ID$/i',
         'contacts:billing:name' => '/^Billing(\-| )(Contact )?Name$/i',
         'contacts:billing:organization' => '/^Billing(\-| )(Contact )?Organization$/i',
         'contacts:billing:address' => '/^Billing(\-| )(Contact )?(Street|Address)[0-9]*$/i',
@@ -96,6 +96,6 @@ class Standard extends KeyValue
 
     protected $available = '/(No match|No Object Found|Domain not found)/i';
 
-    protected $rateLimit = '/exceeded the maximum allowable/i';
+    protected $rateLimit = '/(exceeded the maximum allowable|exceeded your query limit)/i';
 
 }
