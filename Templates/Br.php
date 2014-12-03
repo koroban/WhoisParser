@@ -75,4 +75,10 @@ class Br extends Regex
      * @access protected
      */
     protected $available = '/(No match for domain|release process: reserved)/i';
+
+
+    public function translateRawData($rawdata)
+    {
+        return utf8_encode($rawdata);
+    }
 }
