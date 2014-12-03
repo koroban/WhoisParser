@@ -200,7 +200,14 @@ class Result extends AbstractResult
         if (is_array($value) && sizeof($value) === 1) {
             $value = $value[0];
         }
-        
+        // Don't overwrite existing values with empty values, unless we explicitly pass through NULL
+        if (is_array($value) && (sizeof($value) === 0)) {
+            return;
+        }
+        if (!is_array($value) && (strlen($value) < 1) && ($value !== NULL)) {
+            return;
+        }
+
         // reservedType is sometimes need by templates like .DE
         if ($target === 'contacts:reservedType') {
             if ($this->lastHandle !== strtolower($value)) {
