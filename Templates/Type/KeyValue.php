@@ -39,23 +39,7 @@ abstract class KeyValue extends AbstractTemplate
 
         $this->data = $this->parseRawData($rawdata);
         $this->reformatData();
-
-        $matches = 0;
-        foreach ($this->data as $key => $value) {
-            foreach ($this->regexKeys as $dataKey => $regexList) {
-                if (! is_array($regexList)) {
-                    $regexList = array($regexList);
-                }
-
-                foreach ($regexList as $regex) {
-                    if (preg_match($regex, $key)) {
-                        $matches++;
-                        $result->addItem($dataKey, $value);
-                        break 2;
-                    }
-                }
-            }
-        }
+        $matches = $this->parseKeyValues($result, $this->data, $this->regexKeys);
 
         if (($matches < 1) && (!$parsedAvailable)) {
             throw new ReadErrorException("Template did not correctly parse the response");
@@ -89,6 +73,29 @@ abstract class KeyValue extends AbstractTemplate
         }
 
         return $data;
+    }
+
+
+    protected function parseKeyValues($result, $dataArray, $regexKeys)
+    {
+        $matches = 0;
+        foreach ($dataArray as $key => $value) {
+            foreach ($regexKeys as $dataKey => $regexList) {
+                if (! is_array($regexList)) {
+                    $regexList = array($regexList);
+                }
+
+                foreach ($regexList as $regex) {
+                    if (preg_match($regex, $key)) {
+                        $matches++;
+                        $result->addItem($dataKey, $value);
+                        break 2;
+                    }
+                }
+            }
+        }
+
+        return $matches;
     }
 
 
