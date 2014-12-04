@@ -193,9 +193,10 @@ class Result extends AbstractResult
     /**
      * @param  string $target
      * @param  mixed $value
+     * @param bool $append Append values rather than overwriting? (Ignored for registrars and contacts)
      * @return void
      */
-    public function addItem($target, $value)
+    public function addItem($target, $value, $append = false)
     {
         if (is_array($value) && sizeof($value) === 1) {
             $value = $value[0];
@@ -303,7 +304,14 @@ class Result extends AbstractResult
                 }
             }
         } else {
-            $this->{$target} = $value;
+            if ($append && isset($this->{$target})) {
+                if (!is_array($this->{$target})) {
+                    $this->{$target} = array($this->{$target});
+                }
+                $this->{$target}[] = $value;
+            } else {
+                $this->{$target} = $value;
+            }
         }
     }
 
