@@ -73,14 +73,18 @@ class Socket extends AbstractAdapter
         usleep(1);
         stream_set_blocking($this->sock, 1);
 
-        if (isset($query->tld) && ! isset($query->idnFqdn)) {
-            $lookupString = str_replace('%domain%', $query->tld, $config['format']);
-        } elseif (isset($query->ip)) {
-            $lookupString = str_replace('%domain%', $query->ip, $config['format']);
-        } elseif (isset($query->asn)) {
-            $lookupString = str_replace('%domain%', $query->asn, $config['format']);
+        if  (is_object($query)) {
+            if (isset($query->tld) && ! isset($query->idnFqdn)) {
+                $lookupString = str_replace('%domain%', $query->tld, $config['format']);
+            } elseif (isset($query->ip)) {
+                $lookupString = str_replace('%domain%', $query->ip, $config['format']);
+            } elseif (isset($query->asn)) {
+                $lookupString = str_replace('%domain%', $query->asn, $config['format']);
+            } else {
+                $lookupString = str_replace('%domain%', $query->idnFqdn, $config['format']);
+            }
         } else {
-            $lookupString = str_replace('%domain%', $query->idnFqdn, $config['format']);
+            $lookupString = str_replace('%domain%', $query, $config['format']);
         }
 
         $send = fwrite($this->sock, $lookupString . "\r\n");
