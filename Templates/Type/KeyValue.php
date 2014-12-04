@@ -37,28 +37,7 @@ abstract class KeyValue extends AbstractTemplate
             $result->addItem('registered', empty($matches[0]));
         }
 
-        $rawdata = explode("\n", $rawdata);
-        foreach ($rawdata as $line) {
-            $line = trim($line);
-            $lineParts = explode(':', $line, 2);
-            if (count($lineParts) < 2) {
-                continue;
-            }
-
-            $key = trim($lineParts[0]);
-            $value = trim($lineParts[1]);
-
-            if (array_key_exists($key, $this->data)) {
-                if (! is_array($this->data[$key])) {
-                    $this->data[$key] = array($this->data[$key]);
-                }
-                $this->data[$key][] = $value;
-                continue;
-            }
-
-            $this->data[$key] = $value;
-        }
-
+        $this->data = $this->parseRawData($rawdata);
         $this->reformatData();
 
         $matches = 0;
@@ -81,6 +60,35 @@ abstract class KeyValue extends AbstractTemplate
         if (($matches < 1) && (!$parsedAvailable)) {
             throw new ReadErrorException("Template did not correctly parse the response");
         }
+    }
+
+
+    protected function parseRawData($rawdata)
+    {
+        $data = array();
+        $rawdata = explode("\n", $rawdata);
+        foreach ($rawdata as $line) {
+            $line = trim($line);
+            $lineParts = explode(':', $line, 2);
+            if (count($lineParts) < 2) {
+                continue;
+            }
+
+            $key = trim($lineParts[0]);
+            $value = trim($lineParts[1]);
+
+            if (array_key_exists($key, $data)) {
+                if (! is_array($data[$key])) {
+                    $data[$key] = array($data[$key]);
+                }
+                $data[$key][] = $value;
+                continue;
+            }
+
+            $data[$key] = $value;
+        }
+
+        return $data;
     }
 
 

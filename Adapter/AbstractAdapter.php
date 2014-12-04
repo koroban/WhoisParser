@@ -77,7 +77,7 @@ abstract class AbstractAdapter
      * @param  string $type
      * @param string|null $proxyConfig
      * @param string|null $customNamespace
-     * @return mixed
+     * @return AbstractAdapter
      */
     public static function factory($type = 'socket', $proxyConfig = null, $customNamespace = null)
     {

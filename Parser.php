@@ -601,4 +601,26 @@ class Parser
     {
         $this->customAdapterNamespace = $namespace;
     }
+
+
+    /**
+     * Return the current configured proxy config file location
+     *
+     * @return null|string
+     */
+    public function getProxyConfigFile()
+    {
+        return $this->proxyConfigFile;
+    }
+
+
+    /**
+     * Return the currently configured custom adapter namespace.
+     *
+     * @return null|string
+     */
+    public function getCustomAdapterNamespace()
+    {
+        return $this->customAdapterNamespace;
+    }
 }
