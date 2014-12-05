@@ -1,77 +1,42 @@
 <?php
-/**
- * Novutec Domain Tools
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- * @category   Novutec
- * @package    DomainParser
- * @copyright  Copyright (c) 2007 - 2013 Novutec Inc. (http://www.novutec.com)
- * @license    http://www.apache.org/licenses/LICENSE-2.0
- */
 
-/**
- * @namespace Novutec\WhoisParser\Templates
- */
 namespace Novutec\WhoisParser\Templates;
 
-use Novutec\WhoisParser\Templates\Type\Regex;
+use Novutec\WhoisParser\Templates\Type\KeyValue;
 
-/**
- * Template for IANA #625
- *
- * @category   Novutec
- * @package    WhoisParser
- * @copyright  Copyright (c) 2007 - 2013 Novutec Inc. (http://www.novutec.com)
- * @license    http://www.apache.org/licenses/LICENSE-2.0
- */
-class Gtld_rf extends Regex
+class Su extends KeyValue
 {
 
-    /**
-     * Blocks within the raw output of the whois
-     * 
-     * @var array
-     * @access protected
-     */
-    protected $blocks = array(
-            1 => '/domain:(.*?)(?=source)/is'
+    protected $regexKeys = array(
+        'name' => '/^domain$/i',
+        'created' => '/^created$/i',
+        'expires' => '/^paid-till$/i',
+        'nameserver' => '/^nserver$/i',
+        'status' => '/^state$/i',
+        // Registrar
+        'registrar:id' => '/^registrar$/i',
+        // Contacts: Owner
+        'contacts:owner:name' => '/^person$/i',
+        'contacts:owner:organization' => '/^org$/i',
+        'contacts:owner:phone' => '/^phone$/i',
+        'contacts:owner:fax' => '/^fax$/i',
+        'contacts:owner:email' => '/^e-mail$/i',
     );
 
-    /**
-     * Items for each block
-     * 
-     * @var array
-     * @access protected
-     */
-    protected $blockItems = array(
-            1 => array(
-                    '/^paid-till:(.+)$/im' => 'expires'
-            )
-    );
+    protected $available = '/No entries found/i';
 
-    /**
-     * After parsing do something
-     *
-     * Fix address
-     *
-     * @param  object &$WhoisParser
-     * @return void
-     */
-    public function postProcess(&$WhoisParser)
+
+    public function reformatData()
     {
-        $ResultSet = $WhoisParser->getResult();
-        
-        $date = \DateTime::createFromFormat('Y.m.d', trim($ResultSet->expires));
-        $ResultSet->expires = $date->format('Y-m-d 00:00:00');
+        if (array_key_exists('state', $this->data) && (! is_array($this->data['state']))) {
+            $this->data['state'] = explode(', ', $this->data['state']);
+        }
+
+        $dateFields = ['created', 'free-date', 'paid-till'];
+        foreach ($dateFields as $field) {
+            if (array_key_exists($field, $this->data)) {
+                $this->data[$field] = str_replace('.', '-', $this->data[$field]);
+            }
+        }
     }
 }

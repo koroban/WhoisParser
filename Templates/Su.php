@@ -10,13 +10,16 @@ class Su extends KeyValue
     protected $regexKeys = array(
         'name' => '/^domain$/i',
         'created' => '/^created$/i',
-        'expires' => '/^free-date$/i',
+        'expires' => '/^paid-till$/i',
         'nameserver' => '/^nserver$/i',
         'status' => '/^state$/i',
         // Registrar
         'registrar:id' => '/^registrar$/i',
         // Contacts: Owner
         'contacts:owner:name' => '/^person$/i',
+        'contacts:owner:organization' => '/^org$/i',
+        'contacts:owner:phone' => '/^phone$/i',
+        'contacts:owner:fax' => '/^fax$/i',
         'contacts:owner:email' => '/^e-mail$/i',
     );
 
