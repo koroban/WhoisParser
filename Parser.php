@@ -154,7 +154,6 @@ class Parser
 	 */
     public function __construct($format = 'object')
     {
-        date_default_timezone_set('UTC');
         $this->setFormat($format);
     }
 
@@ -306,7 +305,7 @@ class Parser
         $Config = $this->Config->getCurrent();
         
         $Template = AbstractTemplate::factory($Config['template']);
-        
+
         // If Template is null then we do not have a template for that, but we
         // can still proceed to the end with just the rawdata
         if ($Template instanceof AbstractTemplate) {
@@ -426,6 +425,7 @@ class Parser
      */
     private function parseTemplate($Template)
     {
+        //print_r($this->rawdata);
         // check if there is a block to be cutted from HTML response
         if (isset($Template->htmlBlock)) {
             preg_match($Template->htmlBlock, $this->rawdata, $htmlMatches);

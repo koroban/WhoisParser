@@ -59,6 +59,7 @@ class Socket extends AbstractAdapter
         $this->disconnect();
         $this->connect($config);
 
+        usleep(1);
         stream_set_blocking($this->sock, 1);
 
         if (isset($query->tld) && ! isset($query->idnFqdn)) {

@@ -32,7 +32,7 @@ namespace Novutec\WhoisParser;
  * @copyright  Copyright (c) 2007 - 2013 Novutec Inc. (http://www.novutec.com)
  * @license    http://www.apache.org/licenses/LICENSE-2.0
  */
-class Template_Ua extends AbstractTemplate
+class Template_Comua extends AbstractTemplate
 {
 
     /**
@@ -41,8 +41,7 @@ class Template_Ua extends AbstractTemplate
 	 * @var array
 	 * @access protected
 	 */
-    protected $blocks = array(1 => '/domain:(?>[\x20\t]*)(.*?)(?=\% administrative contact)/is', 
-            2 => '/\% (administrative|technical) contact:(.*?)(?=(\% technical contact:|\% \% .ua whois))/is');
+    protected $blocks = array(1 => '/domain:(?>[\x20\t]*)(.*?)(?=\% registrar)/is');
 
     /**
 	 * Items for each block
@@ -51,19 +50,12 @@ class Template_Ua extends AbstractTemplate
 	 * @access protected
 	 */
     protected $blockItems = array(
-            1 => array('/status:(?>[\x20\t]*).+ (.+)$/im' => 'expires', 
+            1 => array('/expires:(?>[\x20\t]*)(.+)$/im' => 'expires', 
                     '/nserver:(?>[\x20\t]*)(.+)$/im' => 'nameserver', 
                     '/admin-c:(?>[\x20\t]*)(.+)$/im' => 'network:contacts:admin', 
                     '/tech-c:(?>[\x20\t]*)(.+)$/im' => 'network:contacts:tech', 
-                    '/created:(?>[\x20\t]*).+ (.+)$/im' => 'created', 
-                    '/changed:(?>[\x20\t]*).+ (.+)$/im' => 'changed'),
-            2 => array('/nic-handle:(?>[\x20\t]*)(.+)$/im' => 'contacts:handle', 
-                    '/organization:(?>[\x20\t]*)(.+)$/im' => 'contacts:organization', 
-                    '/address:(?>[\x20\t]*)(.+)$/im' => 'contacts:address', 
-                    '/phone:(?>[\x20\t]*)(.+)$/im' => 'contacts:phone', 
-                    '/fax-no:(?>[\x20\t]*)(.+)$/im' => 'contacts:fax', 
-                    '/e-mail:(?>[\x20\t]*)(.+)$/im' => 'contacts:email', 
-                    '/changed:(?>[\x20\t]*).+ (.+)$/im' => 'contacts:changed'));
+                    '/created:(?>[\x20\t]*)(.+)$/im' => 'created', 
+                    '/changed:(?>[\x20\t]*)(.+)$/im' => 'changed'));
 
     /**
      * RegEx to check availability of the domain name
@@ -72,12 +64,4 @@ class Template_Ua extends AbstractTemplate
      * @access protected
      */
     protected $available = '/No entries found for/i';
-
-    public function postProcess(&$WhoisParser)
-    {
-        $ResultSet = $WhoisParser->getResult();
-        $date = \DateTime::createFromFormat('YmdHis', $ResultSet->expires);
-
-        $ResultSet->expires = $date->format('Y-m-d H:i:s');
-    }
 }

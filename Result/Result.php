@@ -531,16 +531,18 @@ class Result extends AbstractResult
      */
     private function formatDate($dateformat, $date)
     {
-        $timestamp = strtotime(str_replace('/', '-', $date));
-        
-        if ($timestamp == '') {
-            $timestamp = strtotime(str_replace('/', '.', $date));
-        }
-        
-        if ($timestamp != '') {
-            return strftime($dateformat, $timestamp);
-        } else {
-            return $date;
+        if (is_string($date)) {
+            $timestamp = strtotime(str_replace('/', '-', $date));
+            
+            if ($timestamp == '') {
+                $timestamp = strtotime(str_replace('/', '.', $date));
+            }
+            
+            if ($timestamp != '') {
+                return strftime($dateformat, $timestamp);
+            } else {
+                return $date;
+            }
         }
     }
 }
