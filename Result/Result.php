@@ -20,24 +20,9 @@
  */
 
 /**
- * @namespace Novutec\WhoisParser
+ * @namespace Novutec\WhoisParser\Result
  */
-namespace Novutec\WhoisParser;
-
-/**
- * @see Result/AbstractResult
- */
-require_once 'AbstractResult.php';
-
-/**
- * @see Result/Conact
- */
-require_once 'Contact.php';
-
-/**
- * @see Result/Registrar
- */
-require_once 'Registrar.php';
+namespace Novutec\WhoisParser\Result;
 
 /**
  * WhoisParser Result
@@ -160,7 +145,7 @@ class Result extends AbstractResult
      * @var array
      * @access protected
      */
-    protected $rawdata;
+    public $rawdata = array();
 
     /**
      * Network information of domain name or IP address
@@ -192,7 +177,7 @@ class Result extends AbstractResult
      * @var string
      * @access protected
      */
-    protected $template;
+    public $template;
 
     /**
 	 * Creates a WhoisParserResult object
@@ -208,14 +193,22 @@ class Result extends AbstractResult
     /**
      * @param  string $target
      * @param  mixed $value
+     * @param bool $append Append values rather than overwriting? (Ignored for registrars and contacts)
      * @return void
      */
-    public function addItem($target, $value)
+    public function addItem($target, $value, $append = false)
     {
         if (is_array($value) && sizeof($value) === 1) {
             $value = $value[0];
         }
-        
+        // Don't overwrite existing values with empty values, unless we explicitly pass through NULL
+        if (is_array($value) && (sizeof($value) === 0)) {
+            return;
+        }
+        if (is_string($value) && (strlen($value) < 1) && ($value !== NULL)) {
+            return;
+        }
+
         // reservedType is sometimes need by templates like .DE
         if ($target === 'contacts:reservedType') {
             if ($this->lastHandle !== strtolower($value)) {
@@ -226,7 +219,12 @@ class Result extends AbstractResult
             $this->lastId++;
             return;
         }
-        
+
+        if ($target == 'rawdata') {
+            $this->{$target}[] = $value;
+            return;
+        }
+
         if (strpos($target, ':')) {
             // split target by :
             $targetArray = explode(':', $target);
@@ -270,7 +268,7 @@ class Result extends AbstractResult
                     }
                     
                     if (! isset($this->contacts->{$this->lastHandle}[$this->lastId])) {
-                        $this->contacts->{$this->lastHandle}[$this->lastId] = new \Novutec\WhoisParser\Contact();
+                        $this->contacts->{$this->lastHandle}[$this->lastId] = new Contact();
                     }
                     
                     $this->contacts->{$this->lastHandle}[$this->lastId]->$type = $value;
@@ -292,10 +290,10 @@ class Result extends AbstractResult
                                     $element->$type = array();
                                 }
                                 
-                                array_push($element->$type, new \Novutec\WhoisParser\Contact());
+                                array_push($element->$type, new Contact());
                                 break;
                             case 'registrar':
-                                $element->$type = new \Novutec\WhoisParser\Registrar();
+                                $element->$type = new Registrar();
                                 break;
                             default:
                                 $element->$type = new \stdClass();
@@ -306,7 +304,14 @@ class Result extends AbstractResult
                 }
             }
         } else {
-            $this->{$target} = $value;
+            if ($append && isset($this->{$target})) {
+                if (!is_array($this->{$target})) {
+                    $this->{$target} = array($this->{$target});
+                }
+                $this->{$target}[] = $value;
+            } else {
+                $this->{$target} = $value;
+            }
         }
     }
 
@@ -502,7 +507,7 @@ class Result extends AbstractResult
         }
         
         // format dates
-        $this->template = $config['template'];
+        $this->template[$this->whoisserver] = $config['template'];
         $this->changed = $this->formatDate($dateformat, $this->changed);
         $this->created = $this->formatDate($dateformat, $this->created);
         $this->expires = $this->formatDate($dateformat, $this->expires);
@@ -531,18 +536,15 @@ class Result extends AbstractResult
      */
     private function formatDate($dateformat, $date)
     {
-        if (is_string($date)) {
-            $timestamp = strtotime(str_replace('/', '-', $date));
-            
-            if ($timestamp == '') {
-                $timestamp = strtotime(str_replace('/', '.', $date));
-            }
-            
-            if ($timestamp != '') {
-                return strftime($dateformat, $timestamp);
-            } else {
-                return $date;
-            }
+        if (!is_string($date)) {
+            return null;
         }
+        $timestamp = strtotime(str_replace('/', '-', $date));
+
+        if ($timestamp == '') {
+            $timestamp = strtotime(str_replace('/', '.', $date));
+        }
+
+        return (strlen($timestamp) ? strftime($dateformat, $timestamp) : $date);
     }
 }

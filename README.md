@@ -281,7 +281,7 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [ ] NI
 [x] NL
 [x] NL Registrar WHOIS
-[ ] NO - possible - need recursive lookup for nameserver
+[x] NO
 [ ] NP
 [ ] NR
 [x] NU
@@ -325,7 +325,7 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [x] SO
 [ ] SR
 [x] ST
-[ ] SU - possible -> RU
+[x] SU
 [ ] SV
 [x] SX
 [x] SY
@@ -361,7 +361,7 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [x] VG
 [ ] VI
 [ ] VN
-[ ] VU
+[x] VU
 [x] WF
 [x] WS
 [x] XN--3E0B707E - .kr
@@ -421,7 +421,7 @@ gTLDs and thin registries sort by IANA ID (http://www.iana.org/assignments/regis
 [x] 2 (Network Solutions, LLC)
 [x] 9 (Register.com, Inc.)
 [x] 13 (Melbourne IT, Ltd)
-[x] 15 (CORE Internet Council of Registrars)
+[x] 15 (Corehub, S.R.L.)
 [x] 30 (NameSecure LLC)
 [x] 48 (eNom, Inc.)
 [x] 49 (GMO Internet, Inc. d/b/a Onamae.com)
@@ -435,6 +435,7 @@ gTLDs and thin registries sort by IANA ID (http://www.iana.org/assignments/regis
 [x] 85 (EPAG Domainservices GmbH)
 [x] 88 (Namebay SAM)
 [x] 91 (007Names, Inc.)
+[x] 104 (Domainsite.com, Inc)
 [x] 106 (Ascio Technologies, Inc. - Denmark)
 [x] 113 (CSL Computer Service Langenbach GmbH d/b/a joker.com)
 [ ] 120 (Xin Net Technology Corporation)
@@ -446,15 +447,21 @@ gTLDs and thin registries sort by IANA ID (http://www.iana.org/assignments/regis
 [x] 226 (Deutsche Telekom AG)
 [x] 228 (Moniker Online Services LLC)
 [x] 240 (PlanetDomain Pty Ltd)
+[x] 245 (123 Registration, Inc.)
 [x] 269 (Key-Systems GmbH)
 [x] 291 (DNC Holdings, Inc.)
 [x] 292 (MarkMonitor Inc.)
+[x] 303 (PDR Ltd. d/b/a PublicDomainRegistry.com)
 [x] 320 (TLDS L.L.C. d/b/a SRSPlus)
 [x] 363 (Funpeas Media Ventures, LLC dba DomainProcessor.com)
 [x] 378 (2030138 Ontario Inc. dba NamesBeyond.com and dba GoodLuckDomain.com)
 [x] 380 (Tuonome.it Srl d/b/a APIsrs.com)
 [x] 401 (Misk.com, Inc.)
+[x] 411 (Fabulous.com Pty Ltd.)
+[x] 418 (CommuniGal Communication Ltd.)
+[x] 420 (HiChina Zhicheng Technology Limited)
 [x] 430 (Net Searchers International Ltd.)
+[x] 431 (DreamHost, LLC)
 [x] 440 (Wild West Domains, LLC)
 [x] 455 (EnCirca, Inc.)
 [ ] 471 (Bizcn.com, Inc.)
@@ -462,15 +469,35 @@ gTLDs and thin registries sort by IANA ID (http://www.iana.org/assignments/regis
 [x] 634 (NetTuner Corp. dba Webmasters.com)
 [x] 648 (Webagentur.at Internet Services GmbH d/b/a domainname.at)
 [x] 670 ($$$ Private Label Internet Service Kiosk, Inc. dba "PLISK.com")
+[x] 710 (! ! ! $0 Cost Domain and Hosting Services, Inc.)
 [x] 828 (Hetzner Online AG)
 [x] 886 (Domain.com, LLC)
+[x] 888 (Pheenix, Inc.)
 [x] 913 (PocketDomain.com Inc.)
 [x] 931 (UdomainName.com LLC)
+[x] 940 (Above.com Pty Ltd.)
+[x] 946 (FindYouADomain.com LLC)
 [x] 996 (DomainAdministration.com, LLC)
 [x] 1040 (Dynamic Network Services, Inc.)
+[x] 1052 (EuroDNS S.A.)
+[x] 1149 (Go China Domains, LLC)
+[x] 1154 (FastDomain Inc.)
+[x] 1159 (Allearthdomains.com LLC)
+[x] 1165 (Biglizarddomains.com LLC)
+[x] 1169 (Columbianames.com LLC)
+[x] 1173 (Domainarmada.com LLC)
+[x] 1176 (Domaincomesaround.com LLC)
+[x] 1192 (Domainsoftheworld.net LLC)
+[x] 1201 (Domainyeti.com LLC)
+[x] 1207 (EUTurbo.com LLC)
+[x] 1211 (Godomaingo.com LLC)
+[x] 1220 (Nameemperor.com LLC)
+[x] 1231 (Protondomains.com LLC)
+[x] 1232 (Skykomishdomains.com LLC)
 [x] 1239 (CPS-Datensysteme GmbH)
 [x] 1257 (Variomedia AG dba puredomain.com)
 [x] 1328 (RegistryGate GmbH)
+[x] 1336 (Net-Chinese Co., Ltd.)
 [x] 1376 (Instra Corporation Pty Ltd.)
 [x] 1387 (1API GmbH)
 [x] 1408 (united-domains AG)
@@ -478,7 +505,10 @@ gTLDs and thin registries sort by IANA ID (http://www.iana.org/assignments/regis
 [x] 1443 (Vautron Rechenzentrum AG)
 [x] 1448 (Blacknight Internet Solutions Ltd.)
 [x] 1454 (Nics Telekomünikasyon Ticaret Ltd. Şti.)
+[x] 1479 (Namesilo, LLC)
+[x] 1500 (Tirupati Domains And Hosting Pvt. Ltd.)
 [x] 1505 (Gransy s.r.o. d/b/a subreg.cz)
+[x] 1659 (Uniregistrar Corp)
 [x] Novutec Inc.
 ```
 

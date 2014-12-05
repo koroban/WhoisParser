@@ -20,9 +20,11 @@
  */
 
 /**
- * @namespace Novutec\WhoisParser
+ * @namespace Novutec\WhoisParser\Templates
  */
-namespace Novutec\WhoisParser;
+namespace Novutec\WhoisParser\Templates;
+
+use Novutec\WhoisParser\Templates\Type\Regex;
 
 /**
  * Template for Afnic (.FR, .RE, .WF, .PM, .TF, .YT)
@@ -32,7 +34,7 @@ namespace Novutec\WhoisParser;
  * @copyright  Copyright (c) 2007 - 2013 Novutec Inc. (http://www.novutec.com)
  * @license    http://www.apache.org/licenses/LICENSE-2.0
  */
-class Template_Afnic extends AbstractTemplate
+class Afnic extends Regex
 {
 
     /**
@@ -116,7 +118,13 @@ class Template_Afnic extends AbstractTemplate
         foreach ($ResultSet->contacts as $contactType => $contactArray) {
             foreach ($contactArray as $contactObject) {
                 $filteredAddress = $contactObject->address;
-                
+                if (!is_array($filteredAddress)) {
+                    if (strlen($filteredAddress) < 1) {
+                        continue;
+                    }
+                    $filteredAddress = array($filteredAddress);
+                }
+
                 if ($contactType !== 'owner') {
                     $contactObject->organization = $filteredAddress[0];
                     $contactObject->city = end($filteredAddress);

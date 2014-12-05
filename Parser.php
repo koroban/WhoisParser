@@ -25,29 +25,19 @@
 namespace Novutec\WhoisParser;
 
 /**
- * @see Config/Config
- */
-require_once 'Config/Config.php';
-
-/**
- * @see Adapter/Adapter
- */
-require_once 'Adapter/AbstractAdapter.php';
-
-/**
- * @see Templates/Template
- */
-require_once 'Templates/AbstractTemplate.php';
-
-/**
  * @see Result/Result
  */
 require_once 'Result/Result.php';
 
-/**
- * @see Exception
- */
-require_once 'Exception/AbstractException.php';
+use Novutec\WhoisParser\Adapter\AbstractAdapter;
+use Novutec\WhoisParser\Config\Config;
+use Novutec\WhoisParser\Exception\AbstractException;
+use Novutec\WhoisParser\Exception\NoAdapterException;
+use Novutec\WhoisParser\Exception\NoQueryException;
+use Novutec\WhoisParser\Exception\NoTemplateException;
+use Novutec\WhoisParser\Exception\RateLimitException;
+use Novutec\WhoisParser\Result\Result;
+use Novutec\WhoisParser\Templates\Type\AbstractTemplate;
 
 /**
  * WhoisParser
@@ -92,7 +82,7 @@ class Parser
     /**
      * WhoisParserResult object
      * 
-     * @var object
+     * @var \Novutec\WhoisParser\Result\Result
      * @access protected
      */
     protected $Result;
@@ -104,14 +94,6 @@ class Parser
      * @access protected
      */
     protected $throwExceptions = false;
-
-    /**
-     * Use cache for whois output?
-     * 
-     * @var boolean
-     * @access protected
-     */
-    protected $useCache = false;
 
     /**
      * Contains special whois server like member whois configuration. It will be
@@ -141,16 +123,37 @@ class Parser
     /**
      * Activate cache
      * 
-     * @var boolean
+     * @var string Cache location
      * @access protected
      */
-    protected $cache = true;
+    protected $cachePath = null;
+
+    /**
+     * Rate limited servers list.
+     * Allows us to prevent additional queries. Must be cleared manually.
+     *
+     * @var array List of servers which are currently rate limited
+     */
+    protected $rateLimitedServers = array();
+
+    protected $customConfigFile = null;
+
+    protected $proxyConfigFile = null;
+
+    protected $customTemplateNamespace = null;
+
+    protected $customAdapterNamespace = null;
+
+    /**
+     * @var array Custom domain groups for DomainParser
+     */
+    protected $customDomainGroups = array();
+
 
     /**
      * Creates a WhoisParser object
      * 
      * @param  string $format
-	 * @return void
 	 */
     public function __construct($format = 'object')
     {
@@ -180,11 +183,11 @@ class Parser
     public function lookup($query = '')
     {
         $this->Result = new Result();
-        $this->Config = new Config($this->specialWhois);
+        $this->Config = new Config($this->specialWhois, $this->customConfigFile);
         
         try {
             if ($query == '') {
-                throw AbstractException::factory('NoQuery', 'No lookup query given.');
+                throw new NoQueryException('No lookup query given');
             }
             
             $this->prepare($query);
@@ -211,7 +214,7 @@ class Parser
             }
             
             $this->Result->addItem('exception', $e->getMessage());
-            $this->Result->addItem('rawdata', explode("\n", $this->rawdata));
+            $this->Result->addItem('rawdata', $this->rawdata);
             
             if (isset($this->Query)) {
                 
@@ -265,6 +268,10 @@ class Parser
             $this->Query->asn = $query;
         } else {
             $Parser = new \Novutec\DomainParser\Parser();
+            $Parser->setCustomDomainGroups($this->customDomainGroups);
+            if ($this->cachePath !== null) {
+                $Parser->setCachePath($this->cachePath);
+            }
             $this->Query = $Parser->parse(filter_var($query, FILTER_SANITIZE_STRING));
         }
     }
@@ -273,7 +280,8 @@ class Parser
      * Send data to whois server and call parse() to process rawdata
      * 
      * @throws NoAdapterException
-     * @param  object $query
+     * @throws RateLimitException
+     * @param  string $query
 	 * @return void
 	 */
     public function call($query = '')
@@ -283,14 +291,18 @@ class Parser
         }
         
         $Config = $this->Config->getCurrent();
-        $Adapter = AbstractAdapter::factory($Config['adapter']);
-        
+        $Adapter = AbstractAdapter::factory($Config['adapter'], $this->proxyConfigFile, $this->customAdapterNamespace);
+        $server = $Config['server'];
+
+        if (in_array($server, $this->rateLimitedServers)) {
+            throw new RateLimitException("Rate limit exceeded for server: ". $server);
+        }
+
         if ($Adapter instanceof AbstractAdapter) {
-            $this->rawdata = strip_tags($Adapter->call($this->Query, $Config));
+            $this->rawdata = $Adapter->call($this->Query, $Config);
             $this->parse();
         } else {
-            throw AbstractException::factory('NoAdapter', 'Adapter ' . $Config['adapter'] .
-                     ' could not be found.');
+            throw new NoAdapterException('Adapter '. $Config['adapter'] .' could not be found');
         }
     }
 
@@ -298,30 +310,34 @@ class Parser
      * Parses rawdata from whois server and call postProcess if exists afterwards
      * 
      * @throws NoTemplateException
+     * @throws RateLimitException
      * @return void
      */
     private function parse()
     {
         $Config = $this->Config->getCurrent();
-        
-        $Template = AbstractTemplate::factory($Config['template']);
+
+        $Template = AbstractTemplate::factory($Config['template'], $this->customTemplateNamespace);
 
         // If Template is null then we do not have a template for that, but we
         // can still proceed to the end with just the rawdata
         if ($Template instanceof AbstractTemplate) {
-            $this->parseTemplate($Template);
+            $this->Result->template[$Config['server']] = $Config['template'];
+            $this->rawdata = $Template->translateRawData($this->rawdata, $Config);
+            try {
+                $Template->parse($this->Result, $this->rawdata);
+            } catch (RateLimitException $e) {
+                $server = $Config['server'];
+                if (!in_array($server, $this->rateLimitedServers)) {
+                    $this->rateLimitedServers[] = $server;
+                }
+                throw new RateLimitException("Rate limit exceeded for server: ". $server);
+            }
             
             // set rawdata to Result - this happens here because sometimes we
             // have to fix the rawdata as well in postProcess
-            $this->Result->addItem('rawdata', explode("\n", $this->rawdata));
-            
-            // check availability upon type - IP addresses are always registered
-            if (isset($Template->available) && $Template->available != '') {
-                preg_match_all($Template->available, $this->rawdata, $matches);
-                
-                $this->Result->addItem('registered', empty($matches[0]));
-            }
-            
+            $this->Result->addItem('rawdata', $this->rawdata);
+
             // set registered to Result
             $this->Result->addItem('registered', isset($this->Result->registered) ? $this->Result->registered : false);
             
@@ -344,8 +360,7 @@ class Parser
                 $this->Result->addItem('idnName', $this->Query->idnFqdn);
             }
         } else {
-            throw AbstractException::factory('NoTemplate', 'Template ' . $Config['template'] .
-                     ' could not be found.');
+            throw new NoTemplateException('Template '. $Config['template'] .' could not be found');
         }
     }
 
@@ -417,69 +432,6 @@ class Parser
     }
 
     /**
-     * Parses rawdata by Template
-     * 
-     * @param  object $Template
-     * @param  string $rawdata
-     * @return void
-     */
-    private function parseTemplate($Template)
-    {
-        //print_r($this->rawdata);
-        // check if there is a block to be cutted from HTML response
-        if (isset($Template->htmlBlock)) {
-            preg_match($Template->htmlBlock, $this->rawdata, $htmlMatches);
-            
-            if (isset($htmlMatches[0])) {
-                $this->rawdata = preg_replace('/\s\s+/', "\n", $htmlMatches[0]);
-            }
-        }
-        
-        // lookup all blocks of template
-        foreach ($Template->blocks as $blockKey => $blockRegEx) {
-            // try to match block regex against WHOIS rawdata
-            if (preg_match_all($blockRegEx, $this->rawdata, $blockMatches)) {
-                // use matched block to lookup for blockItems
-                foreach ($blockMatches[0] as $item) {
-                    foreach ($Template->blockItems[$blockKey] as $itemRegEx => $target) {
-                        // try to match blockItem regex against block
-                        if (preg_match_all($itemRegEx, $item, $itemMatches)) {
-                            // set matched items to Result
-                            $this->Result->addItem($target, end($itemMatches));
-                        }
-                    }
-                }
-            }
-        }
-        
-        // if there are still contact handles after parsing then
-        // these contacts are used for more types e.g. one handle for admin and
-        // tech so we are going to clone this matching handles
-        if (isset($this->Result->network->contacts)) {
-            // lookup all left over handles in network
-            foreach ($this->Result->network->contacts as $type => $handle) {
-                if (is_string($handle)) {
-                    // lookup all contacts in Result
-                    foreach ($this->Result->contacts as $contactType => $contactArray) {
-                        foreach ($contactArray as $contactObject) {
-                            // if contact handle in network matches the one in
-                            // Result, we have to clone it
-                            if (strtolower($contactObject->handle) === strtolower($handle)) {
-                                if (empty($this->Result->contacts->$type)) {
-                                    $this->Result->contacts->$type = Array();
-                                }
-                                array_push($this->Result->contacts->$type, $contactObject);
-                                unset($this->Result->network->contacts->$type);
-                                break 2;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    /**
      * Returns WhoisParserResult instance
      * 
      * @return object
@@ -536,18 +488,6 @@ class Parser
         $this->dateformat = $dateformat;
     }
 
-    /**
-     * Set the cache flag
-     *
-     * If cache flag is set, the WHOIS parser will cache the query and rawdata.
-     *
-     * @param  boolean $cache
-     * @return void
-     */
-    public function useCache($cache = true)
-    {
-        $this->cache = filter_var($cache, FILTER_VALIDATE_BOOLEAN);
-    }
 
     /**
      * Set the throwExceptions flag
@@ -564,5 +504,154 @@ class Parser
     public function throwExceptions($throwExceptions = false)
     {
         $this->throwExceptions = filter_var($throwExceptions, FILTER_VALIDATE_BOOLEAN);
+    }
+
+
+    /**
+     * Set the path to use for on-disk cache. If NULL, cache is disabled.
+     *
+     * @param string|null $path Cache path
+     */
+    public function setCachePath($path)
+    {
+        $this->cachePath = $path;
+    }
+
+
+    /**
+     * Return the list of rate limited servers
+     *
+     * @return array
+     */
+    public function getRateLimitedServers()
+    {
+        return $this->rateLimitedServers;
+    }
+
+
+    /**
+     * Remove a specific server from the list of rate limited servers.
+     *
+     * @param string $server
+     * @return bool Server was present in list?
+     */
+    public function removeRateLimitedServer($server)
+    {
+        $key = array_search($server, $this->rateLimitedServers);
+        if ($key !== false) {
+            unset($this->rateLimitedServers[$key]);
+        }
+        return ($key !== false);
+    }
+
+
+    /**
+     * Clear the list of rate limited servers
+     *
+     * @return int Number of entries removed from list
+     */
+    public function clearRateLimitedServers()
+    {
+        $count = count($this->rateLimitedServers);
+        $this->rateLimitedServers = array();
+        return $count;
+    }
+
+
+    /**
+     * Set a custom config file.
+     * Settings in this file will override the default config.
+     * Set to NULL to clear.
+     *
+     * @param null|string $iniFile INI file
+     */
+    public function setCustomConfigFile($iniFile)
+    {
+        $this->customConfigFile = $iniFile;
+    }
+
+
+    /**
+     * Set a proxy config file.
+     * Set to NULL to clear.
+     *
+     * @param null|string $iniFile
+     */
+    public function setProxyConfigFile($iniFile)
+    {
+        $this->proxyConfigFile = $iniFile;
+    }
+
+
+    /**
+     * Set a custom template namespace
+     * Templates in this namespace will override the default templates.
+     * Set to NULL to clear.
+     *
+     * @param null|string $namespace
+     */
+    public function setCustomTemplateNamespace($namespace)
+    {
+        $this->customTemplateNamespace = $namespace;
+    }
+
+
+    /**
+     * Set a custom adapter namespace.
+     * Adapters in this namespace will override the default adapters.
+     * Set to NULL to clear.
+     *
+     * @param null|string $namespace
+     */
+    public function setCustomAdapterNamespace($namespace)
+    {
+        $this->customAdapterNamespace = $namespace;
+    }
+
+
+    /**
+     * Add a custom domain group for DomainParser. This will override the built-in domain groups.
+     *
+     * @param string $groupName
+     * @param array $tldList
+     */
+    public function addCustomDomainGroup($groupName, array $tldList)
+    {
+        $this->customDomainGroups[$groupName] = $tldList;
+    }
+
+
+    /**
+     * Set the custom domain groups for DomainParser. The array should be in the same format as in Additional.php.
+     * These will override the built-in domain groups
+     *
+     * @param array $domainGroups Array of domain groups and their tld lists
+     */
+    public function setCustomDomainGroups(array $domainGroups)
+    {
+        $this->customDomainGroups = $domainGroups;
+    }
+
+
+
+    /**
+     * Return the current configured proxy config file location
+     *
+     * @return null|string
+     */
+    public function getProxyConfigFile()
+    {
+        return $this->proxyConfigFile;
+    }
+
+
+    /**
+     * Return the currently configured custom adapter namespace.
+     *
+     * @return null|string
+     */
+    public function getCustomAdapterNamespace()
+    {
+        return $this->customAdapterNamespace;
     }
 }

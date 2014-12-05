@@ -20,9 +20,11 @@
  */
 
 /**
- * @namespace Novutec\WhoisParser
+ * @namespace Novutec\Whois\Parser\Templates
  */
-namespace Novutec\WhoisParser;
+namespace Novutec\WhoisParser\Templates;
+
+use Novutec\WhoisParser\Templates\Type\Regex;
 
 /**
  * Template for .SE
@@ -33,7 +35,7 @@ namespace Novutec\WhoisParser;
  * @license    http://www.apache.org/licenses/LICENSE-2.0
  * @author     estshy <estshy.pl>
  */
-class Template_Se extends AbstractTemplate
+class Se extends Regex
 {
 
     /**

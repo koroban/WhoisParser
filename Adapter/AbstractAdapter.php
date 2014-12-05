@@ -20,9 +20,9 @@
  */
 
 /**
- * @namespace Novutec\WhoisParser
+ * @namespace Novutec\WhoisParser\Adapter
  */
-namespace Novutec\WhoisParser;
+namespace Novutec\WhoisParser\Adapter;
 
 /**
  * WhoisParser AbstractAdapter
@@ -51,6 +51,14 @@ abstract class AbstractAdapter
      */
     protected $sock = false;
 
+    protected $proxyConfig = null;
+
+
+    public function __construct($proxyConfig)
+    {
+        $this->proxyConfig = $proxyConfig;
+    }
+
     /**
      * Send data to whois server
      * 
@@ -67,16 +75,24 @@ abstract class AbstractAdapter
      * Socket or HTTP, default is socket.
      * 
      * @param  string $type
-     * @return mixed
+     * @param string|null $proxyConfig
+     * @param string|null $customNamespace
+     * @return AbstractAdapter
      */
-    public static function factory($type = 'socket')
+    public static function factory($type = 'socket', $proxyConfig = null, $customNamespace = null)
     {
-        if (file_exists(__DIR__ . '/' . ucfirst($type) . '.php')) {
-            include_once __DIR__ . '/' . ucfirst($type) . '.php';
-            $classname = 'Novutec\WhoisParser\\' . ucfirst($type);
-            return new $classname();
-        } else {
-            return null;
+        $obj = null;
+        // Ensure the custom namespace ends with a \
+        $customNamespace = rtrim($customNamespace, '\\') .'\\';
+        if ((strpos($type, '\\') !== false) && class_exists($type)) {
+            $obj = new $type($proxyConfig);
+        } elseif ((strlen($customNamespace) > 1) && class_exists($customNamespace . ucfirst($type))) {
+            $class = $customNamespace . ucfirst($type);
+            $obj = new $class($proxyConfig);
+        } elseif (class_exists('Novutec\WhoisParser\Adapter\\'. ucfirst($type))) {
+            $class = 'Novutec\WhoisParser\Adapter\\' . ucfirst($type);
+            $obj = new $class($proxyConfig);
         }
+        return $obj;
     }
 }

@@ -20,9 +20,11 @@
  */
 
 /**
- * @namespace Novutec\WhoisParser
+ * @namespace Novutec\WhoisParser\Templates\Type
  */
-namespace Novutec\WhoisParser;
+namespace Novutec\WhoisParser\Templates\Type;
+
+use Novutec\WhoisParser\Exception\RateLimitException;
 
 /**
  * WhoisParser AbstractTemplate
@@ -97,16 +99,25 @@ abstract class AbstractTemplate
      * @param  string $template
      * @return mixed
      */
-    public static function factory($template)
+    public static function factory($template, $customNamespace = null)
     {
-        $template = str_replace('.', '_', $template);
-        if (file_exists(__DIR__ . '/' . ucfirst($template) . '.php')) {
-            include_once __DIR__ . '/' . ucfirst($template) . '.php';
-            $classname = 'Novutec\WhoisParser\Template_' . ucfirst($template);
-            return new $classname();
-        } else {
-            return null;
+        $template = ucfirst(str_replace('.', '_', $template));
+
+        $obj = null;
+
+        // Ensure the custom namespace ends with a \
+        $customNamespace = rtrim($customNamespace, '\\') .'\\';
+        if ((strpos($template, '\\') !== false) && class_exists($template, $customNamespace)) {
+            $class = $template;
+            $obj = new $class();
+        } elseif ((strlen($customNamespace) > 1) && class_exists($customNamespace . $template)) {
+            $class = $customNamespace . $template;
+            $obj = new $class();
+        } elseif (class_exists('Novutec\WhoisParser\Templates\\'. $template)) {
+            $class = 'Novutec\WhoisParser\Templates\\'. $template;
+            $obj = new $class();
         }
+        return $obj;
     }
 
     /**
@@ -115,4 +126,44 @@ abstract class AbstractTemplate
      */
     public function postProcess(&$WhoisParser)
     {}
+
+
+    /**
+     * @param \Novutec\WhoisParser\Result\Result $result
+     * @param $rawdata
+     * @throws \Novutec\WhoisParser\Exception\RateLimitException
+     */
+    public abstract function parse($result, $rawdata);
+
+
+    protected function parseRateLimit($rawdata)
+    {
+        if (isset ($this->rateLimit) && strlen($this->rateLimit)) {
+            $count = preg_match_all($this->rateLimit, $rawdata, $matches);
+            if ($count > 0) {
+                throw new RateLimitException("Rate limit exceeded for server");
+            }
+        }
+    }
+
+
+    /**
+     * Perform any necessary translation on the raw data before processing (for example, re-encoding to UTF-8)
+     *
+     * @param string $rawdata
+     * @param array $config
+     * @return string
+     */
+    public function translateRawData($rawdata, $config)
+    {
+        if (array_key_exists('encoding', $config)) {
+            switch (strtolower($config['encoding'])) {
+                case 'iso-8859-1':
+                    $rawdata = utf8_encode($rawdata);
+                    break;
+            }
+        }
+
+        return $rawdata;
+    }
 }
