@@ -61,6 +61,13 @@ class Se extends Regex
             '/^modified:(?>[\x20\t]*)(.+)$/im'  => 'changed',
             '/^expires:(?>[\x20\t]*)(.+)$/im'   => 'expires',
             '/^registrar:(?>[\x20\t]*)(.+)$/im' => 'registrar:name',
+            '/^status:(?>[\x20\t]*)(.+)$/im' => 'status',
+            '/^dnssec:(?>[\x20\t]*)(.+)$/im' => 'dnssec',
+
+            '/^holder:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:handle',
+            '/^admin-c:(?>[\x20\t]*)(.+)$/im' => 'contacts:admin:handle',
+            '/^tech-c:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:handle',
+            '/^billing-c:(?>[\x20\t]*)(.+)$/im' => 'contacts:billing:handle',
         ),
     );
 
@@ -83,8 +90,7 @@ class Se extends Regex
     public function postProcess(&$WhoisParser)
     {
         $ResultSet = $WhoisParser->getResult();
-
-        if ($ResultSet->dnssec === 'Unsigned') {
+        if (preg_match("/unsigned/i", $ResultSet->dnssec)) {
             $ResultSet->dnssec = false;
         } else {
             $ResultSet->dnssec = true;
