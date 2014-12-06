@@ -4,7 +4,7 @@ namespace Novutec\WhoisParser\Templates;
 
 use Novutec\WhoisParser\Templates\Type\KeyValue;
 
-class Su extends KeyValue
+class Ru extends KeyValue
 {
 
     protected $regexKeys = array(
