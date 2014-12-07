@@ -153,7 +153,7 @@ abstract class AbstractTemplate
      * @param string $rawdata
      * @return string
      */
-    public function translateRawData($rawdata)
+    public function translateRawData($rawdata, $config)
     {
         return $rawdata;
     }
