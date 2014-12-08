@@ -426,7 +426,7 @@ gTLDs and thin registries sort by IANA ID (http://www.iana.org/assignments/regis
 [x] 48 (eNom, Inc.)
 [x] 49 (GMO Internet, Inc. d/b/a Onamae.com)
 [x] 52 (Hostopia.com Inc. d/b/a Aplus.net)
-[ ] 65 (DomainPeople, Inc.)
+[x] 65 (DomainPeople, Inc.)
 [x] 66 (Enameco, LLC)
 [x] 69 (Tucows Domains Inc.)
 [x] 79 (Easyspace Limited)
@@ -463,8 +463,10 @@ gTLDs and thin registries sort by IANA ID (http://www.iana.org/assignments/regis
 [x] 430 (Net Searchers International Ltd.)
 [x] 431 (DreamHost, LLC)
 [x] 440 (Wild West Domains, LLC)
+[x] 444 (Inames Co. Ltd.)
 [x] 455 (EnCirca, Inc.)
 [ ] 471 (Bizcn.com, Inc.)
+[x] 612 (Blue Razor Domains, LLC)
 [x] 625 (Name.com LLC)
 [x] 634 (NetTuner Corp. dba Webmasters.com)
 [x] 648 (Webagentur.at Internet Services GmbH d/b/a domainname.at)
@@ -508,6 +510,7 @@ gTLDs and thin registries sort by IANA ID (http://www.iana.org/assignments/regis
 [x] 1479 (Namesilo, LLC)
 [x] 1500 (Tirupati Domains And Hosting Pvt. Ltd.)
 [x] 1505 (Gransy s.r.o. d/b/a subreg.cz)
+[x] 1540 (Domainwards.com LLC)
 [x] 1659 (Uniregistrar Corp)
 [x] Novutec Inc.
 ```
