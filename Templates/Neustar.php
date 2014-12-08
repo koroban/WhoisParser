@@ -118,7 +118,10 @@ class Neustar extends Regex
             6 => array('/name server:(?>[\x20\t]+)(.+)$/im' => 'nameserver'), 
             7 => array('/domain registration date:(?>[\x20\t]*)(.+)$/im' => 'created', 
                     '/domain expiration date:(?>[\x20\t]*)(.+)$/im' => 'expires', 
-                    '/domain last updated date:(?>[\x20\t]*)(.+)$/im' => 'changed'));
+                    '/domain last updated date:(?>[\x20\t]*)(.+)$/im' => 'changed',
+                    '/DNSSEC:(?>[\x20\t]*)(.+)$/im' => 'dnssec',
+            )
+    );
 
     /**
      * RegEx to check availability of the domain name
