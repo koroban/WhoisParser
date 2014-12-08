@@ -60,6 +60,9 @@ abstract class KeyValue extends AbstractTemplate
 
             $key = trim($lineParts[0]);
             $value = trim($lineParts[1]);
+            if (strlen($value) < 1) {
+                continue;
+            }
 
             if (array_key_exists($key, $data)) {
                 if (! is_array($data[$key])) {
