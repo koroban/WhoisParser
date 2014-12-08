@@ -77,7 +77,7 @@ class Br extends Regex
     protected $available = '/(No match for domain|release process: reserved)/i';
 
 
-    public function translateRawData($rawdata)
+    public function translateRawData($rawdata, $config)
     {
         return utf8_encode($rawdata);
     }
