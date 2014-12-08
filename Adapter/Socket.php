@@ -114,6 +114,12 @@ class Socket extends AbstractAdapter
             $rawdata = preg_replace('/^HTTP\/1\.1 200.+\n/', '', $rawdata);
         }
 
+        // Servers have been seen returning no data.
+        // This possibly happens when we're being rate limited, but it's not really possible to give any certain reason
+        if (strlen($rawdata) < 1) {
+            throw new ReadErrorException('No data read from server.');
+        }
+
         return str_replace("\r", '', $rawdata);
     }
 
