@@ -46,8 +46,8 @@ class Bg extends Regex
     protected $blocks = array(1 => '/domain name:(?>[\x20\t]*)(.*?)(?=registrant:)/is', 
             2 => '/registrant:(?>[\x20\t]*)(.*?)(?=administrative contact:)/is', 
             3 => '/administrative contact:(?>[\x20\t]*)(.*?)(?=technical contact)/is', 
-            4 => '/technical contact\(s\):(?>[\x20\t]*)(.*?)(?=nic handle|name server information)/is', 
-            5 => '/name server information:(?>[\x20\t]*)(.*?)(?=dnssec)/is', 
+            4 => '/technical contact\(s\):(?>[\x20\t]*)(.*?)(?=name server information)/is',
+            5 => '/name server information:(?>[\x20\t]*)(.*?)(?=dnssec)/is',
             6 => '/dnssec:(?>[\x20\t]*)(.*?)$/is');
 
     /**
