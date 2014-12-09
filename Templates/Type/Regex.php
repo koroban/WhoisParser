@@ -37,15 +37,29 @@ abstract class Regex extends AbstractTemplate {
                     if (preg_match_all($itemRegEx, $item, $itemMatches)) {
                         // set matched items to Result
                         $value = end($itemMatches);
-                        if ($this->convertFromHtml) {
-                            if (is_array($value)) {
-                                foreach($value as $k => $v) {
+                        if (is_array($value)) {
+                            foreach($value as $k => $v) {
+                                if ($this->convertFromHtml) {
                                     $value[$k] = html_entity_decode(strip_tags($v));
                                 }
-                            } else {
+                                $value[$k] = trim($v);
+                                if (strlen($v) < 1) {
+                                    unset($value[$k]);
+                                }
+                            }
+                            if (count($value) < 1) {
+                                continue;
+                            }
+                        } else {
+                            if ($this->convertFromHtml) {
                                 $value = html_entity_decode(strip_tags($value));
                             }
+                            $value = trim($value);
+                            if (strlen($value) < 1) {
+                                continue;
+                            }
                         }
+
                         $result->addItem($target, $value);
                     }
                 }

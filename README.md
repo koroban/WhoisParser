@@ -137,6 +137,7 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [x] BY
 [x] BZ
 [x] CA
+[x] CAPETOWN
 [x] CAT
 [x] CC
 [x] CD
@@ -145,10 +146,11 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [x] CH
 [ ] CI - need recursive calls for handles
 [x] CK
-[ ] CL - possible
+[x] CL
 [x] CM
 [x] CN
 [x] CO
+[x] CO.ZA
 [x] COM
 [x] COOP
 [ ] CR
@@ -164,6 +166,7 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [x] DK
 [x] DM
 [ ] DO - whois.nic.do is broken
+[x] DURBAN
 [x] DZ
 [x] EC
 [x] EDU
@@ -222,6 +225,7 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [ ] JM
 [ ] JO
 [x] JOBS
+[x] JOBURG
 [x] JP
 [x] KE
 [x] KG
@@ -276,6 +280,7 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [x] NC
 [ ] NE
 [x] NET
+[x] NET.ZA
 [x] NF
 [x] NG
 [ ] NI
@@ -288,6 +293,7 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [x] NZ
 [x] OM
 [x] ORG
+[x] ORG.ZA
 [ ] PA
 [x] PE
 [ ] PF
@@ -362,6 +368,7 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [ ] VI
 [ ] VN
 [x] VU
+[x] WEB.ZA
 [x] WF
 [x] WS
 [x] XN--3E0B707E - .kr
@@ -400,7 +407,6 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [x] XXX
 [ ] YE
 [x] YT
-[ ] ZA - webbased whois.co.za
 [ ] ZM
 [ ] ZW
 ```
@@ -426,11 +432,12 @@ gTLDs and thin registries sort by IANA ID (http://www.iana.org/assignments/regis
 [x] 48 (eNom, Inc.)
 [x] 49 (GMO Internet, Inc. d/b/a Onamae.com)
 [x] 52 (Hostopia.com Inc. d/b/a Aplus.net)
-[ ] 65 (DomainPeople, Inc.)
+[x] 65 (DomainPeople, Inc.)
 [x] 66 (Enameco, LLC)
 [x] 69 (Tucows Domains Inc.)
 [x] 79 (Easyspace Limited)
 [x] 81 (Gandi SAS)
+[x] 82 (OnlineNIC, Inc.)
 [x] 83 (1&1 Internet AG)
 [x] 85 (EPAG Domainservices GmbH)
 [x] 88 (Namebay SAM)
@@ -439,6 +446,7 @@ gTLDs and thin registries sort by IANA ID (http://www.iana.org/assignments/regis
 [x] 106 (Ascio Technologies, Inc. - Denmark)
 [x] 113 (CSL Computer Service Langenbach GmbH d/b/a joker.com)
 [ ] 120 (Xin Net Technology Corporation)
+[x] 130 (Netpia.com, Inc.)
 [x] 131 (Total Web Solutions Limited trading as TotalRegistrations)
 [x] 140 (Acens Technologies, S.L.U.)
 [x] 141 (Cronon AG)
@@ -460,11 +468,15 @@ gTLDs and thin registries sort by IANA ID (http://www.iana.org/assignments/regis
 [x] 411 (Fabulous.com Pty Ltd.)
 [x] 418 (CommuniGal Communication Ltd.)
 [x] 420 (HiChina Zhicheng Technology Limited)
+[x] 424 (Internetters Limited)
 [x] 430 (Net Searchers International Ltd.)
 [x] 431 (DreamHost, LLC)
 [x] 440 (Wild West Domains, LLC)
+[x] 444 (Inames Co. Ltd.)
+[x] 449 (Korea Information Certificate Authority, Inc. dba DomainCA.com)
 [x] 455 (EnCirca, Inc.)
 [ ] 471 (Bizcn.com, Inc.)
+[x] 612 (Blue Razor Domains, LLC)
 [x] 625 (Name.com LLC)
 [x] 634 (NetTuner Corp. dba Webmasters.com)
 [x] 648 (Webagentur.at Internet Services GmbH d/b/a domainname.at)
@@ -477,9 +489,11 @@ gTLDs and thin registries sort by IANA ID (http://www.iana.org/assignments/regis
 [x] 931 (UdomainName.com LLC)
 [x] 940 (Above.com Pty Ltd.)
 [x] 946 (FindYouADomain.com LLC)
+[x] 987 (Imperial Registrations, Inc.)
 [x] 996 (DomainAdministration.com, LLC)
 [x] 1040 (Dynamic Network Services, Inc.)
 [x] 1052 (EuroDNS S.A.)
+[x] 1076 (Domain Guardians, Inc.)
 [x] 1149 (Go China Domains, LLC)
 [x] 1154 (FastDomain Inc.)
 [x] 1159 (Allearthdomains.com LLC)
@@ -491,6 +505,7 @@ gTLDs and thin registries sort by IANA ID (http://www.iana.org/assignments/regis
 [x] 1201 (Domainyeti.com LLC)
 [x] 1207 (EUTurbo.com LLC)
 [x] 1211 (Godomaingo.com LLC)
+[x] 1215 (Imminentdomains.net LLC)
 [x] 1220 (Nameemperor.com LLC)
 [x] 1231 (Protondomains.com LLC)
 [x] 1232 (Skykomishdomains.com LLC)
@@ -505,9 +520,12 @@ gTLDs and thin registries sort by IANA ID (http://www.iana.org/assignments/regis
 [x] 1443 (Vautron Rechenzentrum AG)
 [x] 1448 (Blacknight Internet Solutions Ltd.)
 [x] 1454 (Nics Telekomünikasyon Ticaret Ltd. Şti.)
+[x] 1475 (April Sea Information Technology Corporation)
 [x] 1479 (Namesilo, LLC)
 [x] 1500 (Tirupati Domains And Hosting Pvt. Ltd.)
 [x] 1505 (Gransy s.r.o. d/b/a subreg.cz)
+[x] 1536 (BoteroSolutions.com S.A.)
+[x] 1540 (Domainwards.com LLC)
 [x] 1659 (Uniregistrar Corp)
 [x] Novutec Inc.
 ```
