@@ -15,7 +15,7 @@ class Standard extends KeyValue
     protected $regexKeys = array(
         'name' => '/^Domain Name$/i',
         'ask_whois' => '/^(Registrar )?Whois Server$/i',
-        'created' => '/^(Domain |Record )?Creat(e|ed|ion)( On| Date)?$/i',
+        'created' => '/^(Domain |Record )?(Creat|Registrat|Register)(e|ed|ion)( On| Date)?$/i',
         'expires' => '/^(Domain )?(Registration |Registry )?(Expiration|Expires|Expiry) (On|Date)$/i',
         'changed' => '/^(Domain )?(Last )?Updated (On|Date)$/i',
         'nameserver' => '/^(Name Server|Name Server Name|Nameservers)$/i',
@@ -94,9 +94,9 @@ class Standard extends KeyValue
         'contacts:billing:email' => '/^Billing(\-| )(Contact )?(Email|E-Mail)$/i',
     );
 
-    protected $available = '/(Available\s*Domain:|Status: free|No match|No Object Found|Domain (name )?not found|Domain Status: Available)/i';
+    protected $available = '/(Available\s*Domain:|Status: free|No match|No Object Found|Domain (name )?not found|Domain Status: Available|Not found: |No data found)/i';
 
-    protected $rateLimit = '/(Quota Exceeded|exceeded the maximum allowable|exceeded your query limit)/i';
+    protected $rateLimit = '/(Quota Exceeded|exceeded the maximum allowable|exceeded your query limit|whois limit exceeded)/i';
 
 
     public function postProcess(&$WhoisParser)
