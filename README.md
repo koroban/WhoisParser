@@ -442,6 +442,7 @@ gTLDs and thin registries sort by IANA ID (http://www.iana.org/assignments/regis
 [x] 85 (EPAG Domainservices GmbH)
 [x] 88 (Namebay SAM)
 [x] 91 (007Names, Inc.)
+[x] 93 (
 [x] 104 (Domainsite.com, Inc)
 [x] 106 (Ascio Technologies, Inc. - Denmark)
 [x] 113 (CSL Computer Service Langenbach GmbH d/b/a joker.com)
@@ -455,6 +456,7 @@ gTLDs and thin registries sort by IANA ID (http://www.iana.org/assignments/regis
 [x] 226 (Deutsche Telekom AG)
 [x] 228 (Moniker Online Services LLC)
 [x] 240 (PlanetDomain Pty Ltd)
+[x] 244 (
 [x] 245 (123 Registration, Inc.)
 [x] 269 (Key-Systems GmbH)
 [x] 291 (DNC Holdings, Inc.)
@@ -475,7 +477,8 @@ gTLDs and thin registries sort by IANA ID (http://www.iana.org/assignments/regis
 [x] 444 (Inames Co. Ltd.)
 [x] 449 (Korea Information Certificate Authority, Inc. dba DomainCA.com)
 [x] 455 (EnCirca, Inc.)
-[ ] 471 (Bizcn.com, Inc.)
+[x] 471 (Bizcn.com, Inc.)
+[x] 609 (
 [x] 612 (Blue Razor Domains, LLC)
 [x] 625 (Name.com LLC)
 [x] 634 (NetTuner Corp. dba Webmasters.com)
@@ -489,6 +492,7 @@ gTLDs and thin registries sort by IANA ID (http://www.iana.org/assignments/regis
 [x] 931 (UdomainName.com LLC)
 [x] 940 (Above.com Pty Ltd.)
 [x] 946 (FindYouADomain.com LLC)
+[x] 955 (
 [x] 987 (Imperial Registrations, Inc.)
 [x] 996 (DomainAdministration.com, LLC)
 [x] 1040 (Dynamic Network Services, Inc.)

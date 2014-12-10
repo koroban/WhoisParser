@@ -286,6 +286,7 @@ class Parser
 	 */
     public function call($query = '')
     {
+        $this->rawdata = null;
         if ($query != '') {
             $this->Query = filter_var($query, FILTER_SANITIZE_STRING);
         }
