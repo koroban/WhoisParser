@@ -59,23 +59,4 @@ class Registrar extends AbstractResult
 	 */
     protected $url;
 
-    /**
-     * Convert properties to json
-     *
-     * @return string
-     */
-    public function toJson()
-    {
-        return json_encode($this->toArray());
-    }
-
-    /**
-     * Convert properties to array
-     *
-     * @return array
-     */
-    public function toArray()
-    {
-        return get_object_vars($this);
-    }
 }

@@ -3,6 +3,7 @@
 namespace Novutec\WhoisParser\Templates\Type;
 
 use Novutec\WhoisParser\Exception\ReadErrorException;
+use Novutec\WhoisParser\Result\Result;
 
 /**
  * Parser based on simple responses containing only 'key: value' entries.
@@ -18,14 +19,17 @@ abstract class KeyValue extends AbstractTemplate
 
     protected $regexKeys = array();
 
+    protected $result = null;
+
 
     /**
-     * @param \Novutec\WhoisParser\Result\Result $result
+     * @param \Novutec\WhoisParser\Result\Result $previousResult
      * @param $rawdata
      * @throws \Novutec\WhoisParser\Exception\ReadErrorException if data was read from the whois response
      */
-    public function parse($result, $rawdata)
+    public function parse($previousResult, $rawdata)
     {
+        $this->result = new Result();
         $this->parseRateLimit($rawdata);
 
         // check availability upon type - IP addresses are always registered
@@ -34,16 +38,18 @@ abstract class KeyValue extends AbstractTemplate
             preg_match_all($this->available, $rawdata, $matches);
             $parsedAvailable = count($matches);
 
-            $result->addItem('registered', empty($matches[0]));
+            $this->result->addItem('registered', empty($matches[0]));
         }
 
         $this->data = $this->parseRawData($rawdata);
         $this->reformatData();
-        $matches = $this->parseKeyValues($result, $this->data, $this->regexKeys, false);
+        $matches = $this->parseKeyValues($this->result, $this->data, $this->regexKeys, true);
 
         if (($matches < 1) && (!$parsedAvailable)) {
             throw new ReadErrorException("Template did not correctly parse the response");
         }
+
+        $previousResult->mergeFrom($this->result);
     }
 
 
