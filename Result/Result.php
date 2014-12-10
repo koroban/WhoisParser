@@ -297,7 +297,7 @@ class Result extends AbstractResult
                                 $element->$type = new Registrar();
                                 break;
                             default:
-                                throw new \Exception("Unexpected event");
+                                $element->$type = new OtherResult();
                         }
                     }
                     
