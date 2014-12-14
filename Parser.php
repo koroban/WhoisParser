@@ -358,7 +358,7 @@ class Parser
     private function ip2bin($ip)
     {
         if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4) !== false) {
-            return base_convert(ip2long($ip), 10, 2);
+            return base_convert(sprintf('%u', ip2long($ip)), 10, 2);
         }
         
         if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) === false) {
