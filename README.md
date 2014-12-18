@@ -492,6 +492,7 @@ gTLDs and thin registries sort by IANA ID (http://www.iana.org/assignments/regis
 [x] 886 (Domain.com, LLC)
 [x] 888 (Pheenix, Inc.)
 [x] 913 (PocketDomain.com Inc.)
+[x] 925 (Everyones Internet, LLC dba SoftLayer)
 [x] 931 (UdomainName.com LLC)
 [x] 940 (Above.com Pty Ltd.)
 [x] 946 (FindYouADomain.com LLC)
@@ -520,6 +521,7 @@ gTLDs and thin registries sort by IANA ID (http://www.iana.org/assignments/regis
 [x] 1232 (Skykomishdomains.com LLC)
 [x] 1239 (CPS-Datensysteme GmbH)
 [x] 1257 (Variomedia AG dba puredomain.com)
+[x] 1316 (35 Technology Co., Ltd.)
 [x] 1328 (RegistryGate GmbH)
 [x] 1336 (Net-Chinese Co., Ltd.)
 [x] 1376 (Instra Corporation Pty Ltd.)
@@ -539,6 +541,7 @@ gTLDs and thin registries sort by IANA ID (http://www.iana.org/assignments/regis
 [x] 1544 (Name114, Inc.)
 [x] 1606 (Registrar of domain names REG.RU LLC)
 [x] 1659 (Uniregistrar Corp)
+[x] 1860 (Paragon Internet Group Ltd)
 [x] Novutec Inc.
 ```
 
