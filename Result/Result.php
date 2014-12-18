@@ -261,6 +261,12 @@ class Result extends AbstractResult
                     }
                     
                     if (! isset($this->contacts->{$this->lastHandle}[$this->lastId])) {
+                        // This happens if the template fails to parse contacts correctly
+                        // But normally causes a fatal error, so unless we manually trigger an error first,
+                        // all stacktrace information is lost
+                        if (($this->lastId === -1) || ($this->lastHandle === null)) {
+                            trigger_error("Unexpected values for lastHandle / lastId", E_USER_WARNING);
+                        }
                         $this->contacts->{$this->lastHandle}[$this->lastId] = new Contact();
                     }
 
