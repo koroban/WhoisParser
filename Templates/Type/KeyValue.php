@@ -75,7 +75,7 @@ abstract class KeyValue extends AbstractTemplate
                     // Copy the array first so we don't affect the result
                     $statusArr = $availabilityValue;
                     $status = array_shift($statusArr);
-                } else if (strlen($availabilityValue) > 1) {
+                } else if ((!is_array($availabilityValue)) && (strlen($availabilityValue) > 1)) {
                     $status = $availabilityValue;
                 }
                 if (strlen($status)) {
