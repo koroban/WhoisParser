@@ -109,16 +109,16 @@ class Config
             'format' => '%domain%',
             'template' => $template,
             'adapter' => 'socket',
-            'dummy' => false,
+            'dummy' => true,
         );
 
         $config = $defaults;
         if (isset($this->customConfig[$template])) {
             $config = array_merge($defaults, $this->customConfig[$template]);
-            $config['dummy'] = true;
+            $config['dummy'] = false;
         } else if (isset($this->config[$template])) {
             $config = array_merge($defaults, $this->config[$template]);
-            $config['dummy'] = true;
+            $config['dummy'] = false;
         }
         return $config;
     }

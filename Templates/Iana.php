@@ -108,12 +108,24 @@ class Iana extends Regex
                     $newConfig = $Config->get($Query->tld);
                 }
                 
-                if ($Result->name === $Query->tld || $newConfig['dummy'] === false) {
+                if ($Result->name === $Query->tld || $newConfig['dummy'] === true) {
                     $newConfig = $Config->get($Result->name);
                 }
                 
                 if ($newConfig['server'] == '') {
                     $newConfig['server'] = $Result->whoisserver;
+                }
+
+                // We didn't find a specified config for the TLD, so let's try by whois server
+                if ($newConfig['dummy']) {
+                    $serverConfig = $Config->get($newConfig['server']);
+                    if (!$serverConfig['dummy']) {
+                        $newConfig = $serverConfig;
+
+                        if ($newConfig['server'] == '') {
+                            $newConfig['server'] = $Result->whoisserver;
+                        }
+                    }
                 }
             } else {
                 $mapping = $Config->get($Result->whoisserver);

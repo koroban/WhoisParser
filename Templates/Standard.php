@@ -94,9 +94,16 @@ class Standard extends KeyValue
         'contacts:billing:email' => '/^Billing(\-| )(Contact )?(Email|E-Mail)$/i',
     );
 
-    protected $available = '/(Available\s*Domain:|Status: free|No match|No Object Found|Domain (name )?not found|Domain Status: Available| is not registered|Not found: |No data found)/i';
+    protected $available = array(
+        '/(Available\s*Domain:|Status: free|No match|No Object Found|Domain (name )?not found|Domain Status: Available| is not registered|Not found: |No data found)/i',
+        '/^\s*Not Found(\.\.\.)?\s*$/i',
+    );
 
-    protected $rateLimit = '/(Quota Exceeded|exceeded the maximum allowable|exceeded your query limit|whois limit exceeded)/i';
+    protected $availabilityField = 'status';
+
+    protected $availabilityValues = array('available', 'not registered', 'free');
+
+    protected $rateLimit = '/(Quota Exceeded|exceeded the maximum allowable|exceeded your query limit)/i';
 
 
     public function postProcess(&$WhoisParser)
