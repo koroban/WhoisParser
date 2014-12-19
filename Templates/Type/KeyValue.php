@@ -21,6 +21,10 @@ abstract class KeyValue extends AbstractTemplate
 
     protected $result = null;
 
+    protected $availabilityField = null;
+
+    protected $availabilityValues = null;
+
 
     /**
      * @param \Novutec\WhoisParser\Result\Result $previousResult
@@ -34,18 +38,62 @@ abstract class KeyValue extends AbstractTemplate
 
         // check availability upon type - IP addresses are always registered
         $parsedAvailable = false;
-        if (isset($this->available) && strlen($this->available)) {
-            preg_match_all($this->available, $rawdata, $matches);
-            $parsedAvailable = count($matches);
+        if (isset($this->available)) {
+            if ((!is_array($this->available)) && strlen($this->available)) {
+                $this->available = array($this->available);
+            }
 
-            $this->result->addItem('registered', empty($matches[0]));
+            $isRegistered = true;
+            if (is_array($this->available)) {
+                foreach ($this->available as $availableRegex) {
+                    $matches = array();
+                    preg_match_all($availableRegex, $rawdata, $matches);
+
+                    if (count($matches[0])) {
+                        $parsedAvailable = true;
+                        $isRegistered = false;
+                    }
+                }
+            }
+
+            $this->result->addItem('registered', $isRegistered);
         }
 
         $this->data = $this->parseRawData($rawdata);
         $this->reformatData();
-        $matches = $this->parseKeyValues($this->result, $this->data, $this->regexKeys, true);
+        $parseMatches = $this->parseKeyValues($this->result, $this->data, $this->regexKeys, true);
 
-        if (($matches < 1) && (!$parsedAvailable)) {
+        if (strlen($this->availabilityField)) {
+            $availabilityValue = null;
+            if (isset($this->result->{$this->availabilityField})) {
+                $availabilityValue = $this->result->{$this->availabilityField};
+            }
+
+            if ($availabilityValue !== null) {
+                $status = null;
+                if (is_array($availabilityValue) && (count($availabilityValue) == 1)) {
+                    // Copy the array first so we don't affect the result
+                    $statusArr = $availabilityValue;
+                    $status = array_shift($statusArr);
+                } else if (strlen($availabilityValue) > 1) {
+                    $status = $availabilityValue;
+                }
+                if (strlen($status)) {
+                    $status = strtolower($status);
+                    $isRegistered = null;
+                    if (in_array($status, $this->availabilityValues)) {
+                        $isRegistered = false;
+                    }
+
+                    if ($isRegistered !== null) {
+                        $parsedAvailable = true;
+                        $this->result->addItem('registered', $isRegistered);
+                    }
+                }
+            }
+        }
+
+        if (($parseMatches < 1) && (!$parsedAvailable)) {
             throw new ReadErrorException("Template did not correctly parse the response");
         }
 
