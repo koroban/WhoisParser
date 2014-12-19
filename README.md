@@ -272,7 +272,7 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [ ] MV
 [ ] MW
 [x] MX
-[ ] MY - possible
+[x] MY
 [ ] MZ
 [x] NA
 [x] NAME
@@ -493,6 +493,7 @@ gTLDs and thin registries sort by IANA ID (http://www.iana.org/assignments/regis
 [x] 612 (Blue Razor Domains, LLC)
 [x] 625 (Name.com LLC)
 [x] 634 (NetTuner Corp. dba Webmasters.com)
+[x] 636 (BRANDON GRAY INTERNET SERVICES, INC. DBA NAMEJUICE.COM)
 [x] 648 (Webagentur.at Internet Services GmbH d/b/a domainname.at)
 [x] 670 ($$$ Private Label Internet Service Kiosk, Inc. dba "PLISK.com")
 [x] 696 (Entorno Digital, S.A.)
@@ -546,6 +547,7 @@ gTLDs and thin registries sort by IANA ID (http://www.iana.org/assignments/regis
 [x] 1441 (TurnCommerce, Inc. DBA NameBright.com)
 [x] 1443 (Vautron Rechenzentrum AG)
 [x] 1448 (Blacknight Internet Solutions Ltd.)
+[x] 1449 (URL Solutions Inc.)
 [x] 1454 (Nics Telekomünikasyon Ticaret Ltd. Şti.)
 [x] 1471 (Astutium Limited)
 [x] 1475 (April Sea Information Technology Corporation)
@@ -557,6 +559,7 @@ gTLDs and thin registries sort by IANA ID (http://www.iana.org/assignments/regis
 [x] 1540 (Domainwards.com LLC)
 [x] 1544 (Name114, Inc.)
 [x] 1555 (HANGZHOU AIMING NETWORK CO.,LTD)
+[x] 1562 (Hogan Lovells International LLP)
 [x] 1579 (ProNamed LLC)
 [x] 1606 (Registrar of domain names REG.RU LLC)
 [x] 1659 (Uniregistrar Corp)
