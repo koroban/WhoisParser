@@ -313,7 +313,7 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [x] RE
 [x] RO
 [x] RS
-[ ] RU - possible
+[x] RU
 [ ] RW
 [ ] SA - possible
 [x] SB
