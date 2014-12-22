@@ -9,8 +9,9 @@ abstract class Regex extends AbstractTemplate {
     /**
      * @param \Novutec\WhoisParser\Result\Result $result
      * @param $rawdata
+     * @param string|object $query
      */
-    public function parse($result, $rawdata)
+    public function parse($result, $rawdata, $query)
     {
         $this->parseRateLimit($rawdata);
 

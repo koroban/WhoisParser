@@ -129,12 +129,12 @@ abstract class AbstractTemplate
 
 
     /**
-     * @param \Novutec\WhoisParser\Result\Result $result
+     * @param \Novutec\WhoisParser\Result\Result $previousResult
      * @param $rawdata
-     * @throws \Novutec\WhoisParser\Exception\RateLimitException
+     * @param string|object $query
+     * @throws \Novutec\WhoisParser\Exception\ReadErrorException if data was read from the whois response
      */
-    public abstract function parse($result, $rawdata);
-
+    public abstract function parse($previousResult, $rawdata, $query);
 
     protected function parseRateLimit($rawdata)
     {

@@ -29,9 +29,10 @@ abstract class KeyValue extends AbstractTemplate
     /**
      * @param \Novutec\WhoisParser\Result\Result $previousResult
      * @param $rawdata
+     * @param string|object $query
      * @throws \Novutec\WhoisParser\Exception\ReadErrorException if data was read from the whois response
      */
-    public function parse($previousResult, $rawdata)
+    public function parse($previousResult, $rawdata, $query)
     {
         $this->result = new Result();
         $this->parseRateLimit($rawdata);
