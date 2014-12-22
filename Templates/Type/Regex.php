@@ -97,15 +97,6 @@ abstract class Regex extends AbstractTemplate {
             }
         }
 
-        // check availability upon type - IP addresses are always registered
-        if (isset($this->available) && strlen($this->available)) {
-            preg_match_all($this->available, $rawdata, $matches);
-
-            $value = $matches[0];
-            if ($this->convertFromHtml && (!is_array($value))) {
-                $value = html_entity_decode(strip_tags($value));
-            }
-            $result->addItem('registered', empty($value));
-        }
+        $this->parseAvailable($rawdata, $result);
     }
 }

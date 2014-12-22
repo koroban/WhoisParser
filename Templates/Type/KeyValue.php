@@ -37,28 +37,7 @@ abstract class KeyValue extends AbstractTemplate
         $this->result = new Result();
         $this->parseRateLimit($rawdata);
 
-        // check availability upon type - IP addresses are always registered
-        $parsedAvailable = false;
-        if (isset($this->available)) {
-            if ((!is_array($this->available)) && strlen($this->available)) {
-                $this->available = array($this->available);
-            }
-
-            $isRegistered = true;
-            if (is_array($this->available)) {
-                foreach ($this->available as $availableRegex) {
-                    $matches = array();
-                    preg_match_all($availableRegex, $rawdata, $matches);
-
-                    if (count($matches[0])) {
-                        $parsedAvailable = true;
-                        $isRegistered = false;
-                    }
-                }
-            }
-
-            $this->result->addItem('registered', $isRegistered);
-        }
+        $parsedAvailable = $this->parseAvailable($rawdata, $this->result);
 
         $this->data = $this->parseRawData($rawdata);
         $this->reformatData();
