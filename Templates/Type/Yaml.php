@@ -24,7 +24,6 @@ class Yaml extends KeyValue
         $this->flattenYaml($v);
 
         $this->reformatData();
-        print '<pre>'; print_r($this->data); print '</pre>';
 
         $parseMatches = $this->parseKeyValues($this->result, $this->data, $this->regexKeys, true);
 
