@@ -11,7 +11,7 @@ namespace Novutec\WhoisParser\Templates;
 class Standardliar extends Standard
 {
 
-    public function parse($result, $rawdata)
+    public function parse($result, $rawdata, $query)
     {
         if (isset($this->available) && strlen($this->available)) {
             preg_match_all($this->available, $rawdata, $matches);
@@ -24,6 +24,6 @@ class Standardliar extends Standard
             }
         }
 
-        parent::parse($result, $rawdata);
+        parent::parse($result, $rawdata, $query);
     }
 }

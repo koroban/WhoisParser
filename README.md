@@ -144,7 +144,7 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [ ] CF
 [ ] CG - webbased with captcha
 [x] CH
-[ ] CI - need recursive calls for handles
+[x] CI
 [x] CK
 [x] CL
 [x] CM
@@ -319,7 +319,7 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [x] SB
 [x] SC
 [ ] SD
-[ ] SE - possible
+[x] SE
 [x] SG
 [x] SH
 [ ] SI - possible
@@ -327,7 +327,7 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [x] SK
 [ ] SL
 [x] SM
-[ ] SN - whois on port 43 broken
+[x] SN
 [x] SO
 [ ] SR
 [x] ST
@@ -347,7 +347,7 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [x] TL
 [x] TM
 [x] TN
-[ ] TO - useless
+[x] TO  (Note: Fairly useless - only allows us to see nameservers and registered status)
 [ ] TP
 [x] TR
 [x] TRAVEL

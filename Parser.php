@@ -326,7 +326,7 @@ class Parser
             $this->Result->template[$Config['server']] = $Config['template'];
             $this->rawdata = $Template->translateRawData($this->rawdata, $Config);
             try {
-                $Template->parse($this->Result, $this->rawdata);
+                $Template->parse($this->Result, $this->rawdata, $this->Query);
             } catch (RateLimitException $e) {
                 $server = $Config['server'];
                 if (!in_array($server, $this->rateLimitedServers)) {
