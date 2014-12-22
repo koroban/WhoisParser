@@ -107,7 +107,7 @@ abstract class AbstractTemplate
 
         // Ensure the custom namespace ends with a \
         $customNamespace = rtrim($customNamespace, '\\') .'\\';
-        if ((strpos($template, '\\') !== false) && class_exists($template, $customNamespace)) {
+        if ((strpos($template, '\\') !== false) && class_exists($template, true)) {
             $class = $template;
             $obj = new $class();
         } elseif ((strlen($customNamespace) > 1) && class_exists($customNamespace . $template)) {
@@ -165,5 +165,39 @@ abstract class AbstractTemplate
         }
 
         return $rawdata;
+    }
+
+
+    /**
+     * Parse the raw data using the available regex list
+     * @param string $rawdata
+     * @param \Novutec\WhoisParser\Result\Result $result
+     * @return bool Parsed & matched?
+     */
+    protected function parseAvailable($rawdata, $result)
+    {
+        $parsedAvailable = false;
+        if (isset($this->available)) {
+            if ((!is_array($this->available)) && strlen($this->available)) {
+                $this->available = array($this->available);
+            }
+
+            $isRegistered = true;
+            if (is_array($this->available)) {
+                foreach ($this->available as $availableRegex) {
+                    $matches = array();
+                    preg_match_all($availableRegex, $rawdata, $matches);
+
+                    if (count($matches[0])) {
+                        $parsedAvailable = true;
+                        $isRegistered = false;
+                    }
+                }
+            }
+
+            $result->addItem('registered', $isRegistered);
+        }
+
+        return $parsedAvailable;
     }
 }

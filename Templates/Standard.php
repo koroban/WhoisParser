@@ -97,6 +97,7 @@ class Standard extends KeyValue
     protected $available = array(
         '/(Available\s*Domain:|Status: free|No match|No Object Found|Domain (name )?not found|Domain Status: Available| is not registered|Not found: |No data found)/i',
         '/^\s*Not Found(\.\.\.)?\s*$/i',
+        '/^\s*# Not found\s*/im',
         '/Domain "([^"]+)" is available for registration/i',
     );
 
