@@ -104,7 +104,7 @@ class Standard extends KeyValue
 
     protected $availabilityValues = array('available', 'not registered', 'free');
 
-    protected $rateLimit = '/(Quota Exceeded|exceeded the maximum allowable|exceeded your query limit)/i';
+    protected $rateLimit = '/(Quota Exceeded|exceeded the maximum allowable|exceeded your query limit|restricted due to excessive queries)/i';
 
 
     public function postProcess(&$WhoisParser)

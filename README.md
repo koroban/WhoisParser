@@ -510,6 +510,7 @@ gTLDs and thin registries sort by IANA ID (http://www.iana.org/assignments/regis
 [x] 955 (Launchpad, Inc.)
 [x] 987 (Imperial Registrations, Inc.)
 [x] 996 (DomainAdministration.com, LLC)
+[x] 1005 (NetEarth One, Inc.)
 [x] 1040 (Dynamic Network Services, Inc.)
 [x] 1052 (EuroDNS S.A.)
 [x] 1076 (Domain Guardians, Inc.)
@@ -521,6 +522,7 @@ gTLDs and thin registries sort by IANA ID (http://www.iana.org/assignments/regis
 [x] 1169 (Columbianames.com LLC)
 [x] 1173 (Domainarmada.com LLC)
 [x] 1176 (Domaincomesaround.com LLC)
+[x] 1181 (Domaininthehole.com LLC)
 [x] 1192 (Domainsoftheworld.net LLC)
 [x] 1201 (Domainyeti.com LLC)
 [x] 1204 (EunamesOregon.com LLC)
@@ -562,6 +564,7 @@ gTLDs and thin registries sort by IANA ID (http://www.iana.org/assignments/regis
 [x] 1562 (Hogan Lovells International LLP)
 [x] 1579 (ProNamed LLC)
 [x] 1606 (Registrar of domain names REG.RU LLC)
+[x] 1617 (PresidentialDomains LLC)
 [x] 1659 (Uniregistrar Corp)
 [x] 1860 (Paragon Internet Group Ltd)
 [x] Novutec Inc.
