@@ -2,6 +2,7 @@
 
 namespace Novutec\WhoisParser\Templates;
 
+use Novutec\WhoisParser\Templates\Type\AbstractTemplate;
 use Novutec\WhoisParser\Templates\Type\Proxy;
 
 /**
