@@ -54,7 +54,7 @@ class Gtld_deutschetelekom extends Regex
 	 */
     protected $blockItems = array(
             1 => array('/^status:(?>[\x20\t]*)(.+)$/im' => 'status', 
-                    '/^registrant-hdl:(?>[\x20\t]*)(.+)$/im' => 'network:contacts:owner', 
+                    '/^registrant(-hdl)?:(?>[\x20\t]*)(.+)$/im' => 'network:contacts:owner',
                     '/^admin-c:(?>[\x20\t]*)(.+)$/im' => 'network:contacts:admin', 
                     '/^tech-c:(?>[\x20\t]*)(.+)$/im' => 'network:contacts:tech', 
                     '/^zone-c:(?>[\x20\t]*)(.+)$/im' => 'network:contacts:zone', 
