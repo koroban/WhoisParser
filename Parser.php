@@ -629,4 +629,14 @@ class Parser
         $this->rateLimitedServers = array();
         return $count;
     }
+
+
+    /**
+     * Add a specific server to the list of rate limited servers
+     * @param string $server Server name
+     */
+    public function addRateLimitedServer($server)
+    {
+        $this->rateLimitedServers[] = $server;
+    }
 }
