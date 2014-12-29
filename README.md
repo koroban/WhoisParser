@@ -488,6 +488,7 @@ gTLDs and thin registries sort by IANA ID (http://www.iana.org/assignments/regis
 [x] 469 (easyDNS Technologies, Inc.)
 [x] 471 (Bizcn.com, Inc.)
 [x] 472 (Dynadot, LLC)
+[x] 600 (Rebel.com)
 [x] 602 (LCN.com Ltd)
 [x] 604 (In2net Network Inc.)
 [x] 609 (NameKing.com Inc.)
