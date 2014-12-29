@@ -560,6 +560,16 @@ class Parser
 
 
     /**
+     * Add a specific server to the list of rate limited servers
+     * @param string $server Server name
+     */
+    public function addRateLimitedServer($server)
+    {
+        $this->rateLimitedServers[] = $server;
+    }
+
+
+    /**
      * Set a custom config file.
      * Settings in this file will override the default config.
      * Set to NULL to clear.
