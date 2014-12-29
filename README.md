@@ -196,7 +196,7 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [ ] GOV - to few domain names
 [ ] GP
 [ ] GQ
-[ ] GR
+[ ] GR - webbased with captcha
 [x] GS
 [ ] GT  - webbased
 [ ] GU
