@@ -137,6 +137,21 @@ class Iana extends Regex
                 $Config->setCurrent($newConfig);
                 $WhoisParser->call();
             }
+        } else if (isset($Query->idnTld) && ($Result->name != $Query->idnTld) && strlen($Result->name)) {
+            $domain = $Query->idnTld;
+            $domainParts = explode('.', $domain);
+            array_shift($domainParts);
+            $domain = join('.', $domainParts);
+
+            if (strlen($domain)) {
+                $newConfig = $Config->get($domain);
+
+                if ($newConfig['server'] != '') {
+                    $Result->reset();
+                    $Config->setCurrent($newConfig);
+                    $WhoisParser->call();
+                }
+            }
         }
     }
 }

@@ -196,7 +196,7 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [ ] GOV - to few domain names
 [ ] GP
 [ ] GQ
-[ ] GR
+[ ] GR - webbased with captcha
 [x] GS
 [ ] GT  - webbased
 [ ] GU
@@ -462,6 +462,7 @@ gTLDs and thin registries sort by IANA ID (http://www.iana.org/assignments/regis
 [x] 240 (PlanetDomain Pty Ltd)
 [x] 244 (Gabia, Inc.)
 [x] 245 (123 Registration, Inc.)
+[x] 249 (Visesh Infotecnics Ltd. D/B/A Signdomains.Com)
 [x] 269 (Key-Systems GmbH)
 [x] 291 (DNC Holdings, Inc.)
 [x] 292 (MarkMonitor Inc.)
@@ -500,6 +501,7 @@ gTLDs and thin registries sort by IANA ID (http://www.iana.org/assignments/regis
 [x] 710 (! ! ! $0 Cost Domain and Hosting Services, Inc.)
 [x] 814 (Internet.bs Corp.)
 [x] 828 (Hetzner Online AG)
+[x] 839 (REALTIME REGISTER B.V.)
 [x] 886 (Domain.com, LLC)
 [x] 888 (Pheenix, Inc.)
 [x] 913 (PocketDomain.com Inc.)
@@ -562,6 +564,7 @@ gTLDs and thin registries sort by IANA ID (http://www.iana.org/assignments/regis
 [x] 1544 (Name114, Inc.)
 [x] 1555 (HANGZHOU AIMING NETWORK CO.,LTD)
 [x] 1562 (Hogan Lovells International LLP)
+[x] 1564 (TLD Registrar Solutions Ltd.)
 [x] 1579 (ProNamed LLC)
 [x] 1606 (Registrar of domain names REG.RU LLC)
 [x] 1617 (PresidentialDomains LLC)

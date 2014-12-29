@@ -25,6 +25,8 @@ abstract class KeyValue extends AbstractTemplate
 
     protected $availabilityValues = null;
 
+    protected $kvSeparator = ':';
+
 
     /**
      * @param \Novutec\WhoisParser\Result\Result $previousResult
@@ -87,7 +89,7 @@ abstract class KeyValue extends AbstractTemplate
         $rawdata = explode("\n", $rawdata);
         foreach ($rawdata as $line) {
             $line = trim($line);
-            $lineParts = explode(':', $line, 2);
+            $lineParts = explode($this->kvSeparator, $line, 2);
             if (count($lineParts) < 2) {
                 continue;
             }
