@@ -96,6 +96,7 @@ RIRs
 ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 ```
 [x] AC
+[x] AC.UK
 [ ] AD
 [x] AE
 [x] AERO
@@ -154,7 +155,7 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [x] COM
 [x] COOP
 [ ] CR
-[ ] CU
+[x] CU - webbased
 [ ] CV
 [ ] CW
 [x] CX
@@ -298,7 +299,7 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [x] PE
 [ ] PF
 [ ] PG
-[ ] PH
+[ ] PH - webbased with captcha (http://www.dot.ph/whois)
 [ ] PK - webbased
 [x] PL
 [x] PM
@@ -470,6 +471,7 @@ gTLDs and thin registries sort by IANA ID (http://www.iana.org/assignments/regis
 [x] 320 (TLDS L.L.C. d/b/a SRSPlus)
 [x] 363 (Funpeas Media Ventures, LLC dba DomainProcessor.com)
 [x] 378 (2030138 Ontario Inc. dba NamesBeyond.com and dba GoodLuckDomain.com)
+[x] 379 (Arsys Internet, S.L. dba NICLINE.COM)
 [x] 380 (Tuonome.it Srl d/b/a APIsrs.com)
 [x] 381 (DomReg Ltd. d/b/a LIBRIS.COM)
 [x] 401 (Misk.com, Inc.)
