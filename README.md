@@ -323,9 +323,10 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [x] SE
 [x] SG
 [x] SH
-[ ] SI - possible
+[x] SI
 [ ] SJ - no domains but it is NORID
 [x] SK
+[x] SKY
 [ ] SL
 [x] SM
 [x] SN
