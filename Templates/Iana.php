@@ -101,7 +101,8 @@ class Iana extends Regex
         } else {
             $Result->dnssec = false;
         }
-        
+
+        $newConfig = null;
         if (isset($Query->idnFqdn) || isset($Query->ip) || isset($Query->asn)) {
             if (isset($Result->name) && $Result->name != '') {
                 if ($Result->name !== $Query->tld) {
@@ -131,12 +132,6 @@ class Iana extends Regex
                 $mapping = $Config->get($Result->whoisserver);
                 $newConfig = $Config->get($mapping['template']);
             }
-            
-            if ($newConfig['server'] != '') {
-                $Result->reset();
-                $Config->setCurrent($newConfig);
-                $WhoisParser->call();
-            }
         } else if (isset($Query->idnTld) && ($Result->name != $Query->idnTld) && strlen($Result->name)) {
             $domain = $Query->idnTld;
             $domainParts = explode('.', $domain);
@@ -145,13 +140,13 @@ class Iana extends Regex
 
             if (strlen($domain)) {
                 $newConfig = $Config->get($domain);
-
-                if ($newConfig['server'] != '') {
-                    $Result->reset();
-                    $Config->setCurrent($newConfig);
-                    $WhoisParser->call();
-                }
             }
+        }
+
+        if (is_array($newConfig) && strlen($newConfig['server'])) {
+            $Result->reset();
+            $Config->setCurrent($newConfig);
+            $WhoisParser->call();
         }
     }
 }
