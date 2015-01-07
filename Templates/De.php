@@ -81,6 +81,8 @@ class De extends Regex
      */
     protected $available = '/status:(?>[\x20\t]*)free/i';
 
+    protected $rateLimit = '/^% Error: [0-9]+ Connection Refused; access control limit exceeded/im';
+
     /**
      * After parsing ...
      *
