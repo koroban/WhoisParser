@@ -195,6 +195,7 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [ ] GM
 [ ] GN
 [ ] GOV - to few domain names
+[x] GOV.ZA
 [ ] GP
 [ ] GQ
 [ ] GR - webbased with captcha
@@ -522,13 +523,16 @@ gTLDs and thin registries sort by IANA ID (http://www.iana.org/assignments/regis
 [x] 955 (Launchpad, Inc.)
 [x] 987 (Imperial Registrations, Inc.)
 [x] 996 (DomainAdministration.com, LLC)
+[x] 1001 (Domeneshop AS dba domainnameshop.com)
 [x] 1005 (NetEarth One, Inc.)
+[x] 1011 (101domain, inc.)
 [x] 1019 (Threadagent.com, Inc.)
 [x] 1040 (Dynamic Network Services, Inc.)
 [x] 1052 (EuroDNS S.A.)
 [x] 1076 (Domain Guardians, Inc.)
 [x] 1090 (Active Registrar, Inc)
 [x] 1149 (Go China Domains, LLC)
+[x] 1151 (Go Australia Domains, LLC)
 [x] 1154 (FastDomain Inc.)
 [x] 1159 (Allearthdomains.com LLC)
 [x] 1165 (Biglizarddomains.com LLC)
@@ -583,6 +587,7 @@ gTLDs and thin registries sort by IANA ID (http://www.iana.org/assignments/regis
 [x] 1606 (Registrar of domain names REG.RU LLC)
 [x] 1617 (PresidentialDomains LLC)
 [x] 1659 (Uniregistrar Corp)
+[x] 1677 1677 (ACQUIREDNAMES LLC)
 [x] 1860 (Paragon Internet Group Ltd)
 [x] Novutec Inc.
 ```
