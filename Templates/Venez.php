@@ -67,10 +67,4 @@ class Venez extends Regex {
             }
         }
     }
-
-
-    public function translateRawData($rawdata)
-    {
-        return utf8_encode($rawdata);
-    }
 }
