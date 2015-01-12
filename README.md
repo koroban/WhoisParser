@@ -225,7 +225,7 @@ ccTLDs (http://data.iana.org/TLD/tlds-alpha-by-domain.txt)
 [x] IT Registrar WHOIS
 [x] JE
 [ ] JM
-[ ] JO
+[ ] JO - Web based (http://www.dns.jo/Whois.aspx)
 [x] JOBS
 [x] JOBURG
 [x] JP
@@ -454,6 +454,7 @@ gTLDs and thin registries sort by IANA ID (http://www.iana.org/assignments/regis
 [x] 106 (Ascio Technologies, Inc. - Denmark)
 [x] 113 (CSL Computer Service Langenbach GmbH d/b/a joker.com)
 [ ] 120 (Xin Net Technology Corporation)
+[x] 123 (The Registry at Info Avenue, LLC d/b/a Spirit Communications)
 [x] 130 (Netpia.com, Inc.)
 [x] 131 (Total Web Solutions Limited trading as TotalRegistrations)
 [x] 134 (BB ONLINE UK LTD)
@@ -545,6 +546,7 @@ gTLDs and thin registries sort by IANA ID (http://www.iana.org/assignments/regis
 [x] 1204 (EunamesOregon.com LLC)
 [x] 1207 (EUTurbo.com LLC)
 [x] 1208 (Flancrestdomains.com LLC)
+[x] 1209 (Freshbreweddomains.com LLC)
 [x] 1211 (Godomaingo.com LLC)
 [x] 1215 (Imminentdomains.net LLC)
 [x] 1220 (Nameemperor.com LLC)
@@ -583,11 +585,13 @@ gTLDs and thin registries sort by IANA ID (http://www.iana.org/assignments/regis
 [x] 1555 (HANGZHOU AIMING NETWORK CO.,LTD)
 [x] 1562 (Hogan Lovells International LLP)
 [x] 1564 (TLD Registrar Solutions Ltd.)
+[x] 1572 (GlamDomains LLC)
 [x] 1579 (ProNamed LLC)
 [x] 1606 (Registrar of domain names REG.RU LLC)
 [x] 1617 (PresidentialDomains LLC)
 [x] 1659 (Uniregistrar Corp)
-[x] 1677 1677 (ACQUIREDNAMES LLC)
+[x] 1677 (ACQUIREDNAMES LLC)
+[x] 1685 (EchoDomain LLC)
 [x] 1860 (Paragon Internet Group Ltd)
 [x] Novutec Inc.
 ```
