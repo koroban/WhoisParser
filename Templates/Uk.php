@@ -75,6 +75,8 @@ class Uk extends Regex
      */
     protected $available = '/This domain name has not been registered/i';
 
+    protected $rateLimit = '/^the WHOIS query quota for [^\s]+ has been exceeded$/im';
+
     /**
      * After parsing do something
      *
