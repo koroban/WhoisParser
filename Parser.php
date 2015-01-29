@@ -442,6 +442,12 @@ class Parser
         return $this->Result;
     }
 
+
+    public function getRawData()
+    {
+        return $this->rawdata;
+    }
+
     /**
      * Returns WhoisParserConfig instance
      * 

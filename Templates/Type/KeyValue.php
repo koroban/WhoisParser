@@ -76,7 +76,7 @@ abstract class KeyValue extends AbstractTemplate
         }
 
         if (($parseMatches < 1) && (!$parsedAvailable)) {
-            throw new ReadErrorException("Template did not correctly parse the response");
+            throw new ReadErrorException("Template ". get_class($this) ." did not correctly parse the response");
         }
 
         $previousResult->mergeFrom($this->result);
