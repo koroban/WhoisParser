@@ -1,6 +1,6 @@
 <?php
 
-namespace WhoisParser\WhoisParser\Templates;
+namespace Novutec\WhoisParser\Templates;
 
 use Novutec\WhoisParser\Templates\Type\Regex;
 
