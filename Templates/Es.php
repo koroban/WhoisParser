@@ -67,4 +67,6 @@ class Es extends Regex
      * @access protected
      */
     protected $available = '/there is no information available on/i';
+
+    protected $rateLimit = '/is not authorised  or  has exceeded the established limit/im';
 }
