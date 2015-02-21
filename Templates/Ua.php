@@ -80,6 +80,9 @@ class Ua extends Regex
         $ResultSet = $WhoisParser->getResult();
         $date = \DateTime::createFromFormat('YmdHis', $ResultSet->expires);
 
-        $ResultSet->expires = $date->format('Y-m-d H:i:s');
+        $ResultSet->expires = '';
+        if ($date instanceof \DateTime) {
+            $ResultSet->expires = $date->format('Y-m-d H:i:s');
+        }
     }
 }
