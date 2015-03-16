@@ -20,9 +20,11 @@
  */
 
 /**
- * @namespace Novutec\WhoisParser
+ * @namespace Novutec\WhoisParser\Templates
  */
-namespace Novutec\WhoisParser;
+namespace Novutec\WhoisParser\Templates;
+
+use Novutec\WhoisParser\Templates\Type\Regex;
 
 /**
  * Template for ICB .AC, .SH, .IO and .TM
@@ -32,8 +34,9 @@ namespace Novutec\WhoisParser;
  * @copyright  Copyright (c) 2007 - 2013 Novutec Inc. (http://www.novutec.com)
  * @license    http://www.apache.org/licenses/LICENSE-2.0
  */
-class Template_Icb extends AbstractTemplate
+class Icb extends Regex
 {
+    protected $convertFromHtml = true;
 
     /**
      * Cut block from HTML output for $blocks
@@ -102,4 +105,10 @@ class Template_Icb extends AbstractTemplate
      * @access protected
      */
     protected $available = '/(There is no live registration)/i';
+
+
+    public function translateRawData($rawdata, $config)
+    {
+        return strip_tags($rawdata);
+    }
 }

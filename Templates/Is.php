@@ -20,9 +20,11 @@
  */
 
 /**
- * @namespace Novutec\WhoisParser
+ * @namespace Novutec\Whois\Parser\Templates
  */
-namespace Novutec\WhoisParser;
+namespace Novutec\WhoisParser\Templates;
+
+use Novutec\WhoisParser\Templates\Type\Regex;
 
 /**
  * Template for .IS
@@ -32,7 +34,7 @@ namespace Novutec\WhoisParser;
  * @copyright  Copyright (c) 2007 - 2013 Novutec Inc. (http://www.novutec.com)
  * @license    http://www.apache.org/licenses/LICENSE-2.0
  */
-class Template_Is extends AbstractTemplate
+class Is extends Regex
 {
 
     /**
@@ -98,7 +100,7 @@ class Template_Is extends AbstractTemplate
                 }
             }
         }
-        
-        $ResultSet->rawdata = array_map('utf8_encode', $ResultSet->rawdata);
+
+        $ResultSet->rawdata[] = utf8_encode(array_pop($ResultSet->rawdata));
     }
 }

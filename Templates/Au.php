@@ -20,9 +20,11 @@
  */
 
 /**
- * @namespace Novutec\WhoisParser
+ * @namespace Novutec\WhoisParser\Templates
  */
-namespace Novutec\WhoisParser;
+namespace Novutec\WhoisParser\Templates;
+
+use Novutec\WhoisParser\Templates\Type\Regex;
 
 /**
  * Template for .AU
@@ -32,7 +34,7 @@ namespace Novutec\WhoisParser;
  * @copyright  Copyright (c) 2007 - 2013 Novutec Inc. (http://www.novutec.com)
  * @license    http://www.apache.org/licenses/LICENSE-2.0
  */
-class Template_Au extends AbstractTemplate
+class Au extends Regex
 {
 
     /**
@@ -43,8 +45,10 @@ class Template_Au extends AbstractTemplate
 	 */
     protected $blocks = array(1 => '/Domain Name:(?>[\x20\t]*)(.*?)(?=Registrant:)/is', 
             2 => '/Registrant:(?>[\x20\t]*)(.*?)(?=Tech Contact ID:)/is', 
-            3 => '/Tech Contact ID:(?>[\x20\t]*)(.*?)(?=Name Server)/is', 
-            4 => '/Name Server:(?>[\x20\t]*)(.*?)$/is');
+            3 => '/Tech Contact ID:(?>[\x20\t]*)(.*?)(?=Name Server)/is',
+            4 => '/Name Server:(?>[\x20\t]*)(.*?)$/is',
+            5 => '/DNSSEC:(?>[\x20\t]*)(.*?)$/is',
+    );
 
     /**
 	 * Items for each block
@@ -65,7 +69,9 @@ class Template_Au extends AbstractTemplate
                     '/Eligibility ID:(?>[\x20\t]*)(.+)$/im' => 'contacts:owner:eligibility_id'), 
             3 => array('/Tech Contact ID:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:handle', 
                     '/Tech Contact Name:(?>[\x20\t]*)(.+)$/im' => 'contacts:tech:name'), 
-            4 => array('/Name Server:(?>[\x20\t]*)(.+)$/im' => 'nameserver'));
+            4 => array('/Name Server:(?>[\x20\t]*)(.+)$/im' => 'nameserver'),
+            5 => array('/DNSSEC:(?>[\x20\t]*)(.+)$/im' => 'dnssec'),
+    );
 
     /**
      * RegEx to check availability of the domain name

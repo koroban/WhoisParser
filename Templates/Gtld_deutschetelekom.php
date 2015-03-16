@@ -20,9 +20,11 @@
  */
 
 /**
- * @namespace Novutec\WhoisParser
+ * @namespace Novutec\WhoisParser\Templates
  */
-namespace Novutec\WhoisParser;
+namespace Novutec\WhoisParser\Templates;
+
+use Novutec\WhoisParser\Templates\Type\Regex;
 
 /**
  * Template for IANA #226
@@ -32,7 +34,7 @@ namespace Novutec\WhoisParser;
  * @copyright  Copyright (c) 2007 - 2013 Novutec Inc. (http://www.novutec.com)
  * @license    http://www.apache.org/licenses/LICENSE-2.0
  */
-class Template_Gtld_deutschetelekom extends AbstractTemplate
+class Gtld_deutschetelekom extends Regex
 {
 
     /**
@@ -52,7 +54,7 @@ class Template_Gtld_deutschetelekom extends AbstractTemplate
 	 */
     protected $blockItems = array(
             1 => array('/^status:(?>[\x20\t]*)(.+)$/im' => 'status', 
-                    '/^registrant-hdl:(?>[\x20\t]*)(.+)$/im' => 'network:contacts:owner', 
+                    '/^registrant(-hdl)?:(?>[\x20\t]*)(.+)$/im' => 'network:contacts:owner',
                     '/^admin-c:(?>[\x20\t]*)(.+)$/im' => 'network:contacts:admin', 
                     '/^tech-c:(?>[\x20\t]*)(.+)$/im' => 'network:contacts:tech', 
                     '/^zone-c:(?>[\x20\t]*)(.+)$/im' => 'network:contacts:zone', 

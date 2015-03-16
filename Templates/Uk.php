@@ -20,9 +20,11 @@
  */
 
 /**
- * @namespace Novutec\WhoisParser
+ * @namespace Novutec\Whois\Parser\Templates
  */
-namespace Novutec\WhoisParser;
+namespace Novutec\WhoisParser\Templates;
+
+use Novutec\WhoisParser\Templates\Type\Regex;
 
 /**
  * Template for .UK
@@ -32,7 +34,7 @@ namespace Novutec\WhoisParser;
  * @copyright  Copyright (c) 2007 - 2013 Novutec Inc. (http://www.novutec.com)
  * @license    http://www.apache.org/licenses/LICENSE-2.0
  */
-class Template_Uk extends AbstractTemplate
+class Uk extends Regex
 {
 
     /**
@@ -72,6 +74,8 @@ class Template_Uk extends AbstractTemplate
      * @access protected
      */
     protected $available = '/This domain name has not been registered/i';
+
+    protected $rateLimit = '/^the WHOIS query quota for [^\s]+ has been exceeded$/im';
 
     /**
      * After parsing do something

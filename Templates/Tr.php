@@ -20,9 +20,11 @@
  */
 
 /**
- * @namespace Novutec\WhoisParser
+ * @namespace Novutec\Whois\Parser\Templates
  */
-namespace Novutec\WhoisParser;
+namespace Novutec\WhoisParser\Templates;
+
+use Novutec\WhoisParser\Templates\Type\Regex;
 
 /**
  * Template for .TR
@@ -32,7 +34,7 @@ namespace Novutec\WhoisParser;
  * @copyright  Copyright (c) 2007 - 2013 Novutec Inc. (http://www.novutec.com)
  * @license    http://www.apache.org/licenses/LICENSE-2.0
  */
-class Template_Tr extends AbstractTemplate
+class Tr extends Regex
 {
 
     /**
@@ -97,7 +99,7 @@ class Template_Tr extends AbstractTemplate
         
         foreach ($ResultSet->contacts as $contactType => $contactArray) {
             foreach ($contactArray as $contactObject) {
-                $contactObject->address = array_map('utf8_encode', explode("\n", trim($contactObject->address)));
+                $contactObject->address = explode("\n", trim($contactObject->address));
                 $contactObject->address = array_map('trim', $contactObject->address);
                 
                 if ($contactType === 'owner') {
@@ -109,8 +111,6 @@ class Template_Tr extends AbstractTemplate
                     $contactObject->email = $contactObject->address[5];
                     $contactObject->address = $contactObject->address[1];
                 } else {
-                    $contactObject->organization = utf8_encode($contactObject->organization);
-                    
                     if (sizeof($contactObject->address) === 4) {
                         $contactObject->country = $contactObject->address[3];
                         $contactObject->city = $contactObject->address[2];

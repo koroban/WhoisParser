@@ -20,9 +20,11 @@
  */
 
 /**
- * @namespace Novutec\WhoisParser
+ * @namespace Novutec\WhoisParser\Templates
  */
-namespace Novutec\WhoisParser;
+namespace Novutec\WhoisParser\Templates;
+
+use Novutec\WhoisParser\Templates\Type\Regex;
 
 /**
  * Template for IANA
@@ -32,7 +34,7 @@ namespace Novutec\WhoisParser;
  * @copyright  Copyright (c) 2007 - 2013 Novutec Inc. (http://www.novutec.com)
  * @license    http://www.apache.org/licenses/LICENSE-2.0
  */
-class Template_Iana extends AbstractTemplate
+class Iana extends Regex
 {
 
     /**
@@ -99,30 +101,52 @@ class Template_Iana extends AbstractTemplate
         } else {
             $Result->dnssec = false;
         }
-        
+
+        $newConfig = null;
         if (isset($Query->idnFqdn) || isset($Query->ip) || isset($Query->asn)) {
             if (isset($Result->name) && $Result->name != '') {
                 if ($Result->name !== $Query->tld) {
                     $newConfig = $Config->get($Query->tld);
                 }
                 
-                if ($Result->name === $Query->tld || $newConfig['dummy'] === false) {
+                if ($Result->name === $Query->tld || $newConfig['dummy'] === true) {
                     $newConfig = $Config->get($Result->name);
                 }
                 
                 if ($newConfig['server'] == '') {
                     $newConfig['server'] = $Result->whoisserver;
                 }
+
+                // We didn't find a specified config for the TLD, so let's try by whois server
+                if ($newConfig['dummy']) {
+                    $serverConfig = $Config->get($newConfig['server']);
+                    if (!$serverConfig['dummy']) {
+                        $newConfig = $serverConfig;
+
+                        if ($newConfig['server'] == '') {
+                            $newConfig['server'] = $Result->whoisserver;
+                        }
+                    }
+                }
             } else {
                 $mapping = $Config->get($Result->whoisserver);
                 $newConfig = $Config->get($mapping['template']);
             }
-            
-            if ($newConfig['server'] != '') {
-                $Result->reset();
-                $Config->setCurrent($newConfig);
-                $WhoisParser->call();
+        } else if (isset($Query->idnTld) && ($Result->name != $Query->idnTld) && strlen($Result->name)) {
+            $domain = $Query->idnTld;
+            $domainParts = explode('.', $domain);
+            array_shift($domainParts);
+            $domain = join('.', $domainParts);
+
+            if (strlen($domain)) {
+                $newConfig = $Config->get($domain);
             }
+        }
+
+        if (is_array($newConfig) && strlen($newConfig['server'])) {
+            $Result->reset();
+            $Config->setCurrent($newConfig);
+            $WhoisParser->call();
         }
     }
 }

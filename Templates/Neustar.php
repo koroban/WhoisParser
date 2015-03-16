@@ -20,9 +20,11 @@
  */
 
 /**
- * @namespace Novutec\WhoisParser
+ * @namespace Novutec\Whois\Parser\Templates
  */
-namespace Novutec\WhoisParser;
+namespace Novutec\WhoisParser\Templates;
+
+use Novutec\WhoisParser\Templates\Type\Regex;
 
 /**
  * Template for Neustar (.BIZ, .CO, .US, .TRAVEL)
@@ -32,7 +34,7 @@ namespace Novutec\WhoisParser;
  * @copyright  Copyright (c) 2007 - 2013 Novutec Inc. (http://www.novutec.com)
  * @license    http://www.apache.org/licenses/LICENSE-2.0
  */
-class Template_Neustar extends AbstractTemplate
+class Neustar extends Regex
 {
 
     /**
@@ -116,7 +118,10 @@ class Template_Neustar extends AbstractTemplate
             6 => array('/name server:(?>[\x20\t]+)(.+)$/im' => 'nameserver'), 
             7 => array('/domain registration date:(?>[\x20\t]*)(.+)$/im' => 'created', 
                     '/domain expiration date:(?>[\x20\t]*)(.+)$/im' => 'expires', 
-                    '/domain last updated date:(?>[\x20\t]*)(.+)$/im' => 'changed'));
+                    '/domain last updated date:(?>[\x20\t]*)(.+)$/im' => 'changed',
+                    '/DNSSEC:(?>[\x20\t]*)(.+)$/im' => 'dnssec',
+            )
+    );
 
     /**
      * RegEx to check availability of the domain name

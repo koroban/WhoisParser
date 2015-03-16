@@ -20,9 +20,9 @@
  */
 
 /**
- * @namespace Novutec\WhoisParser
+ * @namespace Novutec\WhoisParser\Exception
  */
-namespace Novutec\WhoisParser;
+namespace Novutec\WhoisParser\Exception;
 
 /**
  * Exception

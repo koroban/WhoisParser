@@ -20,9 +20,9 @@
  */
 
 /**
- * @namespace Novutec\WhoisParser
+ * @namespace Novutec\WhoisParser\Config
  */
-namespace Novutec\WhoisParser;
+namespace Novutec\WhoisParser\Config;
 
 /**
  * WhoisParser Config
@@ -46,6 +46,13 @@ class Config
     protected $config;
 
     /**
+     * Contains custom configuration
+     *
+     * @var array
+     */
+    protected $customConfig;
+
+    /**
      * Name of the current loaded configuration
      * 
      * @var array
@@ -59,12 +66,16 @@ class Config
 	 * another configuration.
 	 * 
 	 * @param  array $specialWhois
+     * @param string $customIni Custom config (overrides default config)
 	 * @return	void
 	 */
-    public function __construct($specialWhois = array())
+    public function __construct($specialWhois = array(), $customIni = null)
     {
         if (empty($this->config)) {
             $this->config = parse_ini_file('whois.ini');
+            if (strlen($customIni)) {
+                $this->customConfig = parse_ini_file($customIni);
+            }
         }
         
         if (sizeof($specialWhois) > 0) {
@@ -85,18 +96,31 @@ class Config
     public function get($template, $tld = '')
     {
         $template = strtolower($template);
-        
-        if ($tld !== '' && isset($this->config[$tld])) {
-            $template = strtolower($tld);
+
+        if (strlen($tld)) {
+            if ((isset($this->customConfig[$tld])) || isset($this->config[$tld])) {
+                $template = strtolower($tld);
+            }
         }
-        
-        return array(
-                'server' => isset($this->config[$template]['server']) ? $this->config[$template]['server'] : '', 
-                'port' => isset($this->config[$template]['port']) ? $this->config[$template]['port'] : 43, 
-                'format' => isset($this->config[$template]['format']) ? $this->config[$template]['format'] : '%domain%', 
-                'template' => isset($this->config[$template]['template']) ? $this->config[$template]['template'] : $template, 
-                'adapter' => isset($this->config[$template]['adapter']) ? $this->config[$template]['adapter'] : 'socket', 
-                'dummy' => isset($this->config[$template]));
+
+        $defaults = array(
+            'server' => '',
+            'port' => 43,
+            'format' => '%domain%',
+            'template' => $template,
+            'adapter' => 'socket',
+            'dummy' => true,
+        );
+
+        $config = $defaults;
+        if (isset($this->customConfig[$template])) {
+            $config = array_merge($defaults, $this->customConfig[$template]);
+            $config['dummy'] = false;
+        } else if (isset($this->config[$template])) {
+            $config = array_merge($defaults, $this->config[$template]);
+            $config['dummy'] = false;
+        }
+        return $config;
     }
 
     /**

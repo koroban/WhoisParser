@@ -20,9 +20,9 @@
  */
 
 /**
- * @namespace Novutec\WhoisParser
+ * @namespace Novutec\WhoisParser\Exception
  */
-namespace Novutec\WhoisParser;
+namespace Novutec\WhoisParser\Exception;
 
 /**
  * NoQueryException
@@ -32,6 +32,6 @@ namespace Novutec\WhoisParser;
  * @copyright  Copyright (c) 2007 - 2013 Novutec Inc. (http://www.novutec.com)
  * @license    http://www.apache.org/licenses/LICENSE-2.0
  */
-class NoQueryException extends AbstractException
+class NoQueryException extends Exception
 {
 }

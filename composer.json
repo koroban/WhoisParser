@@ -1,16 +1,23 @@
 {
-    "name": "novutec/WhoisParser"
-  , "type": "library"
-  , "description": "Lookup domain names, IP addresses and AS numbers by WHOIS."
-  , "keywords": ["whoisparser", "whois", "php"]
-  , "homepage": "https://github.com/novutec/WhoisParser/"
-  , "author": "Novutec Inc."
-  , "license": "Apache-2.0"
-  , "require": {
-  		"novutec/DomainParser": ">=2.0.0"
-  	}
-  , "autoload": {
-      	"classmap": ["Parser.php"]
-  	}
-  , "version": "3.1.0"
+  "name": "novutec/WhoisParser",
+  "type": "library",
+  "description": "Lookup domain names, IP addresses and AS numbers by WHOIS.",
+  "keywords": [
+    "whoisparser",
+    "whois",
+    "php"
+  ],
+  "homepage": "https://github.com/novutec/WhoisParser/",
+  "author": "Novutec Inc.",
+  "license": "Apache-2.0",
+  "require": {
+    "novutec/DomainParser": ">=2.0.0",
+    "symfony/yaml": "~2.7"
+  },
+  "autoload": {
+    "psr-4": {
+      "Novutec\\WhoisParser\\": ""
+    }
+  },
+  "version": "3.1.0"
 }

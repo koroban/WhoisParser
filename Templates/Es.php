@@ -20,9 +20,11 @@
  */
 
 /**
- * @namespace Novutec\WhoisParser
+ * @namespace Novutec\WhoisParser\Templates
  */
-namespace Novutec\WhoisParser;
+namespace Novutec\WhoisParser\Templates;
+
+use Novutec\WhoisParser\Templates\Type\Regex;
 
 /**
  * Template for .ES
@@ -32,7 +34,7 @@ namespace Novutec\WhoisParser;
  * @copyright  Copyright (c) 2007 - 2013 Novutec Inc. (http://www.novutec.com)
  * @license    http://www.apache.org/licenses/LICENSE-2.0
  */
-class Template_Es extends AbstractTemplate
+class Es extends Regex
 {
 
     /**
@@ -65,4 +67,6 @@ class Template_Es extends AbstractTemplate
      * @access protected
      */
     protected $available = '/there is no information available on/i';
+
+    protected $rateLimit = '/is not authorised  or  has exceeded the established limit/im';
 }

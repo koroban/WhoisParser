@@ -20,9 +20,13 @@
  */
 
 /**
- * @namespace Novutec\WhoisParser
+ * @namespace Novutec\WhoisParser\Adapter
  */
-namespace Novutec\WhoisParser;
+namespace Novutec\WhoisParser\Adapter;
+
+use Novutec\WhoisParser\Exception\ConnectErrorException;
+use Novutec\WhoisParser\Exception\ReadErrorException;
+use Novutec\WhoisParser\Exception\WriteErrorException;
 
 /**
  * WhoisParser Socket Adapter
@@ -45,6 +49,13 @@ class Socket extends AbstractAdapter
      */
     protected $proxyList = array();
 
+
+    public function __construct($proxyConfig)
+    {
+        parent::__construct($proxyConfig);
+    }
+
+
     /**
      * Send data to whois server
      *
@@ -62,21 +73,26 @@ class Socket extends AbstractAdapter
         usleep(1);
         stream_set_blocking($this->sock, 1);
 
-        if (isset($query->tld) && ! isset($query->idnFqdn)) {
-            $lookupString = str_replace('%domain%', $query->tld, $config['format']);
-        } elseif (isset($query->ip)) {
-            $lookupString = str_replace('%domain%', $query->ip, $config['format']);
-        } elseif (isset($query->asn)) {
-            $lookupString = str_replace('%domain%', $query->asn, $config['format']);
+        if  (is_object($query)) {
+            if (isset($query->tld) && ! isset($query->idnFqdn)) {
+                $lookupString = str_replace('%domain%', $query->tld, $config['format']);
+            } elseif (isset($query->ip)) {
+                $lookupString = str_replace('%domain%', $query->ip, $config['format']);
+            } elseif (isset($query->asn)) {
+                $lookupString = str_replace('%domain%', $query->asn, $config['format']);
+            } else {
+                $lookupString = str_replace('%domain%', $query->idnFqdn, $config['format']);
+            }
         } else {
-            $lookupString = str_replace('%domain%', $query->idnFqdn, $config['format']);
+            $lookupString = str_replace('%domain%', $query, $config['format']);
         }
 
         $send = fwrite($this->sock, $lookupString . "\r\n");
 
         if ($send !== strlen($lookupString . "\r\n")) {
-            throw \Novutec\WhoisParser\AbstractException::factory('WriteError', 'Error while sending data (' .
-                     $send . '/' . strlen($lookupString . "\r\n") . ')');
+            throw new WriteErrorException(
+                'Error while sending data (' . $send . '/' . strlen($lookupString . "\r\n") . ')'
+            );
         }
 
         $read = $write = array($this->sock);
@@ -91,7 +107,7 @@ class Socket extends AbstractAdapter
             $recv = stream_get_contents($this->sock);
 
             if ($recv === false) {
-                throw \Novutec\WhoisParser\AbstractException::factory('ReadError', 'Could not read from socket.');
+                throw new ReadErrorException('Could not read from socket.');
             }
 
             $rawdata .= $recv;
@@ -100,6 +116,12 @@ class Socket extends AbstractAdapter
         // remove prepended response of proxy server
         if (is_array($this->proxyList)) {
             $rawdata = preg_replace('/^HTTP\/1\.1 200.+\n/', '', $rawdata);
+        }
+
+        // Servers have been seen returning no data.
+        // This possibly happens when we're being rate limited, but it's not really possible to give any certain reason
+        if (strlen($rawdata) < 1) {
+            throw new ReadErrorException('No data read from server: '. $config['server']);
         }
 
         return str_replace("\r", '', $rawdata);
@@ -134,9 +156,9 @@ class Socket extends AbstractAdapter
         }
 
         if (! is_resource($this->sock)) {
-            throw \Novutec\WhoisParser\AbstractException::factory('ConnectError', 'Unable to connect to ' .
-                     $config['server'] . ':' . $config['port'] .
-                     ' or missing configuration for this template.');
+            throw new ConnectErrorException(
+                'Unable to connect to ' . $config['server'] . ':' . $config['port'] . ' or missing configuration for this template.'
+            );
         }
 
         $this->connected = true;
@@ -173,18 +195,17 @@ class Socket extends AbstractAdapter
             $proxyScheme = 'tcp://';
         } elseif ($proxyConfig['type'] == 'https') {
             if (! extension_loaded('openssl')) {
-                throw \Novutec\WhoisParser\AbstractException::factory('ConnectError', 'OpenSSL extension must be enabled to use a proxy over https');
+                throw new ConnectErrorException('OpenSSL extension must be enabled to use a proxy over https');
             }
             $proxyScheme = 'ssl://';
         } else {
-            throw \Novutec\WhoisParser\AbstractException::factory('ConnectError', 'Unknown proxy type:' . $proxyConfig['type']);
+            throw new ConnectErrorException('Unknown proxy type:' . $proxyConfig['type']);
         }
 
         $socket = @stream_socket_client($proxyScheme . $proxyHost, $errno, $errstr, 30);
 
         if (! is_resource($socket)) {
-            throw \Novutec\WhoisParser\AbstractException::factory('ConnectError', 'Unable to connect to proxy ' .
-                    $proxyScheme . $proxyHost);
+            throw new ConnectErrorException('Unable to connect to proxy ' . $proxyScheme . $proxyHost);
         }
 
         $parsed_socket = parse_url('tcp://' . $config['server']);
@@ -208,8 +229,9 @@ class Socket extends AbstractAdapter
         $send = fwrite($socket, $request_str);
 
         if ($send !== strlen($request_str)) {
-            throw \Novutec\WhoisParser\AbstractException::factory('WriteError', 'Error while sending data via proxy - send ' .
-                $send . ' of ' . strlen($request_str) . ')');
+            throw new WriteErrorException(
+                'Error while sending data via proxy - send ' . $send . ' of ' . strlen($request_str) . ')'
+            );
         }
 
         return $socket;
@@ -222,17 +244,17 @@ class Socket extends AbstractAdapter
      */
     private function getProxyList()
     {
-        $proxyIni = dirname(dirname(__FILE__)) . '/Config/proxy.ini';
+        if (!strlen($this->proxyConfig)) {
+            return false;
+        }
 
-        // suppress a warning if proxy file doesn't exist
-        if (@is_readable($proxyIni)) {
-            $proxyList = parse_ini_file($proxyIni, true);
-            if (! empty($proxyList)) {
+        if (@is_readable($this->proxyConfig)) {
+            $proxyList = parse_ini_file($this->proxyConfig, true);
+            if (!empty($proxyList)) {
                 return $proxyList;
             }
         }
 
-        // there is no proxy file or parsing ini file failed
         return false;
     }
 
@@ -240,7 +262,6 @@ class Socket extends AbstractAdapter
      * Returns random configuration for proxy, and false if there is no valid configuration
      *
      * @throws ConnectErrorException
-     * @param  array $proxyList
      * @return array Returns an associative array on success
      */
     private function getRandomProxy() {
@@ -260,6 +281,6 @@ class Socket extends AbstractAdapter
             unset($this->proxyList[$randKey]);
         }
 
-        throw \Novutec\WhoisParser\AbstractException::factory('ConnectError', 'No valid proxy found.');
+        throw new ConnectErrorException('No valid proxy found');
     }
 }

@@ -20,9 +20,9 @@
  */
 
 /**
- * @namespace Novutec\WhoisParser
+ * @namespace Novutec\WhoisParser\Adapter
  */
-namespace Novutec\WhoisParser;
+namespace Novutec\WhoisParser\Adapter;
 
 /**
  * WhoisParser Http Adapter
@@ -35,6 +35,11 @@ namespace Novutec\WhoisParser;
 class Http extends AbstractAdapter
 {
 
+    public function __construct($proxyConfig)
+    {
+        parent::__construct($proxyConfig);
+    }
+
     /**
      * Send data to whois server
      * 
@@ -45,7 +50,12 @@ class Http extends AbstractAdapter
     public function call($query, $config)
     {
         $this->sock = curl_init();
-        $url = $config['server'] . str_replace('%domain%', $query->idnFqdn, $config['format']);
+        $replacements = array(
+            '%domain%' => $query->idnFqdn,
+            '%subdomain%' => $query->domain,
+            '%tld%' => $query->tld,
+        );
+        $url = $config['server'] . str_replace(array_keys($replacements), array_values($replacements), $config['format']);
         
         curl_setopt($this->sock, CURLOPT_USERAGENT, 'PHP');
         curl_setopt($this->sock, CURLOPT_TIMEOUT, 30);
