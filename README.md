@@ -499,6 +499,7 @@ gTLDs and thin registries sort by IANA ID (http://www.iana.org/assignments/regis
 [x] 450 (DOMAINNAME, INC)
 [x] 455 (EnCirca, Inc.)
 [x] 460 (WEB COMMERCE COMMUNICATIONS LIMITED DBA WEBNIC.CC)
+[x] 463 (REGIONAL NETWORK INFORMATION CENTER, JSC DBA RU-CENTER)
 [x] 469 (easyDNS Technologies, Inc.)
 [x] 470 (NOM-IQ Ltd dba Com Laude)
 [x] 471 (Bizcn.com, Inc.)
@@ -579,6 +580,7 @@ gTLDs and thin registries sort by IANA ID (http://www.iana.org/assignments/regis
 [x] 1232 (Skykomishdomains.com LLC)
 [x] 1239 (CPS-Datensysteme GmbH)
 [x] 1250 (TRUNKOZ TECHNOLOGIES PVT LTD. D/B/A OWNREGISTRAR.COM)
+[x] 1256 (INSTANTNAMES LLC)
 [x] 1257 (Variomedia AG dba puredomain.com)
 [x] 1290 (Mailclub SAS)
 [x] 1291 (CRAZY DOMAINS FZ-LLC)
@@ -596,6 +598,7 @@ gTLDs and thin registries sort by IANA ID (http://www.iana.org/assignments/regis
 [x] 1383 (Soluciones Corporativas IP, SLU)
 [x] 1387 (1API GmbH)
 [x] 1390 (Mesh Digital Limited)
+[x] 1404 (WEB SITE SOURCE, INC)
 [x] 1408 (united-domains AG)
 [x] 1420 (InterNetworX Ltd. & Co. KG)
 [x] 1429 (HEBEI GUOJI MAOYI (SHANGHAI) LTD DBA HEBEIDOMAINS.COM)
@@ -630,11 +633,13 @@ gTLDs and thin registries sort by IANA ID (http://www.iana.org/assignments/regis
 [x] 1587 (MIJN INTERNETOPLOSSING B.V.)
 [x] 1590 (CHINANET TECHNOLOGY (SUZHOU) CO., LTD)
 [x] 1606 (Registrar of domain names REG.RU LLC)
+[x] 1616 (NAMETURN LLC)
 [x] 1617 (PresidentialDomains LLC)
 [x] 1659 (Uniregistrar Corp)
 [x] 1677 (ACQUIREDNAMES LLC)
 [x] 1685 (EchoDomain LLC)
 [x] 1860 (Paragon Internet Group Ltd)
+[x] 1864 (DYNADOT9 LLC)
 [x] Novutec Inc.
 ```
 
