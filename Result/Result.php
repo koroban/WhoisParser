@@ -268,6 +268,9 @@ class Result extends AbstractResult
                     }
                     
                     if (! isset($this->contacts->{$this->lastHandle}[$this->lastId])) {
+                        if (null === $this->lastHandle) {
+                            continue;
+                        }
                         $this->contacts->{$this->lastHandle}[$this->lastId] = new Contact();
                     }
                     
