@@ -7,12 +7,12 @@
   , "author": "Novutec Inc."
   , "license": "Apache-2.0"
   , "require": {
-  		"novutec/domainparser": "dev-master"
+  		"novutec/domainparser": ">=2.0.3"
   	}
   , "autoload": {
         "psr-4": {
             "Novutec\\WhoisParser\\": ""
         }
   	}
-  , "version": "3.1.0"
+  , "version": "3.2.1"
 }
