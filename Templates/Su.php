@@ -29,7 +29,7 @@ class Su extends KeyValue
             $this->data['state'] = explode(', ', $this->data['state']);
         }
 
-        $dateFields = ['created', 'free-date', 'paid-till'];
+        $dateFields = array('created', 'free-date', 'paid-till');
         foreach ($dateFields as $field) {
             if (array_key_exists($field, $this->data)) {
                 $this->data[$field] = str_replace('.', '-', $this->data[$field]);
