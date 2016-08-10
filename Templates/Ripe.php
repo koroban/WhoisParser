@@ -58,6 +58,7 @@ class Ripe extends Regex
                     '/^inet6num:(?>[\x20\t]*)(.+)$/im' => 'network:inetnum', 
                     '/^netname:(?>[\x20\t]*)(.+)$/im' => 'network:name', 
                     '/^descr:(?>[\x20\t]*)(.+)$/im' => 'network:descr',
+                    '/^country:(?>[\x20\t]*)(.+)$/im' => 'network:country',
                     '/^mnt-by:(?>[\x20\t]*)(.+)$/im' => 'network:maintainer', 
                     '/^status:(?>[\x20\t]*)(.+)$/im' => 'status', 
                     '/^org:(?>[\x20\t]*)(.+)$/im' => 'network:contacts:owner', 
