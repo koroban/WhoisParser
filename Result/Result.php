@@ -501,7 +501,7 @@ class Result extends AbstractResult
         }
         
         if (isset($this->network->contacts) && sizeof($this->network->contacts) === 1) {
-            $this->network = null;
+            unset($this->network->contacts);
         }
         
         // format dates
