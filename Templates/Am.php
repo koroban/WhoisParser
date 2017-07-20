@@ -112,23 +112,54 @@ class Am extends Regex
                 } else {
                     $contactObject->name = $contactObject->address[0];
                     $contactObject->organization = $contactObject->address[1];
-                    $contactObject->country = $contactObject->address[4];
-                    $contactObject->email = $contactObject->address[5];
-                    $contactObject->phone = $contactObject->address[6];
-                    $contactObject->fax = $contactObject->address[7];
                     
-                    $explodedAddress = array_map('trim', explode(',', $contactObject->address[3]));
+                    if (sizeof($contactObject->address) === 8) {
+                        // contact information is complete
+                        $contactObject->country = $contactObject->address[4];
+                        $contactObject->email = $contactObject->address[5];
+                        $contactObject->phone = $contactObject->address[6];
+                        $contactObject->fax = $contactObject->address[7];
+                        
+                        $explodedAddress = array_map('trim', explode(',', $contactObject->address[3]));
                     
-                    if (sizeof($explodedAddress) === 2) {
-                        $contactObject->city = $explodedAddress[0];
-                        $contactObject->zipcode = $explodedAddress[1];
+                        if (sizeof($explodedAddress) === 2) {
+                            $contactObject->city = $explodedAddress[0];
+                            $contactObject->zipcode = $explodedAddress[1];
+                        } else {
+                            $contactObject->city = $explodedAddress[0];
+                            $contactObject->state = $explodedAddress[1];
+                            $contactObject->zipcode = $explodedAddress[2];
+                        }
+                        
+                        $contactObject->address = $contactObject->address[2];
                     } else {
-                        $contactObject->city = $explodedAddress[0];
-                        $contactObject->state = $explodedAddress[1];
-                        $contactObject->zipcode = $explodedAddress[2];
+                        // some fields are missing
+                        $address = $contactObject->address;
+                        krsort($address);
+                        while (list($key, $val) = each($address)) {
+                            if (preg_match("/([+]*[-\(\)\. x0-9]){7,}/", $val, $matches)) {
+                                $contactObject->phone = $matches[0];
+                                continue;
+                            }
+                            if (preg_match("/([+]*[-\(\)\. x0-9]){7,}/", $val, $matches)) {
+                                $contactObject->fax = $matches[0];
+                                continue;
+                            }
+                            if (preg_match("/([-0-9a-zA-Z._+&\/=]+@([-0-9a-zA-Z]+[.])+[a-zA-Z]{2,6})/", $val, $matches)) {
+                                $contactObject->email = $matches[0];
+                                continue;
+                            }
+                            if (preg_match("/^([a-zA-Z]{2})$/", $val, $matches)) {
+                                $contactObject->country = $matches[0];
+                                continue;
+                            }
+                        }
+                        $contactObject->name = $contactObject->address[0];
+                        $contactObject->organization = NULL;
+                        $address = array_slice($address, -4, 3);
+                        krsort($address);
+                        $contactObject->address = $address;
                     }
-                    
-                    $contactObject->address = $contactObject->address[2];
                 }
             }
         }
