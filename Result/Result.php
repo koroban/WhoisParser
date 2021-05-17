@@ -272,7 +272,7 @@ class Result extends AbstractResult
                         // But normally causes a fatal error, so unless we manually trigger an error first,
                         // all stacktrace information is lost
                         if (($this->lastId === -1) || ($this->lastHandle === null)) {
-                            trigger_error("Unexpected values for lastHandle / lastId", E_USER_WARNING);
+                            return;
                         }
                         $this->contacts->{$this->lastHandle}[$this->lastId] = new Contact();
                     }
@@ -501,7 +501,7 @@ class Result extends AbstractResult
         }
         
         if (isset($this->network->contacts) && sizeof($this->network->contacts) === 1) {
-            $this->network = null;
+            unset($this->network->contacts);
         }
         
         // format dates
